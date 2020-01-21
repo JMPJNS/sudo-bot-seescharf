@@ -1,0 +1,3 @@
+interface Secrets {
+    botToken: string
+}

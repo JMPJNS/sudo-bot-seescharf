@@ -1,0 +1,25 @@
+{
+  "name": "stan-bot",
+  "version": "1.0.0",
+  "description": "Discord Bot for StanPlays",
+  "main": "dist/index.js",
+  "scripts": {
+    "compile": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JMPJNS/stan-bot.git"
+  },
+  "author": "JMP",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JMPJNS/stan-bot/issues"
+  },
+  "homepage": "https://github.com/JMPJNS/stan-bot#readme",
+  "dependencies": {
+    "@types/node": "^13.1.8",
+    "discord.js": "^11.5.1",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5"
+  }
+}
