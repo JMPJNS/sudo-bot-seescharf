@@ -1,5 +1,5 @@
-export class FakeDatabase {
-    static lastId = 0
+import { Message } from "discord.js";
 
-    static messageStore = {}
+export class FakeDatabase {
+    static lastReactEmbed: Message
 }

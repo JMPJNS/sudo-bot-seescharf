@@ -11,12 +11,11 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\dist\\index.js",
+            "program": "${workspaceFolder}/dist/index.js",
             "preLaunchTask": "tsc",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
-            ],
-            "internalConsoleOptions": "openOnSessionStart"
+            ]
         }
     ]
 }

@@ -1,5 +1,5 @@
 import * as Discord from "discord.js"
-import { MessageHandler } from "./messageHandler"
+import { MessageHandler } from "./MessageHandler"
 import { Secrets } from "./types/types"
 
 const client = new Discord.Client()
@@ -13,11 +13,7 @@ client.once('ready', () => {
 })
 
 client.on('message', async message => {
-	const handler = mh.getCommandHandler(message)
-
-	if (handler) {
-		handler.handler(message, handler.args, client)
-	}
+	mh.handleMessage(message, client)
 })
 
 client.login(secrets.botToken)

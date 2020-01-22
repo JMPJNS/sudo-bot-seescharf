@@ -1,5 +1,4 @@
-import { Message, Client, RichEmbed } from "discord.js";
-import { MessageCommand } from "./types/types"
+import { Message, Client, RichEmbed } from "discord.js"
 import { Utils } from "./Utils";
 import { FakeDatabase } from "./FakeDatabase";
 
@@ -9,32 +8,19 @@ export class MessageHandler {
 
     constructor(private prefix: string) {}
 
-    public getCommandHandler(message: Message) {
+    public handleMessage(message: Message, client: Client) {
 
         const parsedMessage = parser.parse(message, this.prefix)
         // console.log(parsedMessage)
         if (parsedMessage.code === 0) {
-
-            if(parsedMessage.command && this.handleCommand[parsedMessage.command]) {
-                return {
-                    handler: this.handleCommand[parsedMessage.command],
-                    args: parsedMessage.arguments
-                } as MessageCommand
-                
-            } else {
-                return null
+            switch(parsedMessage.command) {
+                case("ping"): this.ping(message, parsedMessage.arguments, client); break
+                case("sendEmbed"): this.sendEmbed(message, parsedMessage.arguments, client); break
+                case("reaction"): this.reactionEmbed(message, parsedMessage.arguments, client); break
+                case("giveCustom"): this.giveCustom(message, parsedMessage.arguments, client); break
             }
         }
     }
-
-    private handleCommand = {
-        "ping": this.ping,
-        "sendEmbed": this.sendEmbed,
-        "reactionEmbed": this.reactionEmbed,
-        "giveCustom": this.giveCustom
-    }
-
-
 
     private async ping(message: Message, args: string[], client: Client) {
         message.channel.send("pong")
@@ -56,7 +42,6 @@ export class MessageHandler {
     }
 
     private async reactionEmbed(message: Message, args: string[], client: Client) {
-        const id = FakeDatabase.lastId
         const embed = new RichEmbed()
         const emoji = args.length > 2 ? Utils.getEmoji(args[2], message) : Utils.getEmoji("Tofu", message)
 
@@ -71,18 +56,17 @@ export class MessageHandler {
             const sentMessage = await message.channel.send(embed) as Message
             sentMessage.react(emoji)
 
-            FakeDatabase.messageStore[id] = sentMessage
+            FakeDatabase.lastReactEmbed = sentMessage
 
         } else {
             const sentMessage = await message.channel.send("Command falsch verwendet!, usage: $reactionEmbed 'Titel' 'Nachricht' 'Emoji'") as Message
             sentMessage.delete(3000)
         }
         message.delete(2000)
-        FakeDatabase.lastId += 1
     }
 
     private async giveCustom(message: Message, args: string[], client: Client) {
-        const embedMessage = FakeDatabase.messageStore[FakeDatabase.lastId - 1] as Message
+        const embedMessage = FakeDatabase.lastReactEmbed
 
         console.log(embedMessage.reactions)
     }
