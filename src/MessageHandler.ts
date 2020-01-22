@@ -1,10 +1,11 @@
-import { Message, Client, RichEmbed, User, MessageEmbedProvider } from "discord.js"
+import { Message, Client, RichEmbed, User } from "discord.js"
 import { Utils } from "./Utils";
 import { FakeDatabase } from "./FakeDatabase";
 
 const parser = require("discord-command-parser")
 
 const customRole = "Custom"
+const defaultEmoji = "Tofu"
 
 export class MessageHandler {
 
@@ -46,13 +47,13 @@ export class MessageHandler {
 
     private async reactionEmbed(message: Message, args: string[], client: Client) {
         const embed = new RichEmbed()
-        const emoji = args.length > 2 ? Utils.getEmoji(args[2], message) : Utils.getEmoji("Tofu", message)
+        const emoji = Utils.getEmoji(args[2], message, defaultEmoji)
 
 
         if (args.length > 1) {
             embed.setColor(Utils.colors.primary)
                 .addField(args[0], args[1])
-                .addField("react to this message with", `${emoji}`)
+                .addField("Reagiere auf diese Nachricht mit", `${emoji}`)
                 .setTimestamp()
                 // .setFooter("ID: ", `${id}`)
 
@@ -62,7 +63,7 @@ export class MessageHandler {
             FakeDatabase.lastReactEmbed = sentMessage
 
         } else {
-            const sentMessage = await message.channel.send("Wrong Usage!, usage: $reactionEmbed 'Titel' 'Message' 'Emoji'") as Message
+            const sentMessage = await message.channel.send("Falsch verwendet!, $reactionEmbed 'Titel' 'Message' 'Emoji'") as Message
             sentMessage.delete(3000)
         }
         message.delete(2000)
@@ -71,6 +72,15 @@ export class MessageHandler {
     private async giveCustom(message: Message, args: string[], client: Client) {
         const embedMessage = FakeDatabase.lastReactEmbed
         const userArray: User[] = []
+        message.delete(3000)
+
+        const role = message.guild.roles.find(r => r.name === customRole)
+
+        if (!role) {
+            const sm = await message.channel.send(`Erstelle die Rolle ${customRole}!`) as Message
+            sm.delete(5000)
+            return
+        }
 
         for(const reaction of embedMessage.reactions) {
             if(reaction[0] === FakeDatabase.lastEmoji.identifier) {
@@ -89,20 +99,21 @@ export class MessageHandler {
             userArray[i].lastMessage.guild.member(userArray[i]).addRole(message.guild.roles.find(r => r.name === customRole))
         }
 
-        const sentMessage = await message.channel.send(`${userCount} Leuten die Rolle ${customRole} gegeben!`) as Message
+        const sentMessage = await message.channel.send(`${userCount > 1 || userCount === 0 ? userCount + " Leuten" : "Einer Person"} die Rolle ${customRole} gegeben!`) as Message
         sentMessage.delete(3000)
 
     }
 
     private async removeCustom(message: Message, args: string[], client: Client) {
         const role = message.guild.roles.find(r => r.name === customRole)
+        message.delete(3000)
 
-        role.members.forEach(member => {
+        role && role.members.forEach(member => {
             member.removeRole(role)
         })
 
-        const sentMessage = await message.channel.send(`Alle aus der Rolle ${customRole} entfernt!`) as Message
-        sentMessage.delete(3000)
+        const sentMessage = role && await message.channel.send(`Alle aus der Rolle ${customRole} entfernt!`) as Message
+        role && sentMessage.delete(3000)
     }
 
 }
