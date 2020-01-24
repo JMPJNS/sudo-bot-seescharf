@@ -5,7 +5,7 @@ import { FakeDatabase } from "./FakeDatabase";
 const parser = require("discord-command-parser")
 
 const customRole = "Custom"
-const defaultEmoji = "Tofu"
+const defaultEmoji = "Stan_OWO_Tomato"
 
 export class MessageHandler {
 
@@ -26,11 +26,31 @@ export class MessageHandler {
         }
     }
 
+    private checkPermissions(message: Message) {
+        console.log(`[${message.author.username}]`, message.content)
+        if (message.guild.member(message.author).hasPermission(["MANAGE_MESSAGES", "MANAGE_ROLES"])) {
+            return true
+        } else {
+            message.delete(3000)
+            this.sendAndDeleteMessage(message, "Keine Rechte dazu!", 3000)
+            return false
+        }
+    }
+
+    private async sendAndDeleteMessage(message: Message, text: string, time: number) {
+        const sentMessage = await message.channel.send(text) as Message
+        console.log(`[${sentMessage.author.username}]`, sentMessage.content)
+        sentMessage.delete(time)
+    }
+
     private async ping(message: Message, args: string[], client: Client) {
-        message.channel.send("pong")
+        const sentMessage = await message.channel.send("pong") as Message
+        sentMessage.delete(5000)
+        message.delete(3000)
     }
 
     private async sendEmbed(message: Message, args: string[], client: Client) {
+        if (!this.checkPermissions(message)) return
         const embed = new RichEmbed()
 
         if (args.length == 2) {
@@ -40,12 +60,14 @@ export class MessageHandler {
             message.channel.send(embed)
         } else {
             const sentMessage = await message.channel.send("Command falsch verwendet!") as Message
+            console.log(`[${sentMessage.author.username}]`, sentMessage.content)
             sentMessage.delete(2000)
         }
         message.delete(2000)
     }
 
     private async reactionEmbed(message: Message, args: string[], client: Client) {
+        if (!this.checkPermissions(message)) return
         const embed = new RichEmbed()
         const emoji = Utils.getEmoji(args[2], message, defaultEmoji)
 
@@ -58,19 +80,29 @@ export class MessageHandler {
                 // .setFooter("ID: ", `${id}`)
 
             const sentMessage = await message.channel.send(embed) as Message
+            console.log(`[${sentMessage.author.username}]`, sentMessage.content)
             sentMessage.react(emoji)
-            FakeDatabase.lastEmoji = emoji
-            FakeDatabase.lastReactEmbed = sentMessage
+            FakeDatabase.lastEmoji[message.guild.id] = emoji
+            FakeDatabase.lastReactEmbed[message.guild.id] = sentMessage
 
         } else {
             const sentMessage = await message.channel.send("Falsch verwendet!, $reactionEmbed 'Titel' 'Message' 'Emoji'") as Message
+            console.log(`[${sentMessage.author.username}]`, sentMessage.content)
             sentMessage.delete(3000)
         }
         message.delete(2000)
     }
 
     private async giveCustom(message: Message, args: string[], client: Client) {
-        const embedMessage = FakeDatabase.lastReactEmbed
+        if (!this.checkPermissions(message)) return
+        const embedMessage = FakeDatabase.lastReactEmbed[message.guild.id]
+
+        if(!embedMessage) {
+            this.sendAndDeleteMessage(message, "Erstelle zuerst eine reaction: $reaction", 3000)
+            message.delete(3000)
+            return
+        }
+
         const userArray: User[] = []
         message.delete(3000)
 
@@ -83,7 +115,7 @@ export class MessageHandler {
         }
 
         for(const reaction of embedMessage.reactions) {
-            if(reaction[0] === FakeDatabase.lastEmoji.identifier) {
+            if(reaction[0] === FakeDatabase.lastEmoji[message.guild.id].identifier) {
                for(const user of reaction[1].users) {
                    if (!user[1].bot) userArray.push(user[1])
                }
@@ -95,16 +127,21 @@ export class MessageHandler {
 
         userArray.sort( function() { return 0.5 - Math.random() } )
 
+        let userListMessage = ""
         for (let i = 0; i < userCount; i++) {
-            userArray[i].lastMessage.guild.member(userArray[i]).addRole(message.guild.roles.find(r => r.name === customRole))
+            const user = message.guild.member(userArray[i])
+            user.addRole(message.guild.roles.find(r => r.name === customRole))
+
+            userListMessage += i < (userCount - 1) ? `${user}, ` : `${user}`
         }
 
-        const sentMessage = await message.channel.send(`${userCount > 1 || userCount === 0 ? userCount + " Leuten" : "Einer Person"} die Rolle ${customRole} gegeben!`) as Message
-        sentMessage.delete(3000)
+        const sentMessage = await message.channel.send(`${!(userCount > 1) ? (userCount === 0 ? "keiner hat " : userListMessage + " hat") : userListMessage + " haben"} die Rolle ${customRole} gekriegt!`) as Message
+        console.log(`[${sentMessage.author.username}]`, sentMessage.content)
 
     }
 
     private async removeCustom(message: Message, args: string[], client: Client) {
+        if (!this.checkPermissions(message)) return
         const role = message.guild.roles.find(r => r.name === customRole)
         message.delete(3000)
 
@@ -112,8 +149,8 @@ export class MessageHandler {
             member.removeRole(role)
         })
 
-        const sentMessage = role && await message.channel.send(`Alle aus der Rolle ${customRole} entfernt!`) as Message
-        role && sentMessage.delete(3000)
+        if (role) { this.sendAndDeleteMessage(message, `Alle aus der Rolle ${customRole} entfernt!`, 3000) }
+        else {this.sendAndDeleteMessage(message, `Die Rolle ${customRole} exestiert nicht!`, 3000)}
     }
 
 }
