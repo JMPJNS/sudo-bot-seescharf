@@ -27,7 +27,7 @@ export class MessageHandler {
     }
 
     private checkPermissions(message: Message) {
-        console.log(`[${message.author.username}]`, message.content)
+        console.log(`{${message.guild.name}}` ,`[${message.author.username}]`, message.content)
         if (message.guild.member(message.author).hasPermission(["MANAGE_MESSAGES", "MANAGE_ROLES"])) {
             return true
         } else {
@@ -39,12 +39,14 @@ export class MessageHandler {
 
     private async sendAndDeleteMessage(message: Message, text: string, time: number) {
         const sentMessage = await message.channel.send(text) as Message
-        console.log(`[${sentMessage.author.username}]`, sentMessage.content)
+        console.log(`{${sentMessage.guild.name}}` ,`[${sentMessage.author.username}]`, sentMessage.content)
         sentMessage.delete(time)
     }
 
     private async ping(message: Message, args: string[], client: Client) {
+        console.log(`{${message.guild.name}}` ,`[${message.author.username}]`, message.content)
         const sentMessage = await message.channel.send("pong") as Message
+        console.log(`{${sentMessage.guild.name}}` ,`[${sentMessage.author.username}]`, sentMessage.content)
         sentMessage.delete(5000)
         message.delete(3000)
     }
@@ -136,7 +138,7 @@ export class MessageHandler {
         }
 
         const sentMessage = await message.channel.send(`${!(userCount > 1) ? (userCount === 0 ? "keiner hat " : userListMessage + " hat") : userListMessage + " haben"} die Rolle ${customRole} gekriegt!`) as Message
-        console.log(`[${sentMessage.author.username}]`, sentMessage.content)
+        console.log(`{${sentMessage.guild.name}}` ,`[${sentMessage.author.username}]`, sentMessage.content)
 
     }
 
