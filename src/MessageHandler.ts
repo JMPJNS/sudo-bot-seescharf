@@ -1,6 +1,7 @@
 import { Message, Client, RichEmbed, User } from "discord.js"
 import { Utils } from "./Utils";
 import { FakeDatabase } from "./FakeDatabase";
+import { TimedFunctions } from "./TimedFunctions";
 
 const parser = require("discord-command-parser")
 
@@ -22,6 +23,7 @@ export class MessageHandler {
                 case("reaction"): this.reactionEmbed(message, parsedMessage.arguments, client); break
                 case("giveCustom"): this.giveCustom(message, parsedMessage.arguments, client); break
                 case("removeCustom"): this.removeCustom(message, parsedMessage.arguments, client); break
+                case("setupAutoFunctions"): this.setupAutoHandlers(message, parsedMessage.arguments, client); break
             }
         }
     }
@@ -49,6 +51,21 @@ export class MessageHandler {
         console.log(`{${sentMessage.guild.name}}` ,`[${sentMessage.author.username}]`, sentMessage.content)
         sentMessage.delete(5000)
         message.delete(3000)
+    }
+
+    private async setupAutoHandlers(message: Message, args: string[], client: Client) {
+        message.delete(2000)
+
+        if (!FakeDatabase.handlerSetup[message.guild.id]) {
+            this.sendAndDeleteMessage(message, "setting up Automatic Functions", 3000)
+            FakeDatabase.handlerSetup[message.guild.id] = true
+
+            TimedFunctions.giveMember(message)
+            FakeDatabase.giveMemberInterval[message.guild.id] = setInterval(() => TimedFunctions.giveMember(message), 5 * 60 * 1000)
+        } else {
+            this.sendAndDeleteMessage(message, "Automatic Functions already set up", 3000)
+        }
+
     }
 
     private async sendEmbed(message: Message, args: string[], client: Client) {
