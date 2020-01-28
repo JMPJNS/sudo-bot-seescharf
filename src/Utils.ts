@@ -19,4 +19,8 @@ export class Utils {
     static colors = {
         primary: "#0099ff"
     }
+
+    static logMessage(message: Message) {
+        console.log(`{${message.guild.name}}` ,`[${message.author.username}]`, message.content)
+    }
 }

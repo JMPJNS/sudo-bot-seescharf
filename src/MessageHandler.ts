@@ -1,4 +1,4 @@
-import { Message, Client, RichEmbed, User } from "discord.js"
+import { Message, Client, RichEmbed, User, TextChannel } from "discord.js"
 import { Utils } from "./Utils";
 import { FakeDatabase } from "./FakeDatabase";
 import { TimedFunctions } from "./TimedFunctions";
@@ -18,19 +18,19 @@ export class MessageHandler {
         // console.log(parsedMessage)
         if (parsedMessage.code === 0) {
             switch(parsedMessage.command) {
-                case("ping"): this.ping(message, parsedMessage.arguments, client); break
                 case("sendEmbed"): this.sendEmbed(message, parsedMessage.arguments, client); break
                 case("reaction"): this.reactionEmbed(message, parsedMessage.arguments, client); break
                 case("giveCustom"): this.giveCustom(message, parsedMessage.arguments, client); break
                 case("removeCustom"): this.removeCustom(message, parsedMessage.arguments, client); break
                 case("setupAutoFunctions"): this.setupAutoHandlers(message, parsedMessage.arguments, client); break
+                case("say"): this.say(message, parsedMessage.arguments, client); break
             }
         }
     }
 
     private checkPermissions(message: Message) {
-        console.log(`{${message.guild.name}}` ,`[${message.author.username}]`, message.content)
-        if (message.guild.member(message.author).hasPermission(["MANAGE_MESSAGES", "MANAGE_ROLES"])) {
+        Utils.logMessage(message)
+        if (message.guild.member(message.author).hasPermission(["MANAGE_MESSAGES", "MANAGE_ROLES"]) || message.author.id == FakeDatabase.importantIds.users.JMP) {
             return true
         } else {
             message.delete(3000)
@@ -41,20 +41,20 @@ export class MessageHandler {
 
     private async sendAndDeleteMessage(message: Message, text: string, time: number) {
         const sentMessage = await message.channel.send(text) as Message
-        console.log(`{${sentMessage.guild.name}}` ,`[${sentMessage.author.username}]`, sentMessage.content)
+        Utils.logMessage(sentMessage)
         sentMessage.delete(time)
     }
 
     private async ping(message: Message, args: string[], client: Client) {
-        console.log(`{${message.guild.name}}` ,`[${message.author.username}]`, message.content)
+        Utils.logMessage(message)
         const sentMessage = await message.channel.send("pong") as Message
-        console.log(`{${sentMessage.guild.name}}` ,`[${sentMessage.author.username}]`, sentMessage.content)
+        Utils.logMessage(sentMessage)
         sentMessage.delete(5000)
         message.delete(3000)
     }
 
     private async setupAutoHandlers(message: Message, args: string[], client: Client) {
-        message.delete(2000)
+        message.delete(200)
 
         if (!FakeDatabase.handlerSetup[message.guild.id]) {
             this.sendAndDeleteMessage(message, "setting up Automatic Functions", 3000)
@@ -62,8 +62,6 @@ export class MessageHandler {
 
             TimedFunctions.giveMember(message)
             FakeDatabase.giveMemberInterval[message.guild.id] = setInterval(() => TimedFunctions.giveMember(message), 5 * 60 * 1000)
-        } else {
-            this.sendAndDeleteMessage(message, "Automatic Functions already set up", 3000)
         }
 
     }
@@ -83,6 +81,24 @@ export class MessageHandler {
             sentMessage.delete(2000)
         }
         message.delete(2000)
+    }
+
+    private async say(message: Message, args: string[], client: Client) {
+        if (!this.checkPermissions(message)) return
+
+        if(args.length) {
+            const channel = args[0].match(/(?<=\<\#)\d+(?=\>)/)
+            if(channel){
+                args.shift()
+                const sendChannel = message.guild.channels.get(channel[0]) as TextChannel
+                Utils.logMessage(await sendChannel.send(args.join(" ")) as Message)
+            } else {
+                Utils.logMessage(await message.channel.send(args.join(" ")) as Message)
+            }
+        }
+
+        
+        message.delete(200)
     }
 
     private async reactionEmbed(message: Message, args: string[], client: Client) {
@@ -155,7 +171,7 @@ export class MessageHandler {
         }
 
         const sentMessage = await message.channel.send(`${!(userCount > 1) ? (userCount === 0 ? "keiner hat " : userListMessage + " hat") : userListMessage + " haben"} die Rolle ${customRole} gekriegt!`) as Message
-        console.log(`{${sentMessage.guild.name}}` ,`[${sentMessage.author.username}]`, sentMessage.content)
+        Utils.logMessage(sentMessage)
 
     }
 
