@@ -25,6 +25,8 @@ export class MessageHandler {
                 case("setupAutoFunctions"): this.setupAutoHandlers(message, parsedMessage.arguments, client); break
                 case("say"): this.say(message, parsedMessage.arguments, client); break
             }
+        } else if (message.content.trim() === "<@!669237703530774554>") {
+            message.channel.send(`o/ ${message.author}`)
         }
     }
 
