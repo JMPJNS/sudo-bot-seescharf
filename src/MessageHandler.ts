@@ -143,7 +143,7 @@ export class MessageHandler {
         const userArray: User[] = []
         message.delete(3000)
 
-        const role = message.guild.roles.find(r => r.name === customRole)
+        const role = message.guild.roles.get(FakeDatabase.importantIds.roles.custom)
 
         if (!role) {
             const sm = await message.channel.send(`Erstelle die Rolle ${customRole}!`) as Message
@@ -167,7 +167,7 @@ export class MessageHandler {
         let userListMessage = ""
         for (let i = 0; i < userCount; i++) {
             const user = message.guild.member(userArray[i])
-            user.addRole(message.guild.roles.find(r => r.name === customRole))
+            user.addRole(message.guild.roles.get(FakeDatabase.importantIds.roles.custom))
 
             userListMessage += i < (userCount - 1) ? `${user}, ` : `${user}`
         }
@@ -179,7 +179,7 @@ export class MessageHandler {
 
     private async removeCustom(message: Message, args: string[], client: Client) {
         if (!this.checkPermissions(message)) return
-        const role = message.guild.roles.find(r => r.name === customRole)
+        const role = message.guild.roles.get(FakeDatabase.importantIds.roles.custom)
         message.delete(3000)
 
         role && role.members.forEach(member => {
