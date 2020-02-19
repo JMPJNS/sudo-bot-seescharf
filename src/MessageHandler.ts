@@ -22,7 +22,6 @@ export class MessageHandler {
                 case("reaction"): this.reactionEmbed(message, parsedMessage.arguments, client); break
                 case("giveCustom"): this.giveCustom(message, parsedMessage.arguments, client); break
                 case("removeCustom"): this.removeCustom(message, parsedMessage.arguments, client); break
-                case("setupAutoFunctions"): this.setupAutoHandlers(message, parsedMessage.arguments, client); break
                 case("say"): this.say(message, parsedMessage.arguments, client); break
             }
         } else if (message.content.trim() === "<@!669237703530774554>") {
@@ -106,7 +105,7 @@ export class MessageHandler {
     private async reactionEmbed(message: Message, args: string[], client: Client) {
         if (!this.checkPermissions(message)) return
         const embed = new RichEmbed()
-        const emoji = Utils.getEmoji(args[2], message, defaultEmoji)
+        const emoji = message.guild.emojis.get(FakeDatabase.importantIds.emoji.ollekSlurp)
 
 
         if (args.length > 1) {
@@ -118,12 +117,12 @@ export class MessageHandler {
 
             const sentMessage = await message.channel.send(embed) as Message
             console.log(`[${sentMessage.author.username}]`, sentMessage.content)
-            sentMessage.react(emoji)
+            sentMessage.react(emoji).catch(e=> console.error)
             FakeDatabase.lastEmoji[message.guild.id] = emoji
             FakeDatabase.lastReactEmbed[message.guild.id] = sentMessage
 
         } else {
-            const sentMessage = await message.channel.send("Falsch verwendet!, $reactionEmbed 'Titel' 'Message' 'Emoji'") as Message
+            const sentMessage = await message.channel.send("Falsch verwendet!, $reaction 'Titel' 'Message' 'Emoji'") as Message
             console.log(`[${sentMessage.author.username}]`, sentMessage.content)
             sentMessage.delete(3000)
         }

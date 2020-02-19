@@ -13,6 +13,9 @@ export class FakeDatabase {
         },
         roles: {
             custom: "679729020325199887"
+        },
+        emoji: {
+            ollekSlurp: "642742377156444200"
         }
     }
 }
