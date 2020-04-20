@@ -1,0 +1,73 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/jmp/RiderProjects/ollek-bot/OllekBot/OllekBot.csproj": {}
+  },
+  "projects": {
+    "/home/jmp/RiderProjects/ollek-bot/OllekBot/OllekBot.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/jmp/RiderProjects/ollek-bot/OllekBot/OllekBot.csproj",
+        "projectName": "OllekBot",
+        "projectPath": "/home/jmp/RiderProjects/ollek-bot/OllekBot/OllekBot.csproj",
+        "packagesPath": "/home/jmp/.nuget/packages/",
+        "outputPath": "/home/jmp/RiderProjects/ollek-bot/OllekBot/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/jmp/.config/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.emzi0767.com/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "dependencies": {
+            "DSharpPlus": {
+              "target": "Package",
+              "version": "[4.0.0-nightly-00684, )"
+            },
+            "DSharpPlus.CommandsNext": {
+              "target": "Package",
+              "version": "[4.0.0-nightly-00684, )"
+            },
+            "DSharpPlus.Interactivity": {
+              "target": "Package",
+              "version": "[4.0.0-nightly-00684, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.103/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
