@@ -17,19 +17,11 @@ namespace OllekBot
         
         public async Task RunAsync()
         {
-            //Config
-            var botConfigJson = string.Empty;
-            
-            using(var fs = File.OpenRead("config.json"))
-                using (var sr = new StreamReader(fs, new UTF8Encoding(false)))
-                    botConfigJson = await sr.ReadToEndAsync().ConfigureAwait(false);
 
-            var botConfig = JsonConvert.DeserializeObject<BotConfig>(botConfigJson);
-            
             // Bot
             var config = new DiscordConfiguration
             {
-                Token = botConfig.Token,
+                Token = BotConfig.Token,
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
                 LogLevel = LogLevel.Debug,
@@ -42,7 +34,7 @@ namespace OllekBot
             //Commands
             var commandsConfig = new CommandsNextConfiguration
             {
-                StringPrefixes = new string[] {botConfig.Prefix},
+                StringPrefixes = new string[] {BotConfig.Prefix},
                 EnableMentionPrefix = true,
                 EnableDms = false
             };
