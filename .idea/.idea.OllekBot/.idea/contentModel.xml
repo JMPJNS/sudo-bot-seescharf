@@ -4,10 +4,26 @@
     <e p="$USER_HOME$/.Rider2019.3/system/extResources" t="IncludeRecursive" />
     <e p="$USER_HOME$/.Rider2019.3/system/resharper-host/local/Transient/ReSharperHost/v193/SolutionCaches/_OllekBot.-109057590.00" t="ExcludeRecursive" />
     <e p="$PROJECT_DIR$" t="IncludeFlat">
+      <e p=".git/info/exclude" t="IncludeRecursive" />
       <e p="OllekBot" t="IncludeRecursive">
+        <e p="Attributes" t="Include">
+          <e p="RequireRolesOrOwner.cs" t="Include" />
+        </e>
         <e p="Bot.cs" t="Include" />
         <e p="Commands" t="Include">
           <e p="FunCommands.cs" t="Include" />
+          <e p="RankCommands.cs" t="Include" />
+          <e p="UtilityCommands.cs" t="Include" />
+        </e>
+        <e p="DataInterfaces" t="Include">
+          <e p="User.cs" t="Include" />
+        </e>
+        <e p="Database" t="Include">
+          <e p="Firebase.cs" t="Include" />
+        </e>
+        <e p="Handlers" t="Include">
+          <e p="MessageHandler.cs" t="Include" />
+          <e p="UserHandler.cs" t="Include" />
         </e>
         <e p="OllekBot.csproj" t="IncludeRecursive" />
         <e p="Program.cs" t="Include" />
