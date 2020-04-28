@@ -11,6 +11,7 @@
         </e>
         <e p="Bot.cs" t="Include" />
         <e p="Commands" t="Include">
+          <e p="CustomGamesCommands.cs" t="Include" />
           <e p="FunCommands.cs" t="Include" />
           <e p="RankCommands.cs" t="Include" />
           <e p="UtilityCommands.cs" t="Include" />

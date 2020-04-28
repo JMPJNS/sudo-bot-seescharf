@@ -6,6 +6,7 @@ using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
+using DSharpPlus.Interactivity;
 using Newtonsoft.Json;
 using OllekBot.Commands;
 using OllekBot.Handlers;
@@ -16,6 +17,7 @@ namespace OllekBot
     {
         public DiscordClient Client { get; private set; }
         public CommandsNextExtension Commands { get; private set; }
+        public InteractivityExtension Interactivity { get; private set; }
         
         private MessageHandler _messageHandler = new MessageHandler();
         
@@ -47,9 +49,19 @@ namespace OllekBot
             };
 
             Commands = Client.UseCommandsNext(commandsConfig);
+            
+            //Interactivity
+            var interactivityConfig = new InteractivityConfiguration
+            {
+                Timeout = TimeSpan.FromMinutes(5)
+            };
+
+            Interactivity = Client.UseInteractivity(interactivityConfig);
+            
             Commands.RegisterCommands<FunCommands>();
             Commands.RegisterCommands<UtilityCommands>();
             Commands.RegisterCommands<RankCommands>();
+            Commands.RegisterCommands<CustomGamesCommands>();
             
             // Start Bot
             await Client.ConnectAsync();

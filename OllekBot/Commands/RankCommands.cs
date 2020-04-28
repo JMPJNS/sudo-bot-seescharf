@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
+using DSharpPlus.Interactivity;
 using OllekBot.DataInterfaces;
 using OllekBot.Handlers;
 
@@ -13,7 +14,7 @@ namespace OllekBot.Commands
         public async Task Rank(CommandContext ctx)
         {
             var user = UserHandler.GetOrCreateUser(ctx.Member);
-            await ctx.Channel.SendMessageAsync($"{ctx.Member.Mention} hat {user.CalculatePoints().ToString()} Punkte");
+            await ctx.Channel.SendMessageAsync($"{ctx.Member.Mention} hat {user.CalculatePoints().ToString()} IQ");
         }
         
         [Command("giveSP")]
@@ -21,7 +22,8 @@ namespace OllekBot.Commands
         {
             var user = UserHandler.GetOrCreateUser(member);
             user.CountedMessages += count;
-            await ctx.Channel.SendMessageAsync($"{member.Mention} hat {user.CountedMessages.ToString()}xp erhalten");
+            await ctx.Channel.SendMessageAsync($"{member.Mention} hat {user.CountedMessages.ToString()} IQ erhalten");
         }
+        
     }
 }

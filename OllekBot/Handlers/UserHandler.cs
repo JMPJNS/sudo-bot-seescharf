@@ -19,16 +19,9 @@ namespace OllekBot.Handlers
 
         public static User GetOrCreateUser(DiscordMember member)
         {
-            if (Users.Count == 0)
-            {
-                var fresh =  GetFreshUser(member);
-                Users.Add(fresh);
-                return fresh;
-            }
-            
-            var user = Users.Find(x => x.UserId == member.Id);
-            
-            
+ 
+            var user = Users.FirstOrDefault(x => x.UserId == member.Id);
+
             if (user is null)
             {
                 var fresh =  GetFreshUser(member);
