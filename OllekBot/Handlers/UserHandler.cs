@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DSharpPlus.Entities;
 using OllekBot.DataInterfaces;
+using DateTime = System.DateTime;
 
 namespace OllekBot.Handlers
 {
@@ -10,21 +11,33 @@ namespace OllekBot.Handlers
     {
         public static List<User> Users = new List<User>();
 
-        public bool AddCountedMessage(User user)
+        public bool AddCountedMessages(User user, DiscordMessage message)
         {
-            // Pro 100 Zeichen eine extra message, also nachricht von 0-100 = 1 message, 100-200 = 2 messages
-            // 1 Minute Cooldown (Mit command einstellbar)
+            if (user.Blocked) return false;
+            
+            TimeSpan minDelay = TimeSpan.FromMinutes(0.1);
+
+            if (DateTimeOffset.Now - minDelay <= user.LastUpdated)
+            {
+                return false;
+            }
+
+            int countedMessageLength = 100;
+            int count = (message.Content.Length + countedMessageLength)/countedMessageLength;
+
+            user.LastUpdated = DateTime.Now;
+            user.CountedMessages += count;
+            
             return true;
         }
 
         public static User GetOrCreateUser(DiscordMember member)
         {
- 
-            var user = Users.FirstOrDefault(x => x.UserId == member.Id);
+            User user = Users.FirstOrDefault(x => x.UserId == member.Id);
 
             if (user is null)
             {
-                var fresh =  GetFreshUser(member);
+                User fresh =  GetFreshUser(member);
                 Users.Add(fresh);
                 return fresh;
             }

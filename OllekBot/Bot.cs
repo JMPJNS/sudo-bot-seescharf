@@ -62,7 +62,7 @@ namespace OllekBot
             Commands.RegisterCommands<UtilityCommands>();
             Commands.RegisterCommands<RankCommands>();
             Commands.RegisterCommands<CustomGamesCommands>();
-            
+                        
             // Start Bot
             await Client.ConnectAsync();
             await Task.Delay(-1);

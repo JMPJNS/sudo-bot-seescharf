@@ -12,7 +12,7 @@ namespace OllekBot.Commands
     public class UtilityCommands : BaseCommandModule
     {
         [Command("say")]
-        [RequireRoles(RoleCheckMode.Any, new []{"Admins", "Mods", "Developers"})]
+        [RequireRoles(RoleCheckMode.Any, new []{"Admins", "Mods"})]
         public async Task Ping(CommandContext ctx, params string[] words)
         {
             var message = await ctx.Channel.SendMessageAsync(ctx.RawArgumentString);

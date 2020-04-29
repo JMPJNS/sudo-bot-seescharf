@@ -1,5 +1,5 @@
 using System;
-using DSharpPlus.Entities;
+using DateTime = System.DateTime;
 
 namespace OllekBot.DataInterfaces
 {
@@ -10,7 +10,7 @@ namespace OllekBot.DataInterfaces
 
         public bool Blocked;
         
-        public DateTimeOffset LastUpdated;
+        public DateTime LastUpdated;
         public DateTimeOffset JoinDate;
 
         public int SpecialPoints;
@@ -26,6 +26,7 @@ namespace OllekBot.DataInterfaces
             int days = (int)(DateTime.Now - this.JoinDate).TotalDays;
 
             return messages + points + days*50;
+            
         }
 
         public User(ulong userId, ulong guildId, DateTimeOffset joinDate, int countedMessages, int specialPoints, bool blocked)
@@ -38,8 +39,8 @@ namespace OllekBot.DataInterfaces
 
             this.CountedMessages = countedMessages;
             this.SpecialPoints = specialPoints;
-            
-            this.LastUpdated = new DateTimeOffset();
+
+            this.LastUpdated = DateTime.Now;
         }
     }
 }
