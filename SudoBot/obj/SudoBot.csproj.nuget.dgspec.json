@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/jmp/RiderProjects/ollek-bot/OllekBot/OllekBot.csproj": {}
+    "/home/jmp/RiderProjects/sudo-bot/SudoBot/SudoBot.csproj": {}
   },
   "projects": {
-    "/home/jmp/RiderProjects/ollek-bot/OllekBot/OllekBot.csproj": {
+    "/home/jmp/RiderProjects/sudo-bot/SudoBot/SudoBot.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/jmp/RiderProjects/ollek-bot/OllekBot/OllekBot.csproj",
-        "projectName": "OllekBot",
-        "projectPath": "/home/jmp/RiderProjects/ollek-bot/OllekBot/OllekBot.csproj",
+        "projectUniqueName": "/home/jmp/RiderProjects/sudo-bot/SudoBot/SudoBot.csproj",
+        "projectName": "SudoBot",
+        "projectPath": "/home/jmp/RiderProjects/sudo-bot/SudoBot/SudoBot.csproj",
         "packagesPath": "/home/jmp/.nuget/packages/",
-        "outputPath": "/home/jmp/RiderProjects/ollek-bot/OllekBot/obj/",
+        "outputPath": "/home/jmp/RiderProjects/sudo-bot/SudoBot/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/jmp/.config/NuGet/NuGet.Config"
