@@ -5,7 +5,8 @@
     <e p="$USER_HOME$/.Rider2019.3/system/resharper-host/local/Transient/ReSharperHost/v193/SolutionCaches/_OllekBot.-109057590.00" t="ExcludeRecursive" />
     <e p="$PROJECT_DIR$" t="IncludeFlat">
       <e p=".git/info/exclude" t="IncludeRecursive" />
-      <e p="OllekBot" t="IncludeRecursive">
+      <e p="OllekBot.sln" t="IncludeFlat" />
+      <e p="SudoBot" t="IncludeRecursive">
         <e p="Attributes" t="Include">
           <e p="RequireRolesOrOwner.cs" t="Include" />
         </e>
@@ -22,25 +23,26 @@
         <e p="Database" t="Include">
           <e p="Firebase.cs" t="Include" />
         </e>
+        <e p="Globals.cs" t="Include" />
         <e p="Handlers" t="Include">
+          <e p="GuildHandler.cs" t="Include" />
           <e p="MessageHandler.cs" t="Include" />
           <e p="UserHandler.cs" t="Include" />
         </e>
-        <e p="OllekBot.csproj" t="IncludeRecursive" />
         <e p="Program.cs" t="Include" />
         <e p="Secrets" t="Include">
           <e p="BotConfig.cs" t="Include" />
         </e>
+        <e p="SudoBot.csproj" t="IncludeRecursive" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp3.1" t="Include">
-              <e p="OllekBot.AssemblyInfo.cs" t="Include" />
+              <e p="SudoBot.AssemblyInfo.cs" t="Include" />
             </e>
           </e>
         </e>
       </e>
-      <e p="OllekBot.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />
     </e>
   </component>
