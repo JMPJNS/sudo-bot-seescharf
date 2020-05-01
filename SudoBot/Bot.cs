@@ -9,6 +9,8 @@ using DSharpPlus.EventArgs;
 using DSharpPlus.Interactivity;
 using Newtonsoft.Json;
 using SudoBot.Commands;
+using SudoBot.Database;
+using SudoBot.DataInterfaces;
 using SudoBot.Handlers;
 
 namespace SudoBot
@@ -21,13 +23,16 @@ namespace SudoBot
         
         private MessageHandler _messageHandler = new MessageHandler();
         
+        private Firebase _fb = Firebase.Instance;
+
         public async Task RunAsync()
         {
+            BotConfig bc = await _fb.GetBotConfig();
 
             // Bot
             var config = new DiscordConfiguration
             {
-                Token = BotConfig.Token,
+                Token = bc.Token,
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
                 LogLevel = LogLevel.Debug,
@@ -43,7 +48,7 @@ namespace SudoBot
             //Commands
             var commandsConfig = new CommandsNextConfiguration
             {
-                StringPrefixes = BotConfig.Prefix,
+                StringPrefixes = bc.Prefixes,
                 EnableMentionPrefix = true,
                 EnableDms = false
             };

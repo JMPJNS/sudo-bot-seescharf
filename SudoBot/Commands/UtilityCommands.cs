@@ -1,7 +1,9 @@
 using System;
 using System.Globalization;
+using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
+using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -13,7 +15,7 @@ namespace SudoBot.Commands
     public class UtilityCommands : BaseCommandModule
     {
         [Command("say")]
-        [RequireRoles(RoleCheckMode.Any, new []{"Admins", "Mods"})]
+        [RequirePermissions(Permissions.ManageMessages)]
         public async Task Say(CommandContext ctx, params string[] words)
         {
             Task.Run(async () =>
