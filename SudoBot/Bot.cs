@@ -75,28 +75,29 @@ namespace SudoBot
 
         private Task OnClientReady(ReadyEventArgs e)
         {
-            e.Client.DebugLogger.LogMessage(LogLevel.Info, "SudoBot", $"Bot Started", DateTime.Now);
+            Globals.Logger = e.Client.DebugLogger;
+            Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Bot Started", DateTime.Now);
 
             return Task.CompletedTask;
         }
 
         private Task OnGuildAvailable(GuildCreateEventArgs e)
         {
-            e.Client.DebugLogger.LogMessage(LogLevel.Info, "SudoBot", $"Bot Logged in on: {e.Guild.Name}", DateTime.Now);
+            Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Bot Logged in on: {e.Guild.Name}", DateTime.Now);
 
             return Task.CompletedTask;
         }
         
         private Task OnClientError(ClientErrorEventArgs e)
         {
-            e.Client.DebugLogger.LogMessage(LogLevel.Error, "SudoBot", $"Exception occured: {e.Exception.GetType()}: {e.Exception.Message}", DateTime.Now);
+            Globals.Logger.LogMessage(LogLevel.Error, "SudoBot", $"Exception occured: {e.Exception.GetType()}: {e.Exception.Message}", DateTime.Now);
             
             return Task.CompletedTask;
         }
         
         private Task MessageCreated(MessageCreateEventArgs e)
         {
-            e.Client.DebugLogger.LogMessage(LogLevel.Debug, "SudoBot", $"Message sent: ${e.Message}", DateTime.Now);
+            Globals.Logger.LogMessage(LogLevel.Debug, "SudoBot", $"Message sent: ${e.Message}", DateTime.Now);
 
             _messageHandler.HandleMessage(e.Message, e.Author, e.Guild).GetAwaiter().GetResult();
             return Task.CompletedTask;

@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 using Google.Cloud.Firestore;
 using SudoBot.Database;
@@ -12,36 +13,36 @@ namespace SudoBot.DataInterfaces
     public class User
     {
         [FirestoreProperty]
-        public ulong UserId { set; get; }
+        public ulong UserId { private set; get; }
         
         [FirestoreProperty]
-        public ulong GuildId { set; get; }
+        public ulong GuildId { private set; get; }
 
         [FirestoreProperty]
-        public bool Blocked { set; get; }
+        public bool Blocked { private set; get; }
         
         [FirestoreProperty]
-        public DateTime LastUpdated { set; get; }
+        public Timestamp LastUpdated { private set; get; }
         
         [FirestoreProperty]
-        public DateTimeOffset JoinDate { set; get; }
+        public Timestamp JoinDate { private set; get; }
 
         [FirestoreProperty]
-        public int SpecialPoints { set; get; }
+        public int SpecialPoints { private set; get; }
         
         [FirestoreProperty]
-        public int CountedMessages { set; get; }
+        public int CountedMessages { private set; get; }
         
         // Logic Starts Here
-        
-        private Firebase _fb = Firebase.Instance;
+
+        public DocumentReference userReference;
         
         public int CalculatePoints()
         {
-            int messages = this.CountedMessages;
-            int points = this.SpecialPoints;
+            int messages = CountedMessages;
+            int points = SpecialPoints;
 
-            int days = (int)(DateTime.Now - this.JoinDate).TotalDays;
+            int days = (int)(DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc) - JoinDate.ToDateTime()).TotalDays;
 
             return messages + points + days*50;
             
@@ -49,11 +50,11 @@ namespace SudoBot.DataInterfaces
         
         public bool AddCountedMessages(DiscordMessage message)
         {
-            if (this.Blocked) return false;
+            if (Blocked) return false;
             
             TimeSpan minDelay = TimeSpan.FromMinutes(0.1);
 
-            if (DateTimeOffset.Now - minDelay <= this.LastUpdated)
+            if (Timestamp.FromDateTime(DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc) - minDelay) <= LastUpdated)
             {
                 return false;
             }
@@ -61,28 +62,31 @@ namespace SudoBot.DataInterfaces
             int countedMessageLength = 100;
             int count = (message.Content.Length + countedMessageLength)/countedMessageLength;
 
-            this.LastUpdated = DateTime.Now;
-            this.CountedMessages += count;
+            LastUpdated = Timestamp.FromDateTime(DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc));
+            CountedMessages += count;
+
+            SaveUser();
             
             return true;
         }
 
+        public void AddSpecialPoints(int points)
+        {
+            SpecialPoints += points;
+            SaveUser();
+        }
+        
+        // Database Management stuff here
+
         public static async Task<User> GetOrCreateUser(DiscordMember member)
         {
             User user = await Firebase.Instance.GetUser(member.Id, member.Guild.Id);
-
-            // if (user is null)
-            // {
-            //     User fresh = GetFreshUser(member);
-            //     return fresh;
-            // }
-            
-            return user ?? GetFreshUser(member);
+            return user ?? await GetFreshUser(member);
         }
         
-        public static User GetFreshUser(DiscordMember member)
+        private static async Task<User> GetFreshUser(DiscordMember member)
         {
-            return new User(
+            User u =  new User(
                 member.Id,
                 member.Guild.Id,
                 member.JoinedAt,
@@ -90,20 +94,29 @@ namespace SudoBot.DataInterfaces
                 0,
                 false
             );
+
+            return await Firebase.Instance.CreateUser(u);
+        }
+
+        private void SaveUser()
+        {
+            Firebase.Instance.SaveUser(this).GetAwaiter().GetResult();
         }
         
         private User(ulong userId, ulong guildId, DateTimeOffset joinDate, int countedMessages, int specialPoints, bool blocked)
         {
-            this.UserId = userId;
-            this.GuildId = guildId;
-            this.JoinDate = joinDate;
+            UserId = userId;
+            GuildId = guildId;
+            JoinDate = Timestamp.FromDateTimeOffset(DateTime.SpecifyKind(joinDate.DateTime, DateTimeKind.Utc));
 
-            this.Blocked = blocked;
+            Blocked = blocked;
 
-            this.CountedMessages = countedMessages;
-            this.SpecialPoints = specialPoints;
+            CountedMessages = countedMessages;
+            SpecialPoints = specialPoints;
 
-            this.LastUpdated = DateTime.Now;
+            LastUpdated = Timestamp.FromDateTime(DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc));
         }
+        
+        public User() {}
     }
 }

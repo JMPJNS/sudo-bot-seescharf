@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using DSharpPlus;
+using DSharpPlus.CommandsNext;
 using Google.Cloud.Firestore;
 using SudoBot.DataInterfaces;
 
@@ -52,11 +54,49 @@ namespace SudoBot.Database
             {
                 var qs = await _users.WhereEqualTo("UserId", userId).WhereEqualTo("GuildId", guildId)
                     .GetSnapshotAsync();
-                return qs.Documents.First().ConvertTo<User>();
+                
+                User u =  qs.Documents.First().ConvertTo<User>();
+                u.userReference = qs.Documents.First().Reference;
+                return u;
             }
             catch (Exception e)
             {
                 return null;
+            }
+        }
+
+        public async Task<User> CreateUser(User user)
+        {
+            try
+            {
+                DocumentReference userReference = await _users.AddAsync(user);
+                user.userReference = userReference;
+                return user;
+            }
+            catch (Exception e)
+            {
+                Globals.Logger.LogMessage(LogLevel.Error, "SudoBot", $"Error Creating user GID: {user.GuildId}, UID: {user.UserId}", DateTime.Now, e);
+                return null;
+            }
+        }
+
+        public async Task SaveUser(User user)
+        {
+            try
+            {
+                if (user.userReference is null)
+                {
+                    await _users.AddAsync(user);
+                }
+                else
+                {
+                    await user.userReference.SetAsync(user);
+                }
+                
+            }
+            catch (Exception e)
+            {
+                Globals.Logger.LogMessage(LogLevel.Error, "SudoBot", $"Error Updating user GID: {user.GuildId}, UID: {user.UserId}", DateTime.Now, e);
             }
             
         }

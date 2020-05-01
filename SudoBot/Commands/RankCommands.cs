@@ -20,11 +20,11 @@ namespace SudoBot.Commands
         }
         
         [Command("giveSP")]
-        [RequirePermissions(Permissions.ManageRoles)]
+        [RequireRoles(RoleCheckMode.Any, new []{"SudoBotAdmin", "SudoBotMod", "Admins", "Mods"})]
         public async Task GiveSp(CommandContext ctx, DiscordMember member, int count)
         {
             var user = await User.GetOrCreateUser(member);
-            user.CountedMessages += count;
+            user.AddSpecialPoints(count);
             await ctx.Channel.SendMessageAsync($"{member.Mention} hat {user.CountedMessages.ToString()} IQ erhalten");
         }
     }
