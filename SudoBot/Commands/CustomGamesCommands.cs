@@ -12,7 +12,7 @@ namespace SudoBot.Commands
 {
     public class CustomGamesCommands: BaseCommandModule
     {
-        [Command("elf")]
+        [Command("interaction")]
         public async Task Elf(CommandContext ctx)
         {
             var sentMessage = await ctx.Channel.SendMessageAsync($"asdf");

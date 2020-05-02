@@ -13,6 +13,7 @@ namespace SudoBot.Models
 {
     public class User
     {
+        [BsonId]
         public ObjectId Id { get; set; }
         public ulong UserId { private set; get; }
         
@@ -36,7 +37,7 @@ namespace SudoBot.Models
             int messages = CountedMessages;
             int points = SpecialPoints;
 
-            int days = (int)(DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc) - JoinDate).TotalDays;
+            int days = (int)(DateTime.UtcNow - JoinDate).TotalDays;
 
             return messages + points + days*24;
             
@@ -48,7 +49,7 @@ namespace SudoBot.Models
             
             TimeSpan minDelay = TimeSpan.FromMinutes(0.1);
 
-            if (DateTime.Now - minDelay <= LastUpdated)
+            if (DateTime.UtcNow - minDelay <= LastUpdated)
             {
                 return false;
             }
@@ -56,7 +57,7 @@ namespace SudoBot.Models
             int countedMessageLength = 100;
             int count = (message.Content.Length + countedMessageLength)/countedMessageLength;
 
-            LastUpdated = DateTime.Now;
+            LastUpdated = DateTime.UtcNow;
             CountedMessages += count;
 
             await SaveUser();
@@ -111,7 +112,7 @@ namespace SudoBot.Models
             CountedMessages = countedMessages;
             SpecialPoints = specialPoints;
 
-            LastUpdated = DateTime.Now;
+            LastUpdated = DateTime.UtcNow;
         }
         
         public User() {}
