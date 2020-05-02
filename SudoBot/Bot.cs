@@ -9,7 +9,6 @@ using DSharpPlus.EventArgs;
 using DSharpPlus.Interactivity;
 using Newtonsoft.Json;
 using SudoBot.Commands;
-using SudoBot.Database;
 using SudoBot.DataInterfaces;
 using SudoBot.Handlers;
 
@@ -22,17 +21,14 @@ namespace SudoBot
         public InteractivityExtension Interactivity { get; private set; }
         
         private MessageHandler _messageHandler = new MessageHandler();
-        
-        private Firebase _fb = Firebase.Instance;
 
         public async Task RunAsync()
         {
-            BotConfig bc = await _fb.GetBotConfig();
 
             // Bot
             var config = new DiscordConfiguration
             {
-                Token = bc.Token,
+                Token = Environment.GetEnvironmentVariable("BOTTOKEN"),
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
                 LogLevel = LogLevel.Debug,
@@ -48,7 +44,7 @@ namespace SudoBot
             //Commands
             var commandsConfig = new CommandsNextConfiguration
             {
-                StringPrefixes = bc.Prefixes,
+                StringPrefixes = new []{"$"},
                 EnableMentionPrefix = true,
                 EnableDms = false
             };
@@ -67,6 +63,7 @@ namespace SudoBot
             Commands.RegisterCommands<UtilityCommands>();
             Commands.RegisterCommands<RankCommands>();
             Commands.RegisterCommands<CustomGamesCommands>();
+            Commands.RegisterCommands<TestCommands>();
                         
             // Start Bot
             await Client.ConnectAsync();

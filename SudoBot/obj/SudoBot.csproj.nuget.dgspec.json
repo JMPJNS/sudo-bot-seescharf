@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/jmp/RiderProjects/sudo-bot/SudoBot/SudoBot.csproj": {}
+    "/home/jmp/prj/sudo-bot-seescharf/SudoBot/SudoBot.csproj": {}
   },
   "projects": {
-    "/home/jmp/RiderProjects/sudo-bot/SudoBot/SudoBot.csproj": {
+    "/home/jmp/prj/sudo-bot-seescharf/SudoBot/SudoBot.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/jmp/RiderProjects/sudo-bot/SudoBot/SudoBot.csproj",
+        "projectUniqueName": "/home/jmp/prj/sudo-bot-seescharf/SudoBot/SudoBot.csproj",
         "projectName": "SudoBot",
-        "projectPath": "/home/jmp/RiderProjects/sudo-bot/SudoBot/SudoBot.csproj",
+        "projectPath": "/home/jmp/prj/sudo-bot-seescharf/SudoBot/SudoBot.csproj",
         "packagesPath": "/home/jmp/.nuget/packages/",
-        "outputPath": "/home/jmp/RiderProjects/sudo-bot/SudoBot/obj/",
+        "outputPath": "/home/jmp/prj/sudo-bot-seescharf/SudoBot/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/jmp/.config/NuGet/NuGet.Config"
+          "/home/jmp/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -39,19 +39,27 @@
           "dependencies": {
             "DSharpPlus": {
               "target": "Package",
-              "version": "[4.0.0-nightly-00684, )"
+              "version": "[4.0.0-nightly-00687, )"
             },
             "DSharpPlus.CommandsNext": {
               "target": "Package",
-              "version": "[4.0.0-nightly-00684, )"
+              "version": "[4.0.0-nightly-00687, )"
             },
             "DSharpPlus.Interactivity": {
               "target": "Package",
-              "version": "[4.0.0-nightly-00684, )"
+              "version": "[4.0.0-nightly-00687, )"
             },
-            "Google.Cloud.Firestore": {
+            "Dapper": {
               "target": "Package",
-              "version": "[2.0.0-beta02, )"
+              "version": "[2.0.35, )"
+            },
+            "Npgsql": {
+              "target": "Package",
+              "version": "[4.1.3.1, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.1, )"
             }
           },
           "imports": [
@@ -65,11 +73,14 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.103/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/3.1.103/RuntimeIdentifierGraph.json"
         }
       }
     }

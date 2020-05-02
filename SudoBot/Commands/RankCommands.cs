@@ -4,7 +4,6 @@ using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
-using SudoBot.Database;
 using SudoBot.DataInterfaces;
 using SudoBot.Handlers;
 
