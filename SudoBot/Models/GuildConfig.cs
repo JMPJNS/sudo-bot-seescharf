@@ -1,4 +1,4 @@
-namespace SudoBot.DataInterfaces
+namespace SudoBot.Models
 {
     public class GuildConfig
     {

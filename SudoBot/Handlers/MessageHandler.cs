@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
-using SudoBot.DataInterfaces;
+using SudoBot.Models;
 
 namespace SudoBot.Handlers
 {
@@ -15,8 +15,9 @@ namespace SudoBot.Handlers
             DiscordMember member = await guild.GetMemberAsync(author.Id);
             User user = await User.GetOrCreateUser(member);
             
-            bool didCountMessage = user.AddCountedMessages(message);
-            
+            bool didCountMessage = await user.AddCountedMessages(message);
+            if(didCountMessage) await message.Channel.SendMessageAsync("Did Count");
+
         }
     }
 }

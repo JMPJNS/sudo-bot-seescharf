@@ -9,7 +9,7 @@ using DSharpPlus.EventArgs;
 using DSharpPlus.Interactivity;
 using Newtonsoft.Json;
 using SudoBot.Commands;
-using SudoBot.DataInterfaces;
+using SudoBot.Models;
 using SudoBot.Handlers;
 
 namespace SudoBot

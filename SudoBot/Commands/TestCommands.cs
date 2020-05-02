@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
-using SudoBot.DataInterfaces;
+using SudoBot.Models;
 using DSharpPlus.CommandsNext.Attributes;
 using SudoBot.Database;
 
@@ -11,8 +11,6 @@ namespace SudoBot.Commands
         [Command("test")]
         public async Task T(CommandContext ctx)
         {
-            PDb tDB = new PDb();
-            await tDB.Test(ctx.Member);
         }
     }
 }

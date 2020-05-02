@@ -1,15 +1,19 @@
 using System;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using SudoBot.Database;
 using DateTime = System.DateTime;
 
-namespace SudoBot.DataInterfaces
+namespace SudoBot.Models
 {
     public class User
     {
-        public int Id { get; set; }
+        public ObjectId Id { get; set; }
         public ulong UserId { private set; get; }
         
         public ulong GuildId { private set; get; }
@@ -34,11 +38,11 @@ namespace SudoBot.DataInterfaces
 
             int days = (int)(DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc) - JoinDate).TotalDays;
 
-            return messages + points + days*50;
+            return messages + points + days*24;
             
         }
         
-        public bool AddCountedMessages(DiscordMessage message)
+        public async Task<bool> AddCountedMessages(DiscordMessage message)
         {
             if (Blocked) return false;
             
@@ -55,7 +59,7 @@ namespace SudoBot.DataInterfaces
             LastUpdated = DateTime.Now;
             CountedMessages += count;
 
-            SaveUser();
+            await SaveUser();
             
             return true;
         }
@@ -70,12 +74,15 @@ namespace SudoBot.DataInterfaces
 
         public static async Task<User> GetOrCreateUser(DiscordMember member)
         {
-            // User user = await Firebase.Instance.GetUser(member.Id, member.Guild.Id);
-            // return user ?? await GetFreshUser(member);
-            return await GetFreshUser(member);
+            User user = await MongoCrud.Instance.GetUser(member.Id, member.Guild.Id);
+            if (user != null) return user;
+
+            user = GetFreshUser(member);
+            MongoCrud.Instance.InsertUser(user);
+            return user;
         }
         
-        private static async Task<User> GetFreshUser(DiscordMember member)
+        private static User GetFreshUser(DiscordMember member)
         {
             User u =  new User(
                 member.Id,
@@ -85,14 +92,12 @@ namespace SudoBot.DataInterfaces
                 0,
                 false
             );
-
-            // return await Firebase.Instance.CreateUser(u);
             return u;
         }
 
-        private void SaveUser()
+        private async Task SaveUser()
         {
-            // Firebase.Instance.SaveUser(this).GetAwaiter().GetResult();
+            await MongoCrud.Instance.UpdateUser(this);
         }
         
         private User(ulong userId, ulong guildId, DateTimeOffset joinDate, int countedMessages, int specialPoints, bool blocked)
