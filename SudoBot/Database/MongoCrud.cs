@@ -2,6 +2,7 @@ using System;
 using System.Data;
 using System.Threading.Tasks;
 using DSharpPlus;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using SudoBot.Models;
 
@@ -29,11 +30,12 @@ namespace SudoBot.Database
         }
 
 
+        // User Stuff
         public async Task<User> GetUser(ulong userId, ulong guildId)
         {
             try
             {
-                return _users.FindAsync(user => user.UserId == userId && user.GuildId == guildId).Result.First();
+                return await _users.FindAsync(user => user.UserId == userId && user.GuildId == guildId).Result.FirstAsync();
             }
             catch (Exception e)
             {
@@ -54,7 +56,7 @@ namespace SudoBot.Database
                 user);
         }
         
-        public int GetUserRank(User user)
+        public async Task<int> GetUserRank(User user)
         {
             throw new NotImplementedException();
         }

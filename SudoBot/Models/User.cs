@@ -29,6 +29,8 @@ namespace SudoBot.Models
         
         public int CountedMessages { private set; get; }
         
+        public int TicketsRemaining { private set; get; }
+        
         // Logic Starts Here
 
         
@@ -41,6 +43,18 @@ namespace SudoBot.Models
 
             return messages + points + days*24;
             
+        }
+
+        public async Task RemoveTicket()
+        {
+            TicketsRemaining--;
+            await SaveUser();
+        }
+
+        public async Task AddTickets(int count)
+        {
+            TicketsRemaining += count;
+            await SaveUser();
         }
         
         public async Task<bool> AddCountedMessages(DiscordMessage message)
@@ -65,10 +79,10 @@ namespace SudoBot.Models
             return true;
         }
 
-        public void AddSpecialPoints(int points)
+        public async Task AddSpecialPoints(int points)
         {
             SpecialPoints += points;
-            SaveUser();
+            await SaveUser();
         }
         
         // Database Management stuff here
@@ -113,6 +127,7 @@ namespace SudoBot.Models
             SpecialPoints = specialPoints;
 
             LastUpdated = DateTime.UtcNow;
+            TicketsRemaining = 1;
         }
         
         public User() {}

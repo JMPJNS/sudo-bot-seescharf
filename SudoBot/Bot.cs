@@ -54,7 +54,7 @@ namespace SudoBot
             //Interactivity
             var interactivityConfig = new InteractivityConfiguration
             {
-                Timeout = TimeSpan.FromMinutes(5)
+                Timeout = TimeSpan.FromMinutes(1)
             };
 
             Interactivity = Client.UseInteractivity(interactivityConfig);
@@ -81,6 +81,8 @@ namespace SudoBot
         private Task OnGuildAvailable(GuildCreateEventArgs e)
         {
             Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Bot Logged in on: {e.Guild.Name}", DateTime.Now);
+            
+            //TODO Check if Guild Config exists, otherwise create default config
 
             return Task.CompletedTask;
         }

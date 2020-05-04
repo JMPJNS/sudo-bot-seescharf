@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
@@ -12,22 +13,25 @@ namespace SudoBot.Commands
 {
     public class CustomGamesCommands: BaseCommandModule
     {
-        [Command("interaction")]
-        public async Task Elf(CommandContext ctx)
+        [Command("createCustoms")]
+        public async Task CreateCustoms(CommandContext ctx, string title, string message, int maxMembers) 
         {
-            var sentMessage = await ctx.Channel.SendMessageAsync($"asdf");
+            var embed = new DiscordEmbedBuilder();
+            embed.Title = title;
+            embed.Color = DiscordColor.Blue;
+            embed.Description = message;
 
-            var xEmoji = DiscordEmoji.FromName(ctx.Client, ":x:");
-            var bEmoji = DiscordEmoji.FromName(ctx.Client, ":b:");
-            var boneEmoji = DiscordEmoji.FromName(ctx.Client, ":bone:");
+            var usersIds = new List<ulong>();
+            
+            var sentMessage = await ctx.Channel.SendMessageAsync(embed:embed);
+            
+            var joinEmoji = DiscordEmoji.FromName(ctx.Client, ":white_check_mark:");
+            var startEmoji = DiscordEmoji.FromName(ctx.Client, ":cyclone:");
+            var cancleEmoji = DiscordEmoji.FromName(ctx.Client, ":no_entry_sign:");
 
-            int xCount = 0;
-            int bCount = 0;
-            int boneCount = 0;
-
-            await sentMessage.CreateReactionAsync(xEmoji);
-            await sentMessage.CreateReactionAsync(bEmoji);
-            await sentMessage.CreateReactionAsync(boneEmoji);
+            await sentMessage.CreateReactionAsync(joinEmoji);
+            await sentMessage.CreateReactionAsync(cancleEmoji);
+            await sentMessage.CreateReactionAsync(startEmoji);
 
             while (true)
             {
@@ -37,25 +41,47 @@ namespace SudoBot.Commands
                         .WaitForReactionAsync(x => x.Message == sentMessage && !x.User.IsBot);
                     
                     if(reactionResult.TimedOut) continue;
+                    DiscordMember member = await sentMessage.Channel.Guild.GetMemberAsync(reactionResult.Result.User.Id);
 
-                    if (reactionResult.Result.Emoji == xEmoji)
+                    if (reactionResult.Result.Emoji == joinEmoji)
                     {
-                        xCount++;
-                        await ctx.Channel.SendMessageAsync($"{reactionResult.Result.Emoji}: {xCount.ToString()}");
+                        await ctx.Channel.SendMessageAsync($"{reactionResult.Result.Emoji}");
+                        User user = await User.GetOrCreateUser(member);
+
+                        if (usersIds.Contains(user.UserId) || user.TicketsRemaining == 0)
+                        {
+                            await sentMessage.DeleteReactionAsync(reactionResult.Result.Emoji, reactionResult.Result.User);
+                            continue;
+                        }
+                        
+                        usersIds.Add(user.UserId);
+
+                        await user.RemoveTicket();
+                        await sentMessage.DeleteReactionAsync(reactionResult.Result.Emoji, reactionResult.Result.User);
                         continue;
                     }
 
-                    if (reactionResult.Result.Emoji == bEmoji)
+                    if ((member.Guild.Permissions & Permissions.ManageMessages) != 0 && reactionResult.Result.Emoji == cancleEmoji)
                     {
-                        bCount++;
-                        await ctx.Channel.SendMessageAsync($"{reactionResult.Result.Emoji}: {bCount.ToString()}");
-                        continue;
+                        await ctx.Channel.SendMessageAsync($"{reactionResult.Result.Emoji}");
+                        await ctx.Channel.SendMessageAsync($"Das Custom Game wurde von {reactionResult.Result.User.Mention} Abgebrochen!");
+                        return;
                     }
 
-                    if (reactionResult.Result.Emoji == boneEmoji)
+                    if ((member.Guild.Permissions & Permissions.ManageMessages) != 0 && reactionResult.Result.Emoji == startEmoji)
                     {
-                        boneCount++;
-                        await ctx.Channel.SendMessageAsync($"{reactionResult.Result.Emoji}: {boneCount.ToString()}");
+                        await ctx.Channel.SendMessageAsync($"{reactionResult.Result.Emoji}");
+
+                        var rUsers = usersIds.Shuffle();
+
+                        if (rUsers.Count < maxMembers) maxMembers = rUsers.Count;
+
+                        for (int i = 0; i < maxMembers; i++)
+                        {
+                            var m = await sentMessage.Channel.Guild.GetMemberAsync(rUsers[i]);
+                            // TODO get customgames role from CustomGames Mongo, add Role to User
+                        }
+                        
                         continue;
                     }
 
