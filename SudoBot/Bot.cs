@@ -83,8 +83,6 @@ namespace SudoBot
         {
             Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Bot Logged in on: {e.Guild.Name}", DateTime.Now);
             
-            //TODO Check if Guild Config exists, otherwise create default config
-
             var guild = MongoCrud.Instance.GetGuild(e.Guild.Id).GetAwaiter().GetResult();
             if (guild == null)
             {

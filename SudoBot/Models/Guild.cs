@@ -18,6 +18,8 @@ namespace SudoBot.Models
         public int TicketCount { get; set; }
         
         public ulong CustomsRole { get; private set; }
+        
+        private List<RankingRole> RankingRoles { get; set; }
 
         public bool HasLeveling { get; set; }
         public bool HasCustoms { get; set; }
@@ -26,16 +28,29 @@ namespace SudoBot.Models
         public Guild(ulong guildId)
         {
             GuildId = guildId;
+            
+            RankingRoles = new List<RankingRole>();
+            
             HasLeveling = false;
             HasCustoms = true;
             HasSupport = false;
+            
             TicketCount = 1;
         }
+        
+        private class RankingRole
+        {
+            public ulong Role;
+            public int Points;
+        }
+        
         
         private async Task SaveGuild()
         {
             await MongoCrud.Instance.UpdateGuild(this);
         }
+        
+        // Custom Games stuff
 
         public async Task RemoveAllCustomsRole(CommandContext ctx)
         {
@@ -64,6 +79,17 @@ namespace SudoBot.Models
             {
                 await user.AddTickets(TicketCount);
             }
+        }
+        
+        // Ranking Stuff
+
+        public async Task AddRankingRole(DiscordRole role, int points)
+        {
+            var rr = new RankingRole();
+            rr.Points = points;
+            rr.Role = role.Id;
+            RankingRoles.Add(rr);
+            await SaveGuild();
         }
     }
 }
