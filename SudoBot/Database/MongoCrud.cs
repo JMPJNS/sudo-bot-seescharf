@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using DSharpPlus;
@@ -14,6 +15,7 @@ namespace SudoBot.Database
         
         private IMongoDatabase _db;
         private IMongoCollection<User> _users;
+        private IMongoCollection<Guild> _guilds;
         private MongoCrud()
         {
             try
@@ -22,11 +24,38 @@ namespace SudoBot.Database
                 _db = client.GetDatabase("SudoBotDev");
                 
                 _users = _db.GetCollection<User>("Users");
+                _guilds = _db.GetCollection<Guild>("Guilds");
             }
             catch (Exception e)
             {
                 Globals.Logger.LogMessage(LogLevel.Error, "SudoBot", $"Exception occured While connecting to Database: {e.GetType()}: {e.Message}", DateTime.Now);
             }
+        }
+        
+        // Guild Stuff
+
+        public async Task<Guild> GetGuild(ulong guildId)
+        {
+            try
+            {
+                return await _guilds.FindAsync(guild => guild.GuildId == guildId).Result.FirstAsync();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+        
+        public async Task InsertGuild(Guild guild)
+        {
+            await _guilds.InsertOneAsync(guild);
+        }
+        
+        public async Task UpdateGuild(Guild guild)
+        {
+            await _guilds.ReplaceOneAsync(
+                g => guild.GuildId == g.GuildId,
+                guild);
         }
 
 
@@ -58,7 +87,14 @@ namespace SudoBot.Database
         
         public async Task<int> GetUserRank(User user)
         {
+            // Count how many users have a higher score
             throw new NotImplementedException();
+        }
+        
+        // Custom Game Stuff
+        public async Task<List<User>> GetUsersWithoutTicket(ulong guildId)
+        {
+            return await _users.FindAsync(user => user.GuildId == guildId && user.TicketsRemaining == 0).Result.ToListAsync();
         }
     }
 }

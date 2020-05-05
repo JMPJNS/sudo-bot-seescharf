@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using DSharpPlus.Interactivity;
+using SudoBot.Database;
 using SudoBot.Models;
 using SudoBot.Handlers;
 
@@ -13,17 +15,39 @@ namespace SudoBot.Commands
 {
     public class CustomGamesCommands: BaseCommandModule
     {
-        [Command("createCustoms")]
-        public async Task CreateCustoms(CommandContext ctx, string title, string message, int maxMembers) 
+        [Command("setCustomsRole")]
+        public async Task SetCustomsRole(CommandContext ctx, DiscordRole role)
         {
+            var guild = await MongoCrud.Instance.GetGuild(ctx.Guild.Id);
+            await guild.SetCustomsRole(role.Id);
+        }
+        
+        [Command("createCustoms")]
+        public async Task CreateCustoms(CommandContext ctx, string title, string message, int maxMembers, bool useTicket = false)
+        {
+            var guild = await MongoCrud.Instance.GetGuild(ctx.Guild.Id);
+
+            if (guild == null) {Console.WriteLine("ERROR GUILD NOT FOUND"); return;}
+            if (guild.CustomsRole == 0)
+            {
+                await ctx.Channel.SendMessageAsync("Definiere eine Custom Games Rolle mit: $setCustomsRole {@Rolle}");
+                return;
+            }
+            
+            await guild.RemoveAllCustomsRole(ctx);
+
             var embed = new DiscordEmbedBuilder();
             embed.Title = title;
             embed.Color = DiscordColor.Blue;
             embed.Description = message;
-
-            var usersIds = new List<ulong>();
             
-            var sentMessage = await ctx.Channel.SendMessageAsync(embed:embed);
+            //TODO this probably breaks
+            embed.Fields[0].Name = "Beigetreten";
+            embed.Fields[0].Value = 0.ToString();
+            
+            List<ulong> joinedUsers = new List<ulong>();
+
+            var sentMessage = await ctx.Channel.SendMessageAsync(embed:embed.Build());
             
             var joinEmoji = DiscordEmoji.FromName(ctx.Client, ":white_check_mark:");
             var startEmoji = DiscordEmoji.FromName(ctx.Client, ":cyclone:");
@@ -48,14 +72,24 @@ namespace SudoBot.Commands
                         await ctx.Channel.SendMessageAsync($"{reactionResult.Result.Emoji}");
                         User user = await User.GetOrCreateUser(member);
 
-                        if (usersIds.Contains(user.UserId) || user.TicketsRemaining == 0)
+                        if (joinedUsers.Contains(user.UserId) || user.TicketsRemaining == 0)
                         {
                             await sentMessage.DeleteReactionAsync(reactionResult.Result.Emoji, reactionResult.Result.User);
                             continue;
                         }
-                        
-                        usersIds.Add(user.UserId);
 
+                        if (joinedUsers.Contains(user.UserId))
+                        {
+                            joinedUsers.Remove(user.UserId);
+                        }
+                        else
+                        {
+                            joinedUsers.Add(user.UserId);
+                        }
+                        
+                        embed.Fields[0].Value = joinedUsers.Count.ToString();
+                        await sentMessage.ModifyAsync(embed: embed.Build());
+                        
                         await user.RemoveTicket();
                         await sentMessage.DeleteReactionAsync(reactionResult.Result.Emoji, reactionResult.Result.User);
                         continue;
@@ -70,19 +104,18 @@ namespace SudoBot.Commands
 
                     if ((member.Guild.Permissions & Permissions.ManageMessages) != 0 && reactionResult.Result.Emoji == startEmoji)
                     {
-                        await ctx.Channel.SendMessageAsync($"{reactionResult.Result.Emoji}");
-
-                        var rUsers = usersIds.Shuffle();
+                        var role = ctx.Guild.GetRole(guild.CustomsRole);
+                        var rUsers = joinedUsers.Shuffle();
 
                         if (rUsers.Count < maxMembers) maxMembers = rUsers.Count;
 
                         for (int i = 0; i < maxMembers; i++)
                         {
                             var m = await sentMessage.Channel.Guild.GetMemberAsync(rUsers[i]);
-                            // TODO get customgames role from CustomGames Mongo, add Role to User
+                            await m.GrantRoleAsync(role);
                         }
                         
-                        continue;
+                        return;
                     }
 
                     await ctx.Channel.SendMessageAsync($"Deleting Reaction: {reactionResult.Result.Emoji}");

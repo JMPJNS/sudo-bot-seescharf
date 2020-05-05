@@ -13,8 +13,6 @@ namespace SudoBot.Models
 {
     public class User
     {
-        [BsonId]
-        public ObjectId Id { get; set; }
         public ulong UserId { private set; get; }
         
         public ulong GuildId { private set; get; }

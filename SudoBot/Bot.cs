@@ -9,6 +9,7 @@ using DSharpPlus.EventArgs;
 using DSharpPlus.Interactivity;
 using Newtonsoft.Json;
 using SudoBot.Commands;
+using SudoBot.Database;
 using SudoBot.Models;
 using SudoBot.Handlers;
 
@@ -84,6 +85,12 @@ namespace SudoBot
             
             //TODO Check if Guild Config exists, otherwise create default config
 
+            var guild = MongoCrud.Instance.GetGuild(e.Guild.Id).GetAwaiter().GetResult();
+            if (guild == null)
+            {
+                MongoCrud.Instance.InsertGuild(new Guild(e.Guild.Id)).GetAwaiter().GetResult();
+            }
+            
             return Task.CompletedTask;
         }
         
