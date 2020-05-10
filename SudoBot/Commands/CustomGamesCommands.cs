@@ -15,6 +15,7 @@ namespace SudoBot.Commands
 {
     public class CustomGamesCommands: BaseCommandModule
     {
+        [RequireRoles(RoleCheckMode.Any, new []{"SudoBotAdmin", "SudoBotMod", "Admins", "Mods"})]
         [Command("setCustomsRole")]
         public async Task SetCustomsRole(CommandContext ctx, DiscordRole role)
         {
@@ -22,6 +23,7 @@ namespace SudoBot.Commands
             await guild.SetCustomsRole(role.Id);
         }
         
+        [RequireRoles(RoleCheckMode.Any, new []{"SudoBotAdmin", "SudoBotMod", "Admins", "Mods"})]
         [Command("createCustoms")]
         public async Task CreateCustoms(CommandContext ctx, string title, string message, int maxMembers, bool useTicket = false)
         {
@@ -40,10 +42,10 @@ namespace SudoBot.Commands
             embed.Title = title;
             embed.Color = DiscordColor.Blue;
             embed.Description = message;
-            
+
             //TODO this probably breaks
-            embed.Fields[0].Name = "Beigetreten";
-            embed.Fields[0].Value = 0.ToString();
+            // embed.Fields[0].Name = "Beigetreten";
+            // embed.Fields[0].Value = 0.ToString();
             
             List<ulong> joinedUsers = new List<ulong>();
 
@@ -69,51 +71,98 @@ namespace SudoBot.Commands
 
                     if (reactionResult.Result.Emoji == joinEmoji)
                     {
-                        await ctx.Channel.SendMessageAsync($"{reactionResult.Result.Emoji}");
                         User user = await User.GetOrCreateUser(member);
+                        
 
-                        if (joinedUsers.Contains(user.UserId) || user.TicketsRemaining == 0)
+                        if (joinedUsers.Contains(user.UserId))
+                        {
+                            await ctx.Channel.SendMessageAsync($"{member.Mention} hat verlassen");
+
+                            var u = joinedUsers.Single(x => x == user.UserId);
+                            
+                            joinedUsers.Remove(u);
+                        }
+                        else
+                        {
+                            if (user.TicketsRemaining == 0)
+                            {
+                                await ctx.Channel.SendMessageAsync($"{member.Mention} hat keine Tickets übrig!");
+                                continue;
+                            }
+                            await ctx.Channel.SendMessageAsync($"{member.Mention} ist Beigetreten");
+                            joinedUsers.Add(user.UserId);
+                        }
+                        
+                        await sentMessage.DeleteReactionAsync(reactionResult.Result.Emoji, reactionResult.Result.User);
+                        
+                        // embed.Fields[0].Value = joinedUsers.Count.ToString();
+                        // await sentMessage.ModifyAsync(embed: embed.Build());
+                        
+                        await user.RemoveTicket();
+                        continue;
+                    }
+
+                    if (reactionResult.Result.Emoji == cancleEmoji)
+                    {
+                        if ((member.PermissionsIn(ctx.Channel) & Permissions.ManageMessages) == 0)
                         {
                             await sentMessage.DeleteReactionAsync(reactionResult.Result.Emoji, reactionResult.Result.User);
                             continue;
                         }
-
-                        if (joinedUsers.Contains(user.UserId))
-                        {
-                            joinedUsers.Remove(user.UserId);
-                        }
-                        else
-                        {
-                            joinedUsers.Add(user.UserId);
-                        }
                         
-                        embed.Fields[0].Value = joinedUsers.Count.ToString();
-                        await sentMessage.ModifyAsync(embed: embed.Build());
-                        
-                        await user.RemoveTicket();
-                        await sentMessage.DeleteReactionAsync(reactionResult.Result.Emoji, reactionResult.Result.User);
-                        continue;
-                    }
-
-                    if ((member.Guild.Permissions & Permissions.ManageMessages) != 0 && reactionResult.Result.Emoji == cancleEmoji)
-                    {
-                        await ctx.Channel.SendMessageAsync($"{reactionResult.Result.Emoji}");
                         await ctx.Channel.SendMessageAsync($"Das Custom Game wurde von {reactionResult.Result.User.Mention} Abgebrochen!");
                         return;
                     }
 
-                    if ((member.Guild.Permissions & Permissions.ManageMessages) != 0 && reactionResult.Result.Emoji == startEmoji)
+                    if (reactionResult.Result.Emoji == startEmoji)
                     {
+                        if ((member.PermissionsIn(ctx.Channel) & Permissions.ManageMessages) == 0)
+                        {
+                            await sentMessage.DeleteReactionAsync(reactionResult.Result.Emoji, reactionResult.Result.User);
+                            continue;
+                        }
+                        
                         var role = ctx.Guild.GetRole(guild.CustomsRole);
                         var rUsers = joinedUsers.Shuffle();
+
+                        string users = "";
 
                         if (rUsers.Count < maxMembers) maxMembers = rUsers.Count;
 
                         for (int i = 0; i < maxMembers; i++)
                         {
-                            var m = await sentMessage.Channel.Guild.GetMemberAsync(rUsers[i]);
-                            await m.GrantRoleAsync(role);
+                            try
+                            {
+                                var m = await sentMessage.Channel.Guild.GetMemberAsync(rUsers[i]);
+                                users += $"{m.Mention}, ";
+                                await m.GrantRoleAsync(role);
+                            }
+                            catch (Exception e)
+                            {
+                                await ctx.Channel.SendMessageAsync($"Es ist ein Fehler aufgetreten bei Member {rUsers[i]}");
+                                if (e.Message == "Unauthorized: 403")
+                                {
+                                    await ctx.Channel.SendMessageAsync($"Der Bot Hat keine Berechtigung die Rolle {role.Mention} zu Vergeben!");
+                                    return;
+                                }
+                            }
+                            
                         }
+
+                        users = users.Substring(0, users.Length - 2);
+                        if (maxMembers > 1)
+                        {
+                            users += " haben die Rolle Gekriegt!";
+                        } else if (maxMembers == 1)
+                        {
+                            users += " hat die Rolle Gekriegt!"; 
+                        }
+                        else
+                        {
+                            users += "Keiner hat die Rolle Gekriegt!"; 
+                        }
+
+                        await ctx.Channel.SendMessageAsync(users);
                         
                         return;
                     }

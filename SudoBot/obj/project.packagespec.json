@@ -1,10 +1,10 @@
 ﻿{
   "version": "1.0.0",
   "restore": {
-    "projectUniqueName": "/home/jmp/prj/sudo-bot-seescharf/SudoBot/SudoBot.csproj",
+    "projectUniqueName": "/home/jmp/prj/RiderProjects/sudo-bot-seescharf/SudoBot/SudoBot.csproj",
     "projectName": "SudoBot",
-    "projectPath": "/home/jmp/prj/sudo-bot-seescharf/SudoBot/SudoBot.csproj",
-    "outputPath": "/home/jmp/prj/sudo-bot-seescharf/SudoBot/obj/",
+    "projectPath": "/home/jmp/prj/RiderProjects/sudo-bot-seescharf/SudoBot/SudoBot.csproj",
+    "outputPath": "/home/jmp/prj/RiderProjects/sudo-bot-seescharf/SudoBot/obj/",
     "projectStyle": "PackageReference",
     "originalTargetFrameworks": [
       "netcoreapp3.1"
@@ -29,15 +29,15 @@
       "dependencies": {
         "DSharpPlus": {
           "target": "Package",
-          "version": "[4.0.0-nightly-00687, )"
+          "version": "[4.0.0-nightly-00690, )"
         },
         "DSharpPlus.CommandsNext": {
           "target": "Package",
-          "version": "[4.0.0-nightly-00687, )"
+          "version": "[4.0.0-nightly-00690, )"
         },
         "DSharpPlus.Interactivity": {
           "target": "Package",
-          "version": "[4.0.0-nightly-00687, )"
+          "version": "[4.0.0-nightly-00690, )"
         },
         "MongoDB.Driver": {
           "target": "Package",
@@ -62,7 +62,7 @@
           "privateAssets": "all"
         }
       },
-      "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/3.1.103/RuntimeIdentifierGraph.json"
+      "runtimeIdentifierGraphPath": "/home/jmp/prg/dotnet/sdk/3.1.201/RuntimeIdentifierGraph.json"
     }
   }
 }

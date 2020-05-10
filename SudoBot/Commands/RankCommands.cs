@@ -20,7 +20,7 @@ namespace SudoBot.Commands
         }
         
         [Command("giveSP")]
-        [RequireRoles(RoleCheckMode.Any, new []{"SudoBotAdmin", "SudoBotMod", "Admins", "Mods"})]
+        [RequireRoles(RoleCheckMode.Any, Globals.ModRoles)]
         public async Task GiveSp(CommandContext ctx, DiscordMember member, int count)
         {
             var user = await User.GetOrCreateUser(member);

@@ -24,9 +24,9 @@
     ".NETCoreApp,Version=v3.1": {
       "SudoBot/1.0.0": {
         "dependencies": {
-          "DSharpPlus": "4.0.0-nightly-00687",
-          "DSharpPlus.CommandsNext": "4.0.0-nightly-00687",
-          "DSharpPlus.Interactivity": "4.0.0-nightly-00687",
+          "DSharpPlus": "4.0.0-nightly-00690",
+          "DSharpPlus.CommandsNext": "4.0.0-nightly-00690",
+          "DSharpPlus.Interactivity": "4.0.0-nightly-00690",
           "MongoDB.Driver": "2.10.0",
           "Microsoft.AspNetCore.Antiforgery": "3.1.0.0",
           "Microsoft.AspNetCore.Authentication.Abstractions": "3.1.0.0",
@@ -279,7 +279,7 @@
           "System.Text.Encoding.Reference": "4.1.2.0",
           "System.Text.Encoding.Extensions.Reference": "4.1.2.0",
           "System.Text.Encodings.Web": "4.0.5.0",
-          "System.Text.Json": "4.0.1.1",
+          "System.Text.Json": "4.0.1.0",
           "System.Text.RegularExpressions.Reference": "4.2.2.0",
           "System.Threading.Channels": "4.0.2.0",
           "System.Threading.Reference": "4.1.2.0",
@@ -330,7 +330,7 @@
           "lib/netstandard2.0/DnsClient.dll": {}
         }
       },
-      "DSharpPlus/4.0.0-nightly-00687": {
+      "DSharpPlus/4.0.0-nightly-00690": {
         "dependencies": {
           "Newtonsoft.Json": "12.0.3",
           "System.Memory": "4.5.3",
@@ -341,37 +341,37 @@
         },
         "runtime": {
           "lib/netstandard2.0/DSharpPlus.dll": {
-            "assemblyVersion": "4.0.0.687",
-            "fileVersion": "4.0.0.687"
+            "assemblyVersion": "4.0.0.690",
+            "fileVersion": "4.0.0.690"
           }
         },
         "compile": {
           "lib/netstandard2.0/DSharpPlus.dll": {}
         }
       },
-      "DSharpPlus.CommandsNext/4.0.0-nightly-00687": {
+      "DSharpPlus.CommandsNext/4.0.0-nightly-00690": {
         "dependencies": {
-          "DSharpPlus": "4.0.0-nightly-00687",
+          "DSharpPlus": "4.0.0-nightly-00690",
           "Microsoft.Extensions.DependencyInjection": "3.1.1"
         },
         "runtime": {
           "lib/netstandard2.0/DSharpPlus.CommandsNext.dll": {
-            "assemblyVersion": "4.0.0.687",
-            "fileVersion": "4.0.0.687"
+            "assemblyVersion": "4.0.0.690",
+            "fileVersion": "4.0.0.690"
           }
         },
         "compile": {
           "lib/netstandard2.0/DSharpPlus.CommandsNext.dll": {}
         }
       },
-      "DSharpPlus.Interactivity/4.0.0-nightly-00687": {
+      "DSharpPlus.Interactivity/4.0.0-nightly-00690": {
         "dependencies": {
-          "DSharpPlus": "4.0.0-nightly-00687"
+          "DSharpPlus": "4.0.0-nightly-00690"
         },
         "runtime": {
           "lib/netstandard2.0/DSharpPlus.Interactivity.dll": {
-            "assemblyVersion": "4.0.0.687",
-            "fileVersion": "4.0.0.687"
+            "assemblyVersion": "4.0.0.690",
+            "fileVersion": "4.0.0.690"
           }
         },
         "compile": {
@@ -608,24 +608,8 @@
       },
       "runtime.opensuse.13.2-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.2": {},
       "runtime.opensuse.42.1-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.2": {},
-      "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.Apple/4.3.0": {
-        "runtimeTargets": {
-          "runtimes/osx.10.10-x64/native/System.Security.Cryptography.Native.Apple.dylib": {
-            "rid": "osx.10.10-x64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          }
-        }
-      },
-      "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.2": {
-        "runtimeTargets": {
-          "runtimes/osx.10.10-x64/native/System.Security.Cryptography.Native.OpenSsl.dylib": {
-            "rid": "osx.10.10-x64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          }
-        }
-      },
+      "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.Apple/4.3.0": {},
+      "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.2": {},
       "runtime.rhel.7-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.2": {},
       "runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.2": {},
       "runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.2": {},
@@ -3010,7 +2994,7 @@
         },
         "compileOnly": true
       },
-      "System.Text.Json/4.0.1.1": {
+      "System.Text.Json/4.0.1.0": {
         "compile": {
           "System.Text.Json.dll": {}
         },
@@ -3199,26 +3183,26 @@
       "path": "dnsclient/1.2.0",
       "hashPath": "dnsclient.1.2.0.nupkg.sha512"
     },
-    "DSharpPlus/4.0.0-nightly-00687": {
+    "DSharpPlus/4.0.0-nightly-00690": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-LrSHix+2NpshB/JLPNMVULhXw1ybzo7cN6h6SfMWdwCT2XlhJtVe7v79YDVFoQYQ7lDUa8PRo/rYn5Ez17M8VA==",
-      "path": "dsharpplus/4.0.0-nightly-00687",
-      "hashPath": "dsharpplus.4.0.0-nightly-00687.nupkg.sha512"
+      "sha512": "sha512-LNwdyJN0Na60vavfLthazn7SQ0Sk6umCr957MAmqVKHT17Hk0SMJE3BlcNUaIAP5uOHHtAIOW0blxonuoyQBDA==",
+      "path": "dsharpplus/4.0.0-nightly-00690",
+      "hashPath": "dsharpplus.4.0.0-nightly-00690.nupkg.sha512"
     },
-    "DSharpPlus.CommandsNext/4.0.0-nightly-00687": {
+    "DSharpPlus.CommandsNext/4.0.0-nightly-00690": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-tfajqCvStDPFxNMLctyL+qssQAHvsUE7yBEafSHkKW5Zj23r11aivW4H5LNatDBBn6fM9hGLBbgan3Guik3Hyg==",
-      "path": "dsharpplus.commandsnext/4.0.0-nightly-00687",
-      "hashPath": "dsharpplus.commandsnext.4.0.0-nightly-00687.nupkg.sha512"
+      "sha512": "sha512-WHU2PBuVK+4Z5qV7I6SrD3+f8073WO7/fjcuTUxAkQAVINxDkx4XHmemdA8HXqxAmxAVIj01wnG93ZTZWwMs5A==",
+      "path": "dsharpplus.commandsnext/4.0.0-nightly-00690",
+      "hashPath": "dsharpplus.commandsnext.4.0.0-nightly-00690.nupkg.sha512"
     },
-    "DSharpPlus.Interactivity/4.0.0-nightly-00687": {
+    "DSharpPlus.Interactivity/4.0.0-nightly-00690": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-9+fvb9v/TDsTxt+vrXpq3n4n0tIYLeAAZ9A0RBgklfaXE68Qui9kWjbboqGqWVM7UG4QNNv1AHvRGY5UKxYUlg==",
-      "path": "dsharpplus.interactivity/4.0.0-nightly-00687",
-      "hashPath": "dsharpplus.interactivity.4.0.0-nightly-00687.nupkg.sha512"
+      "sha512": "sha512-8dpUxkIoUf4kqw7Z5em+ucdMlXBLCLsL3BntgnY+OZN9RljRXTAAu5SjLVbe0gAUIDuLacHXaR9Td6E/B271XQ==",
+      "path": "dsharpplus.interactivity/4.0.0-nightly-00690",
+      "hashPath": "dsharpplus.interactivity.4.0.0-nightly-00690.nupkg.sha512"
     },
     "Microsoft.Extensions.DependencyInjection/3.1.1": {
       "type": "package",
@@ -5238,7 +5222,7 @@
       "serviceable": false,
       "sha512": ""
     },
-    "System.Text.Json/4.0.1.1": {
+    "System.Text.Json/4.0.1.0": {
       "type": "referenceassembly",
       "serviceable": false,
       "sha512": ""

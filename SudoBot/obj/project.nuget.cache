@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "OUrVH1FOkV5OrD0c7zyRP0jJnAVKD1JvU4FmjQ7UhW1s4bOPVzmLeVBK4ArwoHE6LpR7FE+kC+FYlhVZj0akKA==",
+  "dgSpecHash": "RkpLWWGXAlNena5vHQfiMqah2RVELsJQvQRRD4pkVYUTzWMFb0/zOLJDgF32LLje57HBBPBsAQcDXGPpqPLRIA==",
   "success": true,
-  "projectFilePath": "/home/jmp/prj/sudo-bot-seescharf/SudoBot/SudoBot.csproj",
+  "projectFilePath": "/home/jmp/prj/RiderProjects/sudo-bot-seescharf/SudoBot/SudoBot.csproj",
   "expectedPackageFiles": [
     "/home/jmp/.nuget/packages/dnsclient/1.2.0/dnsclient.1.2.0.nupkg.sha512",
-    "/home/jmp/.nuget/packages/dsharpplus/4.0.0-nightly-00687/dsharpplus.4.0.0-nightly-00687.nupkg.sha512",
-    "/home/jmp/.nuget/packages/dsharpplus.commandsnext/4.0.0-nightly-00687/dsharpplus.commandsnext.4.0.0-nightly-00687.nupkg.sha512",
-    "/home/jmp/.nuget/packages/dsharpplus.interactivity/4.0.0-nightly-00687/dsharpplus.interactivity.4.0.0-nightly-00687.nupkg.sha512",
+    "/home/jmp/.nuget/packages/dsharpplus/4.0.0-nightly-00690/dsharpplus.4.0.0-nightly-00690.nupkg.sha512",
+    "/home/jmp/.nuget/packages/dsharpplus.commandsnext/4.0.0-nightly-00690/dsharpplus.commandsnext.4.0.0-nightly-00690.nupkg.sha512",
+    "/home/jmp/.nuget/packages/dsharpplus.interactivity/4.0.0-nightly-00690/dsharpplus.interactivity.4.0.0-nightly-00690.nupkg.sha512",
     "/home/jmp/.nuget/packages/microsoft.extensions.dependencyinjection/3.1.1/microsoft.extensions.dependencyinjection.3.1.1.nupkg.sha512",
     "/home/jmp/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/3.1.1/microsoft.extensions.dependencyinjection.abstractions.3.1.1.nupkg.sha512",
     "/home/jmp/.nuget/packages/microsoft.netcore.platforms/2.1.2/microsoft.netcore.platforms.2.1.2.nupkg.sha512",
