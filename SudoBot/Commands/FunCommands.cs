@@ -9,7 +9,7 @@ namespace SudoBot.Commands
         [Command("ping")]
         public async Task Ping(CommandContext ctx)
         {
-            var message = await ctx.Channel.SendMessageAsync("Pong");
+            var message = await ctx.Channel.SendMessageAsync("haha funny command");
         }
 
         [Command("add")]

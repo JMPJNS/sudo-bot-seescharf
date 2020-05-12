@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/jmp/prj/RiderProjects/sudo-bot-seescharf/SudoBot/SudoBot.csproj": {}
+    "/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/SudoBot.csproj": {}
   },
   "projects": {
-    "/home/jmp/prj/RiderProjects/sudo-bot-seescharf/SudoBot/SudoBot.csproj": {
+    "/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/SudoBot.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/jmp/prj/RiderProjects/sudo-bot-seescharf/SudoBot/SudoBot.csproj",
+        "projectUniqueName": "/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/SudoBot.csproj",
         "projectName": "SudoBot",
-        "projectPath": "/home/jmp/prj/RiderProjects/sudo-bot-seescharf/SudoBot/SudoBot.csproj",
+        "projectPath": "/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/SudoBot.csproj",
         "packagesPath": "/home/jmp/.nuget/packages/",
-        "outputPath": "/home/jmp/prj/RiderProjects/sudo-bot-seescharf/SudoBot/obj/",
+        "outputPath": "/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/jmp/.nuget/NuGet/NuGet.Config"
@@ -39,19 +39,19 @@
           "dependencies": {
             "DSharpPlus": {
               "target": "Package",
-              "version": "[4.0.0-nightly-00690, )"
+              "version": "[4.0.0-nightly-00696, )"
             },
             "DSharpPlus.CommandsNext": {
               "target": "Package",
-              "version": "[4.0.0-nightly-00690, )"
+              "version": "[4.0.0-nightly-00696, )"
             },
             "DSharpPlus.Interactivity": {
               "target": "Package",
-              "version": "[4.0.0-nightly-00690, )"
+              "version": "[4.0.0-nightly-00696, )"
             },
             "MongoDB.Driver": {
               "target": "Package",
-              "version": "[2.10.0, )"
+              "version": "[2.10.4, )"
             }
           },
           "imports": [
@@ -72,7 +72,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/jmp/prg/dotnet/sdk/3.1.201/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.103/RuntimeIdentifierGraph.json"
         }
       }
     }

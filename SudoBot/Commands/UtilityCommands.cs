@@ -7,6 +7,7 @@ using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
+using SudoBot.Attributes;
 using SudoBot.Models;
 using SudoBot.Handlers;
 
@@ -14,8 +15,8 @@ namespace SudoBot.Commands
 {
     public class UtilityCommands : BaseCommandModule
     {
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         [Command("say")]
-        [RequirePermissions(Permissions.ManageMessages)]
         public async Task Say(CommandContext ctx, params string[] words)
         {
             Task.Run(async () =>

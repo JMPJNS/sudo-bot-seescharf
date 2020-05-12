@@ -13,6 +13,8 @@ namespace SudoBot.Models
 {
     public class User
     {
+        [BsonId]
+        public ObjectId ThisIsNotTheId { get; set; }
         public ulong UserId { private set; get; }
         
         public ulong GuildId { private set; get; }
@@ -91,7 +93,7 @@ namespace SudoBot.Models
             if (user != null) return user;
 
             user = GetFreshUser(member);
-            MongoCrud.Instance.InsertUser(user);
+            await MongoCrud.Instance.InsertUser(user);
             return user;
         }
         

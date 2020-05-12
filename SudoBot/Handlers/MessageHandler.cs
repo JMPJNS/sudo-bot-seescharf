@@ -16,7 +16,6 @@ namespace SudoBot.Handlers
             User user = await User.GetOrCreateUser(member);
             
             bool didCountMessage = await user.AddCountedMessages(message);
-            if(didCountMessage) await message.Channel.SendMessageAsync("Did Count");
 
         }
     }

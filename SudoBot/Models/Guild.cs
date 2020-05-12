@@ -21,20 +21,15 @@ namespace SudoBot.Models
         
         private List<RankingRole> RankingRoles { get; set; }
 
-        public bool HasLeveling { get; set; }
-        public bool HasCustoms { get; set; }
-        public bool HasSupport { get; set; }
+        public List<GuildPermission> Permissions { get; set; }
 
         public Guild(ulong guildId)
         {
             GuildId = guildId;
             
             RankingRoles = new List<RankingRole>();
-            
-            HasLeveling = false;
-            HasCustoms = true;
-            HasSupport = false;
-            
+            Permissions = new List<GuildPermission>();
+
             TicketCount = 1;
         }
         
@@ -48,6 +43,12 @@ namespace SudoBot.Models
         private async Task SaveGuild()
         {
             await MongoCrud.Instance.UpdateGuild(this);
+        }
+
+        public async Task GivePermission(GuildPermission perm)
+        {
+            Permissions.Add(perm);
+            await SaveGuild();
         }
         
         // Custom Games stuff

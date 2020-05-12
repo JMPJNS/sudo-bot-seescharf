@@ -1,13 +1,13 @@
 using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
-using SudoBot.Models;
 using DSharpPlus.CommandsNext.Attributes;
-using SudoBot.Database;
+using SudoBot.Attributes;
 
 namespace SudoBot.Commands
 {
     public class TestCommands : BaseCommandModule
     {
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.TestCommands)]
         [Command("test")]
         public async Task T(CommandContext ctx)
         {

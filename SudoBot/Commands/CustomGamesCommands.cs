@@ -7,6 +7,7 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using DSharpPlus.Interactivity;
+using SudoBot.Attributes;
 using SudoBot.Database;
 using SudoBot.Models;
 using SudoBot.Handlers;
@@ -15,7 +16,7 @@ namespace SudoBot.Commands
 {
     public class CustomGamesCommands: BaseCommandModule
     {
-        [RequireRoles(RoleCheckMode.Any, new []{"SudoBotAdmin", "SudoBotMod", "Admins", "Mods"})]
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.CustomGames)]
         [Command("setCustomsRole")]
         public async Task SetCustomsRole(CommandContext ctx, DiscordRole role)
         {
@@ -23,13 +24,13 @@ namespace SudoBot.Commands
             await guild.SetCustomsRole(role.Id);
         }
         
-        [RequireRoles(RoleCheckMode.Any, new []{"SudoBotAdmin", "SudoBotMod", "Admins", "Mods"})]
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.CustomGames)]
         [Command("createCustoms")]
         public async Task CreateCustoms(CommandContext ctx, string title, string message, int maxMembers, bool useTicket = false)
         {
             var guild = await MongoCrud.Instance.GetGuild(ctx.Guild.Id);
 
-            if (guild == null) {Console.WriteLine("ERROR GUILD NOT FOUND"); return;}
+            if (guild == null) {await ctx.Channel.SendMessageAsync("ERROR GUILD NOT FOUND, contact JMP#7777"); return;}
             if (guild.CustomsRole == 0)
             {
                 await ctx.Channel.SendMessageAsync("Definiere eine Custom Games Rolle mit: $setCustomsRole {@Rolle}");

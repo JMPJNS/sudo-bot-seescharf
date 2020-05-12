@@ -7,7 +7,7 @@ namespace SudoBot
     public class Globals
     {
         public static readonly string[] ModRoles = {"SudoBotAdmin", "SudoBotMod", "Admins", "Mods"};
-        public static string[] AdminRoles = {"SudoBotAdmin", "Admins"};
+        public static readonly string[] AdminRoles = {"SudoBotAdmin", "Admins"};
         public static DebugLogger Logger;
     }
 }
