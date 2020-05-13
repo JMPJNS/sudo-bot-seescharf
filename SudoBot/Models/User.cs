@@ -89,11 +89,11 @@ namespace SudoBot.Models
 
         public static async Task<User> GetOrCreateUser(DiscordMember member)
         {
-            User user = await MongoCrud.Instance.GetUser(member.Id, member.Guild.Id);
+            User user = await Mongo.Instance.GetUser(member.Id, member.Guild.Id);
             if (user != null) return user;
 
             user = GetFreshUser(member);
-            await MongoCrud.Instance.InsertUser(user);
+            await Mongo.Instance.InsertUser(user);
             return user;
         }
         
@@ -112,7 +112,7 @@ namespace SudoBot.Models
 
         private async Task SaveUser()
         {
-            await MongoCrud.Instance.UpdateUser(this);
+            await Mongo.Instance.UpdateUser(this);
         }
         
         private User(ulong userId, ulong guildId, DateTimeOffset joinDate, int countedMessages, int specialPoints, bool blocked)

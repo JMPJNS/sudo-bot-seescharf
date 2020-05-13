@@ -20,7 +20,7 @@ namespace SudoBot.Attributes
         {
             if (ctx.Guild == null || ctx.Member == null) return Task.FromResult(false);
 
-            var guildConfig = MongoCrud.Instance.GetGuild(ctx.Guild.Id).GetAwaiter().GetResult();
+            var guildConfig = Mongo.Instance.GetGuild(ctx.Guild.Id).GetAwaiter().GetResult();
 
             // Guild Permission Check
             if (_guildPerm != GuildPermission.Any && !guildConfig.Permissions.Contains(GuildPermission.All))

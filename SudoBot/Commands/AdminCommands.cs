@@ -19,7 +19,7 @@ namespace SudoBot.Commands
                 await ctx.Channel.SendMessageAsync("Ungültige Eingabe");
                 return;
             }
-            var guildConfig = await MongoCrud.Instance.GetGuild(ctx.Guild.Id);
+            var guildConfig = await Mongo.Instance.GetGuild(ctx.Guild.Id);
             if (!guildConfig.Permissions.Contains(perm))
             {
                 await guildConfig.GivePermission(perm);

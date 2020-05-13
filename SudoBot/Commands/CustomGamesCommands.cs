@@ -20,7 +20,7 @@ namespace SudoBot.Commands
         [Command("setCustomsRole")]
         public async Task SetCustomsRole(CommandContext ctx, DiscordRole role)
         {
-            var guild = await MongoCrud.Instance.GetGuild(ctx.Guild.Id);
+            var guild = await Mongo.Instance.GetGuild(ctx.Guild.Id);
             await guild.SetCustomsRole(role.Id);
         }
         
@@ -28,7 +28,7 @@ namespace SudoBot.Commands
         [Command("createCustoms")]
         public async Task CreateCustoms(CommandContext ctx, string title, string message, int maxMembers, bool useTicket = false)
         {
-            var guild = await MongoCrud.Instance.GetGuild(ctx.Guild.Id);
+            var guild = await Mongo.Instance.GetGuild(ctx.Guild.Id);
 
             if (guild == null) {await ctx.Channel.SendMessageAsync("ERROR GUILD NOT FOUND, contact JMP#7777"); return;}
             if (guild.CustomsRole == 0)
@@ -38,23 +38,23 @@ namespace SudoBot.Commands
             }
             
             await guild.RemoveAllCustomsRole(ctx);
+            
+            var joinEmoji = DiscordEmoji.FromName(ctx.Client, ":white_check_mark:");
+            var startEmoji = DiscordEmoji.FromName(ctx.Client, ":cyclone:");
+            var cancleEmoji = DiscordEmoji.FromName(ctx.Client, ":no_entry_sign:");
 
-            var embed = new DiscordEmbedBuilder();
-            embed.Title = title;
-            embed.Color = DiscordColor.Blue;
-            embed.Description = message;
+            var embed = new DiscordEmbedBuilder()
+                .WithTitle(title)
+                .WithColor(DiscordColor.Blue)
+                .WithDescription(message);
 
-            //TODO this probably breaks
-            // embed.Fields[0].Name = "Beigetreten";
-            // embed.Fields[0].Value = 0.ToString();
+            embed.AddField("Beigetreten", "0");
+            embed.AddField("Reagiere auf diese Nachricht!", $"mit {joinEmoji}");
             
             List<ulong> joinedUsers = new List<ulong>();
 
             var sentMessage = await ctx.Channel.SendMessageAsync(embed:embed.Build());
             
-            var joinEmoji = DiscordEmoji.FromName(ctx.Client, ":white_check_mark:");
-            var startEmoji = DiscordEmoji.FromName(ctx.Client, ":cyclone:");
-            var cancleEmoji = DiscordEmoji.FromName(ctx.Client, ":no_entry_sign:");
 
             await sentMessage.CreateReactionAsync(joinEmoji);
             await sentMessage.CreateReactionAsync(cancleEmoji);
@@ -77,7 +77,7 @@ namespace SudoBot.Commands
 
                         if (joinedUsers.Contains(user.UserId))
                         {
-                            await ctx.Channel.SendMessageAsync($"{member.Mention} hat verlassen");
+                            // await ctx.Channel.SendMessageAsync($"{member.Mention} hat verlassen");
 
                             var u = joinedUsers.Single(x => x == user.UserId);
                             
@@ -85,21 +85,21 @@ namespace SudoBot.Commands
                         }
                         else
                         {
-                            if (user.TicketsRemaining == 0)
+                            if (useTicket && user.TicketsRemaining == 0)
                             {
                                 await ctx.Channel.SendMessageAsync($"{member.Mention} hat keine Tickets übrig!");
                                 continue;
                             }
-                            await ctx.Channel.SendMessageAsync($"{member.Mention} ist Beigetreten");
+                            // await ctx.Channel.SendMessageAsync($"{member.Mention} ist Beigetreten");
                             joinedUsers.Add(user.UserId);
                         }
                         
                         await sentMessage.DeleteReactionAsync(reactionResult.Result.Emoji, reactionResult.Result.User);
                         
-                        // embed.Fields[0].Value = joinedUsers.Count.ToString();
-                        // await sentMessage.ModifyAsync(embed: embed.Build());
+                        embed.Fields[0].Value = joinedUsers.Count.ToString();
+                        await sentMessage.ModifyAsync(embed: embed.Build());
                         
-                        await user.RemoveTicket();
+                        if (useTicket) await user.RemoveTicket();
                         continue;
                     }
 

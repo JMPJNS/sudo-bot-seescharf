@@ -42,7 +42,7 @@ namespace SudoBot.Models
         
         private async Task SaveGuild()
         {
-            await MongoCrud.Instance.UpdateGuild(this);
+            await Mongo.Instance.UpdateGuild(this);
         }
 
         public async Task GivePermission(GuildPermission perm)
@@ -75,7 +75,7 @@ namespace SudoBot.Models
 
         public async Task ResetTickets()
         {
-            var users = await MongoCrud.Instance.GetUsersWithoutTicket(GuildId);
+            var users = await Mongo.Instance.GetUsersWithoutTicket(GuildId);
             foreach (var user in users)
             {
                 await user.AddTickets(TicketCount);

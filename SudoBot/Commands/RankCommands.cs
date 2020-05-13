@@ -34,7 +34,7 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.Ranking)]
         public async Task SetRankingRole(CommandContext ctx, int points, DiscordRole role)
         {
-            var guild = await MongoCrud.Instance.GetGuild(ctx.Guild.Id);
+            var guild = await Mongo.Instance.GetGuild(ctx.Guild.Id);
             await guild.AddRankingRole(role, points);
             await ctx.Channel.SendMessageAsync($"Die Rolle {role.Name} ist mit {points.ToString()} IQ zu Erreichen!");
         }

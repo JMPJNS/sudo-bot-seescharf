@@ -9,14 +9,14 @@ using SudoBot.Models;
 
 namespace SudoBot.Database
 {
-    public class MongoCrud
+    public class Mongo
     {
-        public static MongoCrud Instance { get; } = new MongoCrud();
+        public static Mongo Instance { get; } = new Mongo();
         
         private IMongoDatabase _db;
         private IMongoCollection<User> _users;
         private IMongoCollection<Guild> _guilds;
-        private MongoCrud()
+        private Mongo()
         {
             try
             {

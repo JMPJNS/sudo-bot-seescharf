@@ -84,10 +84,10 @@ namespace SudoBot
         {
             Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Bot Logged in on: {e.Guild.Name}", DateTime.Now);
             
-            var guild = MongoCrud.Instance.GetGuild(e.Guild.Id).GetAwaiter().GetResult();
+            var guild = Mongo.Instance.GetGuild(e.Guild.Id).GetAwaiter().GetResult();
             if (guild == null)
             {
-                MongoCrud.Instance.InsertGuild(new Guild(e.Guild.Id)).GetAwaiter().GetResult();
+                Mongo.Instance.InsertGuild(new Guild(e.Guild.Id)).GetAwaiter().GetResult();
             }
             
             return Task.CompletedTask;
