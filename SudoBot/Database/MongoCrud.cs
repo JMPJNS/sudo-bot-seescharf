@@ -21,7 +21,7 @@ namespace SudoBot.Database
             try
             {
                 var client = new MongoClient(Environment.GetEnvironmentVariable("DBSTRING"));
-                _db = client.GetDatabase("SudoBotDev");
+                _db = client.GetDatabase(Environment.GetEnvironmentVariable("DBNAME"));
                 
                 _users = _db.GetCollection<User>("Users");
                 _guilds = _db.GetCollection<Guild>("Guilds");
