@@ -22,6 +22,7 @@ namespace SudoBot
         public InteractivityExtension Interactivity { get; private set; }
         
         private MessageHandler _messageHandler = new MessageHandler();
+        private MemberUpdateHandler _memberUpdateHandler = new MemberUpdateHandler();
 
         public async Task RunAsync()
         {
@@ -41,6 +42,8 @@ namespace SudoBot
             Client.GuildAvailable += OnGuildAvailable;
             Client.ClientErrored += OnClientError;
             Client.MessageCreated += MessageCreated;
+
+            Client.GuildMemberUpdated += OnMemberUpdated;
             
             //Commands
             var commandsConfig = new CommandsNextConfiguration
@@ -92,6 +95,13 @@ namespace SudoBot
             
             return Task.CompletedTask;
         }
+
+        private Task OnMemberUpdated(GuildMemberUpdateEventArgs e)
+        {
+            Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Member Updated: [{e.Guild}] ({e.Member})", DateTime.Now);
+            _memberUpdateHandler.HandleRoleChange(e).GetAwaiter().GetResult();
+            return Task.CompletedTask;
+        }
         
         private Task OnClientError(ClientErrorEventArgs e)
         {
@@ -102,9 +112,8 @@ namespace SudoBot
         
         private Task MessageCreated(MessageCreateEventArgs e)
         {
-            Globals.Logger.LogMessage(LogLevel.Debug, "SudoBot", $"Message sent: ${e.Message}", DateTime.Now);
-
-            _messageHandler.HandleMessage(e.Message, e.Author, e.Guild).GetAwaiter().GetResult();
+            Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Message Created: [{e.Guild}] ({e.Author}): ${e.Message}", DateTime.Now);
+            _messageHandler.HandleMessage(e).GetAwaiter().GetResult();
             return Task.CompletedTask;
         }
     }

@@ -8,14 +8,14 @@ namespace SudoBot.Handlers
 {
     public class MessageHandler
     {
-        public async Task HandleMessage(DiscordMessage message, DiscordUser author, DiscordGuild guild)
+        public async Task HandleMessage(MessageCreateEventArgs args)
         {
-            if (author.IsBot) return;
+            if (args.Author.IsBot) return;
             
-            DiscordMember member = await guild.GetMemberAsync(author.Id);
+            DiscordMember member = await args.Guild.GetMemberAsync(args.Author.Id);
             User user = await User.GetOrCreateUser(member);
             
-            bool didCountMessage = await user.AddCountedMessages(message);
+            bool didCountMessage = await user.AddCountedMessages(args.Message);
 
         }
     }

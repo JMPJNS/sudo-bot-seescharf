@@ -26,6 +26,13 @@ namespace SudoBot.Commands
             });
             await ctx.Channel.SendMessageAsync(ctx.RawArgumentString);
         }
+        
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
+        [Command("makeBig")]
+        public async Task MakeBig(CommandContext ctx, DiscordEmoji e)
+        {
+            await ctx.Channel.SendMessageAsync(e.Url);
+        }
 
         // Reminder Stuff
 
