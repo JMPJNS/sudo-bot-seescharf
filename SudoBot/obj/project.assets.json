@@ -11,7 +11,7 @@
           "lib/netstandard2.1/DnsClient.dll": {}
         }
       },
-      "DSharpPlus/4.0.0-nightly-00696": {
+      "DSharpPlus/4.0.0-nightly-00697": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "12.0.3",
@@ -28,10 +28,10 @@
           "lib/netstandard2.0/DSharpPlus.dll": {}
         }
       },
-      "DSharpPlus.CommandsNext/4.0.0-nightly-00696": {
+      "DSharpPlus.CommandsNext/4.0.0-nightly-00697": {
         "type": "package",
         "dependencies": {
-          "DSharpPlus": "4.0.0-nightly-00696",
+          "DSharpPlus": "4.0.0-nightly-00697",
           "Microsoft.Extensions.DependencyInjection": "3.1.1"
         },
         "compile": {
@@ -41,10 +41,10 @@
           "lib/netstandard2.0/DSharpPlus.CommandsNext.dll": {}
         }
       },
-      "DSharpPlus.Interactivity/4.0.0-nightly-00696": {
+      "DSharpPlus.Interactivity/4.0.0-nightly-00697": {
         "type": "package",
         "dependencies": {
-          "DSharpPlus": "4.0.0-nightly-00696"
+          "DSharpPlus": "4.0.0-nightly-00697"
         },
         "compile": {
           "lib/netstandard2.0/DSharpPlus.Interactivity.dll": {}
@@ -1969,13 +1969,13 @@
         "lib/netstandard2.1/DnsClient.xml"
       ]
     },
-    "DSharpPlus/4.0.0-nightly-00696": {
-      "sha512": "TdCakDZKqK6dBpI3Ibjx8XXLkHdXtqRXLcK+QiARa+Ukc9M0BnqkoQPn5CKa4CqeScIK6NbtaVF613/JW1nkuA==",
+    "DSharpPlus/4.0.0-nightly-00697": {
+      "sha512": "mgI6Q+HYYipbxiUCk3RktZdUeIlIlpYH7pnBPKR6HYiHaibYxC77VztZ5OYsBSN8BgYGiYFD5oqtdZxXvicARg==",
       "type": "package",
-      "path": "dsharpplus/4.0.0-nightly-00696",
+      "path": "dsharpplus/4.0.0-nightly-00697",
       "files": [
         ".nupkg.metadata",
-        "dsharpplus.4.0.0-nightly-00696.nupkg.sha512",
+        "dsharpplus.4.0.0-nightly-00697.nupkg.sha512",
         "dsharpplus.nuspec",
         "lib/netstandard1.3/DSharpPlus.dll",
         "lib/netstandard1.3/DSharpPlus.xml",
@@ -1983,13 +1983,13 @@
         "lib/netstandard2.0/DSharpPlus.xml"
       ]
     },
-    "DSharpPlus.CommandsNext/4.0.0-nightly-00696": {
-      "sha512": "qFK8u+YoURCCTi711w7zh904x9H62UX5ZDGDkxw8jJWsxI/a/823oNZqXMeo4OAbdbh/kwRUMYNfx7HK7XoeKg==",
+    "DSharpPlus.CommandsNext/4.0.0-nightly-00697": {
+      "sha512": "MEQtzVP6dy5mcJDK++geRQnERMtVJPLU6f2YDdAGEeI99Y3i1Ntj0V3PYE1PI+/opo7sVTNNFMfaJSNSQWj/CA==",
       "type": "package",
-      "path": "dsharpplus.commandsnext/4.0.0-nightly-00696",
+      "path": "dsharpplus.commandsnext/4.0.0-nightly-00697",
       "files": [
         ".nupkg.metadata",
-        "dsharpplus.commandsnext.4.0.0-nightly-00696.nupkg.sha512",
+        "dsharpplus.commandsnext.4.0.0-nightly-00697.nupkg.sha512",
         "dsharpplus.commandsnext.nuspec",
         "lib/netstandard1.3/DSharpPlus.CommandsNext.dll",
         "lib/netstandard1.3/DSharpPlus.CommandsNext.xml",
@@ -1997,13 +1997,13 @@
         "lib/netstandard2.0/DSharpPlus.CommandsNext.xml"
       ]
     },
-    "DSharpPlus.Interactivity/4.0.0-nightly-00696": {
-      "sha512": "7LUHqVADOefPsRb/3GygzTzxB7J9QgDoNvpKa5EX5DyxGIkU1boUohdUTpLwYxszUyR/CS7/YJctKfJ8Py42fA==",
+    "DSharpPlus.Interactivity/4.0.0-nightly-00697": {
+      "sha512": "z34PYJvklKRAXFIqriVmV3L8FMKol+4WqiSncCRwgUQHj5uc6cH6YUTm+dvZ7a4xY9yuBrLGFQpF2p7AYg5ZcQ==",
       "type": "package",
-      "path": "dsharpplus.interactivity/4.0.0-nightly-00696",
+      "path": "dsharpplus.interactivity/4.0.0-nightly-00697",
       "files": [
         ".nupkg.metadata",
-        "dsharpplus.interactivity.4.0.0-nightly-00696.nupkg.sha512",
+        "dsharpplus.interactivity.4.0.0-nightly-00697.nupkg.sha512",
         "dsharpplus.interactivity.nuspec",
         "lib/netstandard1.3/DSharpPlus.Interactivity.dll",
         "lib/netstandard1.3/DSharpPlus.Interactivity.xml",
@@ -6545,9 +6545,9 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "DSharpPlus >= 4.0.0-nightly-00696",
-      "DSharpPlus.CommandsNext >= 4.0.0-nightly-00696",
-      "DSharpPlus.Interactivity >= 4.0.0-nightly-00696",
+      "DSharpPlus >= 4.0.0-nightly-00697",
+      "DSharpPlus.CommandsNext >= 4.0.0-nightly-00697",
+      "DSharpPlus.Interactivity >= 4.0.0-nightly-00697",
       "MongoDB.Driver >= 2.10.4"
     ]
   },
@@ -6589,15 +6589,15 @@
         "dependencies": {
           "DSharpPlus": {
             "target": "Package",
-            "version": "[4.0.0-nightly-00696, )"
+            "version": "[4.0.0-nightly-00697, )"
           },
           "DSharpPlus.CommandsNext": {
             "target": "Package",
-            "version": "[4.0.0-nightly-00696, )"
+            "version": "[4.0.0-nightly-00697, )"
           },
           "DSharpPlus.Interactivity": {
             "target": "Package",
-            "version": "[4.0.0-nightly-00696, )"
+            "version": "[4.0.0-nightly-00697, )"
           },
           "MongoDB.Driver": {
             "target": "Package",

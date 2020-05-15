@@ -39,15 +39,15 @@
           "dependencies": {
             "DSharpPlus": {
               "target": "Package",
-              "version": "[4.0.0-nightly-00696, )"
+              "version": "[4.0.0-nightly-00697, )"
             },
             "DSharpPlus.CommandsNext": {
               "target": "Package",
-              "version": "[4.0.0-nightly-00696, )"
+              "version": "[4.0.0-nightly-00697, )"
             },
             "DSharpPlus.Interactivity": {
               "target": "Package",
-              "version": "[4.0.0-nightly-00696, )"
+              "version": "[4.0.0-nightly-00697, )"
             },
             "MongoDB.Driver": {
               "target": "Package",

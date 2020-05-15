@@ -16,12 +16,23 @@ namespace SudoBot.Commands
 {
     public class CustomGamesCommands: BaseCommandModule
     {
-        [CheckForPermissions(SudoPermission.Mod, GuildPermission.CustomGames)]
+        [CheckForPermissions(SudoPermission.Admin, GuildPermission.CustomGames)]
         [Command("setCustomsRole")]
         public async Task SetCustomsRole(CommandContext ctx, DiscordRole role)
         {
             var guild = await Mongo.Instance.GetGuild(ctx.Guild.Id);
             await guild.SetCustomsRole(role.Id);
+            await ctx.Channel.SendMessageAsync("Die Rolle wurde gesetzt");
+        }
+
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.CustomGames)]
+        [Command("removeAllCustomsRole")]
+        public async Task RemoveAllCustomsRole(CommandContext ctx)
+        {
+            var guild = await Mongo.Instance.GetGuild(ctx.Guild.Id);
+            await ctx.Channel.SendMessageAsync("Die Rolle wird von allen entfernt. Wird ein Paar sekunden dauern.");
+            await guild.RemoveAllCustomsRole(ctx);
+            await ctx.Channel.SendMessageAsync("Die Rolle wurde von allen entfernt!");
         }
         
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.CustomGames)]
@@ -30,14 +41,11 @@ namespace SudoBot.Commands
         {
             var guild = await Mongo.Instance.GetGuild(ctx.Guild.Id);
 
-            if (guild == null) {await ctx.Channel.SendMessageAsync("ERROR GUILD NOT FOUND, contact JMP#7777"); return;}
             if (guild.CustomsRole == 0)
             {
                 await ctx.Channel.SendMessageAsync("Definiere eine Custom Games Rolle mit: $setCustomsRole {@Rolle}");
                 return;
             }
-            
-            await guild.RemoveAllCustomsRole(ctx);
             
             var joinEmoji = DiscordEmoji.FromName(ctx.Client, ":white_check_mark:");
             var startEmoji = DiscordEmoji.FromName(ctx.Client, ":cyclone:");

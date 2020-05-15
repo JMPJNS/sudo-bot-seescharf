@@ -18,9 +18,17 @@ namespace SudoBot.Attributes
         }
         public override Task<bool> ExecuteCheckAsync(CommandContext ctx, bool help)
         {
+            if (ctx.Command.Name == "help") return Task.FromResult(true);
             if (ctx.Guild == null || ctx.Member == null) return Task.FromResult(false);
 
             var guildConfig = Mongo.Instance.GetGuild(ctx.Guild.Id).GetAwaiter().GetResult();
+
+            if (guildConfig == null)
+            {
+                ctx.Channel.SendMessageAsync("ERROR GUILD NOT FOUND, CONTACT JMP#7777");
+                ctx.Channel.SendMessageAsync($"MessageID: {ctx.Message.Id}, GuildID: {ctx.Guild.Id}, ChannelID: {ctx.Channel.Id}");
+                return Task.FromResult(false);
+            }
 
             // Guild Permission Check
             if (_guildPerm != GuildPermission.Any && !guildConfig.Permissions.Contains(GuildPermission.All))
