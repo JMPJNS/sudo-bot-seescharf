@@ -30,7 +30,7 @@ namespace SudoBot.Commands
         public async Task RemoveAllCustomsRole(CommandContext ctx)
         {
             var guild = await Mongo.Instance.GetGuild(ctx.Guild.Id);
-            await ctx.Channel.SendMessageAsync("Die Rolle wird von allen entfernt. Wird ein Paar sekunden dauern.");
+            await ctx.Channel.SendMessageAsync("Die Rolle wird von allen entfernt. Wird ein paar Sekunden dauern.");
             await guild.RemoveAllCustomsRole(ctx);
             await ctx.Channel.SendMessageAsync("Die Rolle wurde von allen entfernt!");
         }

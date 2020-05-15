@@ -18,7 +18,7 @@ namespace SudoBot.Attributes
         }
         public override Task<bool> ExecuteCheckAsync(CommandContext ctx, bool help)
         {
-            if (ctx.Command.Name == "help") return Task.FromResult(true);
+            bool isHelp = ctx.Command.Name == "help";
             if (ctx.Guild == null || ctx.Member == null) return Task.FromResult(false);
 
             var guildConfig = Mongo.Instance.GetGuild(ctx.Guild.Id).GetAwaiter().GetResult();
@@ -35,7 +35,7 @@ namespace SudoBot.Attributes
             {
                 if (!guildConfig.Permissions.Contains(_guildPerm))
                 {
-                    ctx.Channel.SendMessageAsync("Dieser Command ist für diesen Discord nicht Freigegeben, für mehr Infos kontaktiert JMP#7777");
+                    if (!isHelp) ctx.Channel.SendMessageAsync("Dieser Command ist für diesen Discord nicht Freigegeben, für mehr Infos kontaktiert JMP#7777");
                     return Task.FromResult(false);
                 }
             }
@@ -52,7 +52,7 @@ namespace SudoBot.Attributes
                 case SudoPermission.Mod when ctx.Member.Roles.Any(x => Globals.ModRoles.Any(y => y == x.Name)):
                     return Task.FromResult(true);
                 default:
-                    ctx.Channel.SendMessageAsync($"Du hast keine Berechtigung dazu {DiscordEmoji.FromName(ctx.Client, ":smirk:")}");
+                    if (!isHelp) ctx.Channel.SendMessageAsync($"Du hast keine Berechtigung dazu {DiscordEmoji.FromName(ctx.Client, ":smirk:")}");
             
                     return Task.FromResult(false);
             }
