@@ -65,7 +65,7 @@ namespace SudoBot.Commands
                 .WithColor(DiscordColor.Blue)
                 .WithDescription(message);
 
-            embed.AddField("Beigetreten", "0");
+            // embed.AddField("Beigetreten", "0");
             embed.AddField("Reagiere auf diese Nachricht!", $"mit {joinEmoji}");
             
             List<ulong> joinedUsers = new List<ulong>();
@@ -110,7 +110,7 @@ namespace SudoBot.Commands
                         // await sentMessage.DeleteReactionAsync(reactionResult.Result.Emoji, reactionResult.Result.User);
                         
                         embed.Fields[0].Value = joinedUsers.Count.ToString();
-                        sentMessage.ModifyAsync(embed: embed.Build());
+                        // sentMessage.ModifyAsync(embed: embed.Build());
                         
                         // if (useTicket) await user.RemoveTicket();
                         continue;
