@@ -27,11 +27,19 @@ namespace SudoBot.Commands
             await ctx.Channel.SendMessageAsync(ctx.RawArgumentString);
         }
         
-        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         [Command("makeBig")]
         public async Task MakeBig(CommandContext ctx, DiscordEmoji e)
         {
-            await ctx.Channel.SendMessageAsync(e.Url);
+            var embed = new DiscordEmbedBuilder()
+                .WithImageUrl(e.Url);
+            await ctx.Channel.SendMessageAsync(embed: embed.Build());
+        }
+        
+        [Command("ping")]
+        public async Task Ping(CommandContext ctx)
+        {
+            var message = await ctx.Channel.SendMessageAsync(ctx.Client.Ping.ToString());
         }
 
         // Reminder Stuff
@@ -65,6 +73,35 @@ namespace SudoBot.Commands
                 await ctx.Channel.SendMessageAsync("Falsch Verwendet! $reminder {um/in} {uhrzeit/zeitspanne} {nachricht}");
                 return;
             }
+        }
+        
+        // Info Commands
+        [Command("memberInfo")]
+        public async Task MemberInfo(CommandContext ctx, DiscordMember member)
+        {
+            string roles = "";
+            foreach (var role in member.Roles)
+            {
+                roles += $"{role.Mention}, ";
+            }
+
+            if (roles.Length > 2)
+            {
+                roles = roles.Substring(0, roles.Length - 2);   
+            }
+
+            var embed = new DiscordEmbedBuilder()
+                .WithDescription(member.Mention)
+                .WithColor(member.Color)
+                .AddField("Nickname", member.Nickname, true)
+                .AddField("Username", member.Username, true)
+                .AddField("#", member.Discriminator, true)
+                .AddField("ID", member.Id.ToString(), true)
+                .AddField("Beigetreten", member.JoinedAt.ToString())
+                .AddField("Rollen", roles.Length != 0 ? roles : "Keine")
+                .WithThumbnailUrl(member.AvatarUrl);
+
+            await ctx.Channel.SendMessageAsync(embed: embed.Build());
         }
     }
 }

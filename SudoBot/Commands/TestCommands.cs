@@ -12,7 +12,9 @@ namespace SudoBot.Commands
         [Command("test")]
         public async Task T(CommandContext ctx, DiscordEmoji e)
         {
-            await ctx.Channel.SendMessageAsync(e.Url);
+            var embed = new DiscordEmbedBuilder()
+                .WithImageUrl(e.Url);
+            await ctx.Channel.SendMessageAsync(embed: embed.Build());
         }
     }
 }

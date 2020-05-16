@@ -6,12 +6,6 @@ namespace SudoBot.Commands
 {
     public class FunCommands : BaseCommandModule
     {
-        [Command("ping")]
-        public async Task Ping(CommandContext ctx)
-        {
-            var message = await ctx.Channel.SendMessageAsync("haha funny command");
-        }
-
         [Command("add")]
         public async Task Add(CommandContext ctx, int uno, int due)
         {

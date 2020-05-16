@@ -37,8 +37,9 @@ namespace SudoBot.Commands
         
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.CustomGames)]
         [Command("createCustoms")]
-        public async Task CreateCustoms(CommandContext ctx, string title, string message, int maxMembers, bool useTicket = false)
+        public async Task CreateCustoms(CommandContext ctx, string title, string message, int maxMembers, DiscordEmoji tempJoinEmoji, bool useTicket = false)
         {
+            //TODO add Timeout Stuff so it can't run forever!, Only Allowed Guilds can do forever
             var guild = await Mongo.Instance.GetGuild(ctx.Guild.Id);
 
             if (guild.CustomsRole == 0)
@@ -46,8 +47,16 @@ namespace SudoBot.Commands
                 await ctx.Channel.SendMessageAsync("Definiere eine Custom Games Rolle mit: $setCustomsRole {@Rolle}");
                 return;
             }
-            
-            var joinEmoji = DiscordEmoji.FromName(ctx.Client, ":white_check_mark:");
+
+            DiscordEmoji joinEmoji;
+            try
+            {
+                joinEmoji = DiscordEmoji.FromName(ctx.Client, $":{tempJoinEmoji.Name}:");
+            }
+            catch (Exception e)
+            {
+                joinEmoji = DiscordEmoji.FromName(ctx.Client, ":white_check_mark:");
+            }
             var startEmoji = DiscordEmoji.FromName(ctx.Client, ":cyclone:");
             var cancleEmoji = DiscordEmoji.FromName(ctx.Client, ":no_entry_sign:");
 
@@ -65,8 +74,8 @@ namespace SudoBot.Commands
             
 
             await sentMessage.CreateReactionAsync(joinEmoji);
-            await sentMessage.CreateReactionAsync(cancleEmoji);
-            await sentMessage.CreateReactionAsync(startEmoji);
+            // await sentMessage.CreateReactionAsync(cancleEmoji);
+            // await sentMessage.CreateReactionAsync(startEmoji);
 
             while (true)
             {
@@ -76,58 +85,56 @@ namespace SudoBot.Commands
                         .WaitForReactionAsync(x => x.Message == sentMessage && !x.User.IsBot);
                     
                     if(reactionResult.TimedOut) continue;
-                    DiscordMember member = await sentMessage.Channel.Guild.GetMemberAsync(reactionResult.Result.User.Id);
 
                     if (reactionResult.Result.Emoji == joinEmoji)
                     {
-                        User user = await User.GetOrCreateUser(member);
-                        
-
-                        if (joinedUsers.Contains(user.UserId))
+                        if (joinedUsers.Contains(reactionResult.Result.User.Id))
                         {
                             // await ctx.Channel.SendMessageAsync($"{member.Mention} hat verlassen");
 
-                            var u = joinedUsers.Single(x => x == user.UserId);
-                            
-                            joinedUsers.Remove(u);
+                            // var u = joinedUsers.Single(x => x == reactionResult.Result.User.Id);
+                            //
+                            // joinedUsers.Remove(u);
                         }
                         else
                         {
-                            if (useTicket && user.TicketsRemaining == 0)
-                            {
-                                await ctx.Channel.SendMessageAsync($"{member.Mention} hat keine Tickets übrig!");
-                                continue;
-                            }
+                            // if (useTicket && user.TicketsRemaining == 0)
+                            // {
+                            //     await ctx.Channel.SendMessageAsync($"{member.Mention} hat keine Tickets übrig!");
+                            //     continue;
+                            // }
                             // await ctx.Channel.SendMessageAsync($"{member.Mention} ist Beigetreten");
-                            joinedUsers.Add(user.UserId);
+                            joinedUsers.Add(reactionResult.Result.User.Id);
                         }
                         
-                        await sentMessage.DeleteReactionAsync(reactionResult.Result.Emoji, reactionResult.Result.User);
+                        // await sentMessage.DeleteReactionAsync(reactionResult.Result.Emoji, reactionResult.Result.User);
                         
                         embed.Fields[0].Value = joinedUsers.Count.ToString();
-                        await sentMessage.ModifyAsync(embed: embed.Build());
+                        sentMessage.ModifyAsync(embed: embed.Build());
                         
-                        if (useTicket) await user.RemoveTicket();
+                        // if (useTicket) await user.RemoveTicket();
                         continue;
                     }
 
                     if (reactionResult.Result.Emoji == cancleEmoji)
                     {
+                        DiscordMember member = await sentMessage.Channel.Guild.GetMemberAsync(reactionResult.Result.User.Id);
                         if ((member.PermissionsIn(ctx.Channel) & Permissions.ManageMessages) == 0)
                         {
-                            await sentMessage.DeleteReactionAsync(reactionResult.Result.Emoji, reactionResult.Result.User);
+                            sentMessage.DeleteReactionAsync(reactionResult.Result.Emoji, reactionResult.Result.User);
                             continue;
                         }
-                        
+
                         await ctx.Channel.SendMessageAsync($"Das Custom Game wurde von {reactionResult.Result.User.Mention} Abgebrochen!");
                         return;
                     }
 
                     if (reactionResult.Result.Emoji == startEmoji)
                     {
+                        DiscordMember member = await sentMessage.Channel.Guild.GetMemberAsync(reactionResult.Result.User.Id);
                         if ((member.PermissionsIn(ctx.Channel) & Permissions.ManageMessages) == 0)
                         {
-                            await sentMessage.DeleteReactionAsync(reactionResult.Result.Emoji, reactionResult.Result.User);
+                            sentMessage.DeleteReactionAsync(reactionResult.Result.Emoji, reactionResult.Result.User);
                             continue;
                         }
                         

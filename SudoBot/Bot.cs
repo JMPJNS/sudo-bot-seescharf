@@ -112,7 +112,7 @@ namespace SudoBot
         
         private Task MessageCreated(MessageCreateEventArgs e)
         {
-            Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Message Created: [{e.Guild}] ({e.Author}): ${e.Message}", DateTime.Now);
+            Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Message Created: [{e.Guild.Id} : {e.Channel.Id}] ({e.Author.Username}): ${e.Message.Content}", DateTime.Now);
             _messageHandler.HandleMessage(e).GetAwaiter().GetResult();
             return Task.CompletedTask;
         }
