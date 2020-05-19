@@ -18,6 +18,9 @@ namespace SudoBot.Models
         public int TicketCount { get; set; }
         
         public ulong CustomsRole { get; private set; }
+        public ulong CustomsChannel { get; private set; }
+        public ulong CustomsEmoji { get; private set; }
+        public ulong CustomsMessage { get; private set; }
         
         private List<RankingRole> RankingRoles { get; set; }
 
@@ -70,6 +73,15 @@ namespace SudoBot.Models
         public async Task SetCustomsRole(ulong roleId)
         {
             CustomsRole = roleId;
+            await SaveGuild();
+        }
+
+        public async Task SetCustoms(ulong message, ulong channel, ulong emoji)
+        {
+            CustomsChannel = channel;
+            CustomsMessage = message;
+            CustomsEmoji = emoji;
+
             await SaveGuild();
         }
 
