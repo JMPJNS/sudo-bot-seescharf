@@ -16,10 +16,8 @@ namespace SudoBot.Commands
     {
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         [Command("uploadImage")]
-        public async Task Add(CommandContext ctx)
+        public async Task UploadImage(CommandContext ctx)
         {
-            Console.Write("test");
-
             try
             {
                 var at = ctx.Message.Attachments[0];
