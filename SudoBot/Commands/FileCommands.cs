@@ -14,7 +14,7 @@ namespace SudoBot.Commands
 {
     public class FileCommands : BaseCommandModule
     {
-        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         [Command("uploadImage")]
         public async Task Add(CommandContext ctx)
         {
@@ -28,7 +28,7 @@ namespace SudoBot.Commands
                 var uriWithoutQuery = uri.GetLeftPart(UriPartial.Path);
                 var fileExtension = Path.GetExtension(uriWithoutQuery);
                 
-                var path = Path.Combine("/storage/files/images", $"{ctx.Message.Id.ToString()}{fileExtension}");
+                var path = Path.Combine("/drive/jonas/files/images", $"{ctx.Message.Id.ToString()}{fileExtension}");
 
                 var httpClient = new HttpClient();
 
