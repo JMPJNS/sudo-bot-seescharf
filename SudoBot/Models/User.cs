@@ -16,6 +16,8 @@ namespace SudoBot.Models
         [BsonId]
         public ObjectId ThisIsNotTheId { get; set; }
         public ulong UserId { private set; get; }
+        public string UserName { get; private set; }
+        public string Discriminator { get; private set; }
         
         public ulong GuildId { private set; get; }
 
@@ -90,7 +92,12 @@ namespace SudoBot.Models
         public static async Task<User> GetOrCreateUser(DiscordMember member)
         {
             User user = await Mongo.Instance.GetUser(member.Id, member.Guild.Id);
-            if (user != null) return user;
+            if (user != null)
+            {
+                if (user.UserName == null) user.UserName = member.Username;
+                if (user.Discriminator == null) user.Discriminator = member.Discriminator;
+                return user;
+            }
 
             user = GetFreshUser(member);
             await Mongo.Instance.InsertUser(user);
@@ -107,6 +114,8 @@ namespace SudoBot.Models
                 0,
                 false
             );
+            u.UserName = member.Username;
+            u.Discriminator = member.Discriminator;
             return u;
         }
 

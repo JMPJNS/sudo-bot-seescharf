@@ -14,6 +14,8 @@ namespace SudoBot.Models
         [BsonId]
         public ObjectId Id { get; set; }
         public ulong GuildId { get; set; }
+        public string Name { get; set; }
+        public int MemberCount { get; set; }
 
         public int TicketCount { get; set; }
         
@@ -43,7 +45,7 @@ namespace SudoBot.Models
         }
         
         
-        private async Task SaveGuild()
+        public async Task SaveGuild()
         {
             await Mongo.Instance.UpdateGuild(this);
         }

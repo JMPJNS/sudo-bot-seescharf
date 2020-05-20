@@ -93,7 +93,7 @@ namespace SudoBot.Commands
             var embed = new DiscordEmbedBuilder()
                 .WithDescription(member.Mention)
                 .WithColor(member.Color)
-                .AddField("Nickname", member.Nickname, true)
+                .AddField("Nickname", member.Nickname ?? member.Username, true)
                 .AddField("Username", member.Username, true)
                 .AddField("#", member.Discriminator, true)
                 .AddField("ID", member.Id.ToString(), true)

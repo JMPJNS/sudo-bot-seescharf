@@ -91,9 +91,21 @@ namespace SudoBot
             var guild = Mongo.Instance.GetGuild(e.Guild.Id).GetAwaiter().GetResult();
             if (guild == null)
             {
-                Mongo.Instance.InsertGuild(new Guild(e.Guild.Id)).GetAwaiter().GetResult();
+                Guild g = new Guild(e.Guild.Id);
+                g.Name = e.Guild.Name;
+                g.MemberCount = e.Guild.MemberCount;
+                Mongo.Instance.InsertGuild(g).GetAwaiter().GetResult();
             }
-            
+            else
+            {
+                if (guild.MemberCount == 0 || guild.Name == null)
+                {
+                    guild.Name = e.Guild.Name;
+                    guild.MemberCount = e.Guild.MemberCount;
+                    guild.SaveGuild().GetAwaiter().GetResult();
+                }
+            }
+
             return Task.CompletedTask;
         }
 
@@ -113,7 +125,7 @@ namespace SudoBot
         
         private Task MessageCreated(MessageCreateEventArgs e)
         {
-            Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Message Created: [{e.Guild.Id} : {e.Channel.Id}] ({e.Author.Username}): ${e.Message.Content}", DateTime.Now);
+            Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Message Created: [{e.Guild.Id} : {e.Channel.Id}] ({e.Author.Username}): {e.Message.Content}", DateTime.Now);
             _messageHandler.HandleMessage(e).GetAwaiter().GetResult();
             return Task.CompletedTask;
         }
