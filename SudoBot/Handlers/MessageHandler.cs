@@ -14,8 +14,13 @@ namespace SudoBot.Handlers
             
             DiscordMember member = await args.Guild.GetMemberAsync(args.Author.Id);
             User user = await User.GetOrCreateUser(member);
+
+            if (user.UserName != member.Username || user.Discriminator != member.Discriminator)
+            {
+                await user.UpdateUser(member);
+            }
             
-            bool didCountMessage = await user.AddCountedMessages(args.Message);
+            await user.AddCountedMessages(args.Message);
 
         }
     }

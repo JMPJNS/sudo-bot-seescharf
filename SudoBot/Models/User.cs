@@ -86,6 +86,14 @@ namespace SudoBot.Models
             SpecialPoints += points;
             await SaveUser();
         }
+
+        public async Task UpdateUser(DiscordMember member)
+        {
+            UserName = member.Username;
+            Discriminator = member.Discriminator;
+
+            await SaveUser();
+        }
         
         // Database Management stuff here
 

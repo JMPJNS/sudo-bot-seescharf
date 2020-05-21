@@ -27,7 +27,7 @@ namespace SudoBot.Commands
                 var uriWithoutQuery = uri.GetLeftPart(UriPartial.Path);
                 var fileExtension = Path.GetExtension(uriWithoutQuery);
                 
-                var path = Path.Combine("/drive/jonas/files", $"{ctx.Message.Id.ToString()}{fileExtension}");
+                var path = Path.Combine("/drive/jonas/files/images", $"{ctx.Message.Id.ToString()}{fileExtension}");
 
                 var httpClient = new HttpClient();
 

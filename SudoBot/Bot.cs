@@ -112,8 +112,14 @@ namespace SudoBot
         private Task OnGuildAvailable(GuildCreateEventArgs e)
         {
             Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Bot Logged in on: [{e.Guild.Id}] {e.Guild.Name}", DateTime.Now);
+
+            var embed = new DiscordEmbedBuilder()
+                .WithColor(DiscordColor.Aquamarine)
+                .WithThumbnailUrl(e.Guild.IconUrl)
+                .WithTitle("Bot Logged In")
+                .WithDescription(e.Guild.Name);
             
-            Globals.LogChannel.SendMessageAsync($"Bot Logged in on: [{e.Guild.Id}] {e.Guild.Name}");
+            Globals.LogChannel.SendMessageAsync(embed: embed.Build());
             
             var guild = Mongo.Instance.GetGuild(e.Guild.Id).GetAwaiter().GetResult();
             if (guild == null)
@@ -126,6 +132,13 @@ namespace SudoBot
             else
             {
                 if (guild.MemberCount == 0 || guild.Name == null)
+                {
+                    guild.Name = e.Guild.Name;
+                    guild.MemberCount = e.Guild.MemberCount;
+                    guild.SaveGuild().GetAwaiter().GetResult();
+                }
+
+                if (guild.Name != e.Guild.Name || guild.MemberCount != e.Guild.MemberCount)
                 {
                     guild.Name = e.Guild.Name;
                     guild.MemberCount = e.Guild.MemberCount;
