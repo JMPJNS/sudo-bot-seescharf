@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DSharpPlus;
+using DSharpPlus.Entities;
 
 namespace SudoBot
 {
@@ -9,6 +10,23 @@ namespace SudoBot
         public static readonly string[] ModRoles = {"SudoBotAdmin", "SudoBotMod", "Admins", "Mods", "Admin 👑", "Server-Techniker🛠️", "Bot Developer"};
         public static readonly string[] AdminRoles = {"SudoBotAdmin", "Admins", "Senior Moderatoren ✨", "Admin 👑", "Server-Techniker🛠️", "Moderatoren ✨", "Bot Developer"};
         public static DebugLogger Logger;
+        public static DiscordClient Client;
+        public static DiscordChannel LogChannel
+        {
+            get
+            {
+                if (Environment.GetEnvironmentVariable("DBNAME") == "SudoBot")
+                {
+                    var guild = Client.GetGuildAsync(468835109844418575).GetAwaiter().GetResult();
+                    return guild.GetChannel(712253992243036281);
+                }
+                else
+                {
+                    var guild = Client.GetGuildAsync(468835109844418575).GetAwaiter().GetResult();
+                    return guild.GetChannel(712254249148350495);
+                }
+            }
+        }
     }
 }
 

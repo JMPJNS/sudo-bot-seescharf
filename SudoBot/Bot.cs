@@ -40,6 +40,8 @@ namespace SudoBot
             Client = new DiscordClient(config);
             Client.Ready += OnClientReady;
             Client.GuildAvailable += OnGuildAvailable;
+            Client.GuildCreated += OnGuildCreated;
+            
             Client.ClientErrored += OnClientError;
             Client.MessageCreated += MessageCreated;
 
@@ -79,14 +81,39 @@ namespace SudoBot
         private Task OnClientReady(ReadyEventArgs e)
         {
             Globals.Logger = e.Client.DebugLogger;
+            Globals.Client = e.Client;
             Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Bot Started", DateTime.Now);
 
             return Task.CompletedTask;
         }
 
+        private Task OnGuildCreated(GuildCreateEventArgs e)
+        {
+            Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Bot Joined: [{e.Guild.Id}] {e.Guild.Name}", DateTime.Now);
+
+            var embed = new DiscordEmbedBuilder()
+                .WithColor(DiscordColor.Aquamarine)
+                .WithThumbnailUrl(e.Guild.IconUrl)
+                .WithTitle("Bot Joined")
+                .WithDescription(e.Guild.Name)
+                .AddField("ID", e.Guild.Id.ToString())
+                .AddField("User Count", e.Guild.MemberCount.ToString());
+            
+            Globals.LogChannel.SendMessageAsync(embed: embed.Build());
+            
+            Guild g = new Guild(e.Guild.Id);
+            g.Name = e.Guild.Name;
+            g.MemberCount = e.Guild.MemberCount;
+            Mongo.Instance.InsertGuild(g).GetAwaiter().GetResult();
+            
+            return Task.CompletedTask;
+        }
+        
         private Task OnGuildAvailable(GuildCreateEventArgs e)
         {
-            Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Bot Logged in on: {e.Guild.Name}", DateTime.Now);
+            Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Bot Logged in on: [{e.Guild.Id}] {e.Guild.Name}", DateTime.Now);
+            
+            Globals.LogChannel.SendMessageAsync($"Bot Logged in on: [{e.Guild.Id}] {e.Guild.Name}");
             
             var guild = Mongo.Instance.GetGuild(e.Guild.Id).GetAwaiter().GetResult();
             if (guild == null)

@@ -94,8 +94,8 @@ namespace SudoBot.Models
             User user = await Mongo.Instance.GetUser(member.Id, member.Guild.Id);
             if (user != null)
             {
-                if (user.UserName == null) user.UserName = member.Username;
-                if (user.Discriminator == null) user.Discriminator = member.Discriminator;
+                user.UserName ??= member.Username;
+                user.Discriminator ??= member.Discriminator;
                 return user;
             }
 

@@ -26,6 +26,13 @@ namespace SudoBot.Commands
             });
             await ctx.Channel.SendMessageAsync(ctx.RawArgumentString);
         }
+
+        [Command("invite")]
+        public async Task Invite(CommandContext ctx)
+        {
+            await ctx.Channel.SendMessageAsync(
+                "https://discord.com/oauth2/authorize?client_id=705548602994458684&scope=bot&permissions=1544023122");
+        }
         
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         [Command("makeBig")]
