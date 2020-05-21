@@ -61,8 +61,17 @@ namespace SudoBot.Commands
                 var l5 = ctx.Guild.GetRole(702157869130448988);
                 var l1 = ctx.Guild.GetRole(702159345588109334);
 
+                var allCount = allMembers.Count;
+
+                int count = 0;
+
                 foreach (var member in allMembers)
                 {
+                    if (count % 100 == 0)
+                    {
+                        await ctx.Channel.SendMessageAsync($"{count.ToString()} / {allCount.ToString()}");
+                    }
+                    
                     var user = await User.GetOrCreateUser(member);
                     if (member.Roles.Contains(l80))
                     {
@@ -98,6 +107,8 @@ namespace SudoBot.Commands
                     {
                         await user.SetHighestOldLevel(1);
                     }
+
+                    count++;
                 }
 
                 await ctx.Channel.SendMessageAsync("Fertig!");
