@@ -24,7 +24,7 @@ namespace SudoBot.Commands
                 await Task.Delay(1000);
                 await ctx.Message.DeleteAsync();
             });
-            await channel.SendMessageAsync(ctx.RawArgumentString);
+            await channel.SendMessageAsync(string.Join(" ",words));
         }
         
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
