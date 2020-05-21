@@ -17,6 +17,18 @@ namespace SudoBot.Commands
     {
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         [Command("say")]
+        public async Task SayInChannel(CommandContext ctx, DiscordChannel channel, params string[] words)
+        {
+            Task.Run(async () =>
+            {
+                await Task.Delay(1000);
+                await ctx.Message.DeleteAsync();
+            });
+            await channel.SendMessageAsync(ctx.RawArgumentString);
+        }
+        
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
+        [Command("say")]
         public async Task Say(CommandContext ctx, params string[] words)
         {
             Task.Run(async () =>
@@ -46,7 +58,7 @@ namespace SudoBot.Commands
         [Command("ping")]
         public async Task Ping(CommandContext ctx)
         {
-            var message = await ctx.Channel.SendMessageAsync(ctx.Client.Ping.ToString());
+            var message = await ctx.Channel.SendMessageAsync($"{ctx.Client.Ping.ToString()}ms");
         }
 
         // Reminder Stuff
