@@ -26,6 +26,10 @@ namespace SudoBot.Commands
                 await ctx.Channel.SendMessageAsync("Die Rechte wurden Vergeben!");
             }
         }
+        
+        // Mute
+        // // Alle Rollen weg nehmen, und 639522863023521822 geben, bei unmuted wieder rollen geben
+        // Ban
 
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         [Command("getAllPermissions")]

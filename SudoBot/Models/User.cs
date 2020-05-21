@@ -33,6 +33,8 @@ namespace SudoBot.Models
         
         public int TicketsRemaining { private set; get; }
         
+        public int HighestOldLevel { private set; get; }
+        
         // Logic Starts Here
 
         
@@ -43,7 +45,7 @@ namespace SudoBot.Models
 
             int days = (int)(DateTime.UtcNow - JoinDate).TotalDays;
 
-            return messages + points + days*24;
+            return messages + points + days*10;
             
         }
 
@@ -92,6 +94,12 @@ namespace SudoBot.Models
             UserName = member.Username;
             Discriminator = member.Discriminator;
 
+            await SaveUser();
+        }
+
+        public async Task SetHighestOldLevel(int level)
+        {
+            HighestOldLevel = level;
             await SaveUser();
         }
         
