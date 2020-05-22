@@ -110,12 +110,20 @@ namespace SudoBot.Models
 
             bool rvalue = false;
 
-            foreach (var r in guild.RankingRoles)
+            var sorted = guild.RankingRoles.OrderBy(x => x.Points).ToList();
+
+            for (var i=0; i< sorted.Count; i++)
             {
+                var r = sorted[i];
+                Guild.RankingRole next;
+                if (i < sorted.Count - 1) 
+                     next = sorted[i + 1];
+                else next = null;
+                
                 var role = dGuild.GetRole(r.Role);
                 try
                 {
-                    if (xp > r.Points)
+                    if (xp > r.Points && xp < (next != null ? next.Points : int.MaxValue))
                     {
                         if (member.Roles.Contains(role)) continue;
                         rvalue = true;
