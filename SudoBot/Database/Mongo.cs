@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using DSharpPlus;
+using DSharpPlus.Entities;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using SudoBot.Models;
@@ -58,6 +59,10 @@ namespace SudoBot.Database
                 guild);
         }
 
+        public async Task<List<User>> GetAllUsersWithPrevRole()
+        {
+            return await _users.FindAsync(user => user.HighestOldLevel != 0).Result.ToListAsync();
+        }
 
         // User Stuff
         public async Task<User> GetUser(ulong userId, ulong guildId)

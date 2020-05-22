@@ -43,12 +43,15 @@ namespace SudoBot.Models
         
         public int CalculatePoints()
         {
+            var guild = Guild.GetGuild(GuildId).GetAwaiter().GetResult();
             int messages = CountedMessages;
             int points = SpecialPoints;
 
             int days = (int)(DateTime.UtcNow - JoinDate).TotalDays;
 
-            return messages + points + days*10;
+            if (HighestOldLevel != 0) return messages + points + days * guild.RankingTimeMultiplier;
+
+            return messages + points + days*guild.RankingTimeMultiplier;
             
         }
 
@@ -83,6 +86,12 @@ namespace SudoBot.Models
             await SaveUser();
             
             return true;
+        }
+
+        public async Task AddCountedMessagesByHand(int count)
+        {
+            CountedMessages += count;
+            await SaveUser();
         }
 
         public async Task<bool> UpdateRankRoles()

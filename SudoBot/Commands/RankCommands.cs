@@ -50,6 +50,25 @@ namespace SudoBot.Commands
             }
         }
 
+        [Command("setName")]
+        [CheckForPermissions(SudoPermission.Admin, GuildPermission.Ranking)]
+        public async Task SetRankingName(CommandContext ctx, string name)
+        {
+            var guild = await Guild.GetGuild(ctx.Guild.Id);
+            var oldname = guild.RankingPointName;
+            await guild.SetRankingPointsName(name);
+            await ctx.Channel.SendMessageAsync($"Der Name wurde von {oldname} auf {guild.RankingPointName} geändert!");
+        }
+        
+        [Command("setTimeMultiplier")]
+        [CheckForPermissions(SudoPermission.Admin, GuildPermission.Ranking)]
+        public async Task SetTimeMultiplier(CommandContext ctx, int ammount)
+        {
+            var guild = await Guild.GetGuild(ctx.Guild.Id);
+            await guild.SetRankingTimeMultipier(ammount);
+            await ctx.Channel.SendMessageAsync($"Der Zeit Multiplikator wurde auf {guild.RankingTimeMultiplier.ToString()} gesetzt!");
+        }
+
         [Command("list")]
         [Description("Auflistung alle Rollen im Ranking System")]
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Ranking)]

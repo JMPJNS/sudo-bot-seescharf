@@ -27,6 +27,8 @@ namespace SudoBot.Models
         public ulong LocalLogChannel { get; private set; }
 
         public List<RankingRole> RankingRoles { get; private set; }
+        public int RankingTimeMultiplier { get; private set; }
+        public string RankingPointName { get; private set; }
 
         public List<GuildPermission> Permissions { get; set; }
 
@@ -36,7 +38,8 @@ namespace SudoBot.Models
             
             RankingRoles = new List<RankingRole>();
             Permissions = new List<GuildPermission>();
-
+            RankingTimeMultiplier = 10;
+            RankingPointName = "XP";
             TicketCount = 1;
         }
         
@@ -57,6 +60,18 @@ namespace SudoBot.Models
         public async Task GivePermission(GuildPermission perm)
         {
             Permissions.Add(perm);
+            await SaveGuild();
+        }
+
+        public async Task SetRankingPointsName(string name)
+        {
+            RankingPointName = name;
+            await SaveGuild();
+        }
+
+        public async Task SetRankingTimeMultipier(int num)
+        {
+            RankingTimeMultiplier = num;
             await SaveGuild();
         }
         

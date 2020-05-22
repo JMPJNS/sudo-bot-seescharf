@@ -14,6 +14,7 @@ namespace SudoBot.Commands
         public async Task Rank(CommandContext ctx)
         {
             var user = await User.GetOrCreateUser(ctx.Member);
+            var guild = await Guild.GetGuild(user.GuildId);
 
             await user.UpdateRankRoles();
 
@@ -22,7 +23,7 @@ namespace SudoBot.Commands
                 .WithThumbnailUrl(ctx.Member.AvatarUrl)
                 .WithTitle(ctx.Member.Nickname ?? ctx.Member.Username)
                 .AddField("Bonus Punkte", user.SpecialPoints.ToString(), true)
-                .AddField("IQ", user.CalculatePoints().ToString(), true);
+                .AddField(guild.RankingPointName ?? "XP", user.CalculatePoints().ToString(), true);
             
             await ctx.Channel.SendMessageAsync(embed:embed.Build());
         }
@@ -32,6 +33,7 @@ namespace SudoBot.Commands
         public async Task RankOther(CommandContext ctx, DiscordMember member)
         {
             var user = await User.GetOrCreateUser(member);
+            var guild = await Guild.GetGuild(user.GuildId);
             
             await user.UpdateRankRoles();
         
@@ -40,7 +42,7 @@ namespace SudoBot.Commands
                 .WithThumbnailUrl(member.AvatarUrl)
                 .WithTitle(member.Nickname ?? member.Username)
                 .AddField("Bonus Punkte", user.SpecialPoints.ToString(), true)
-                .AddField("IQ", user.CalculatePoints().ToString(), true);
+                .AddField(guild.RankingPointName ?? "XP", user.CalculatePoints().ToString(), true);
             
             await ctx.Channel.SendMessageAsync(embed:embed.Build());
         }
