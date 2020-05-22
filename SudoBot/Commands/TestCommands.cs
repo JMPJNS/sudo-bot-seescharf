@@ -6,6 +6,7 @@ using SudoBot.Attributes;
 
 namespace SudoBot.Commands
 {
+    [Group("test")]
     public class TestCommands : BaseCommandModule
     {
         [CheckForPermissions(SudoPermission.Any, GuildPermission.TestCommands)]

@@ -26,7 +26,7 @@ namespace SudoBot.Models
         
         public ulong LocalLogChannel { get; private set; }
 
-        private List<RankingRole> RankingRoles { get; set; }
+        public List<RankingRole> RankingRoles { get; private set; }
 
         public List<GuildPermission> Permissions { get; set; }
 
@@ -40,7 +40,7 @@ namespace SudoBot.Models
             TicketCount = 1;
         }
         
-        private class RankingRole
+        public class RankingRole
         {
             public ulong Role;
             public int Points;
@@ -49,6 +49,8 @@ namespace SudoBot.Models
         
         public async Task SaveGuild()
         {
+            var cacheIndex = GuildCache.FindIndex(x => x.GuildId == GuildId);
+            GuildCache[cacheIndex] = this;
             await Mongo.Instance.UpdateGuild(this);
         }
 
@@ -115,9 +117,34 @@ namespace SudoBot.Models
             await SaveGuild();
         }
 
+        public async Task<bool> RemoveRankingRole(DiscordRole role)
+        {
+            var rr = RankingRoles.FirstOrDefault(r => r.Role == role.Id);
+            if (rr == null)
+            {
+                return false;
+            }
+            else
+            {
+                RankingRoles.Remove(rr);
+                await SaveGuild();
+                return true;
+            }
+        }
+
+        public static List<Guild> GuildCache = new List<Guild>();
+
         public static async Task<Guild> GetGuild(ulong guildId)
         {
+            var cached = GuildCache.FirstOrDefault(x => x.GuildId == guildId);
+
+            if (cached != null)
+            {
+                return cached;
+            }
+            
             var guild = await Mongo.Instance.GetGuild(guildId);
+            GuildCache.Add(guild);
             return guild;
         }
     }

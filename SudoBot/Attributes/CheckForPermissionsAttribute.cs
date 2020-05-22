@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -27,7 +28,7 @@ namespace SudoBot.Attributes
             if (guildConfig == null)
             {
                 ctx.Channel.SendMessageAsync("ERROR GUILD NOT FOUND, CONTACT JMP#7777");
-                ctx.Channel.SendMessageAsync($"MessageID: {ctx.Message.Id}, GuildID: {ctx.Guild.Id}, ChannelID: {ctx.Channel.Id}");
+                ctx.Channel.SendMessageAsync($"MessageID: {ctx.Message.Id.ToString()}, GuildID: {ctx.Guild.Id.ToString()}, ChannelID: {ctx.Channel.Id.ToString()}");
                 return Task.FromResult(false);
             }
 
@@ -48,9 +49,9 @@ namespace SudoBot.Attributes
                     return Task.FromResult(true);
                 case SudoPermission.Me when ctx.Member.Id == 272809112851578881:
                     return Task.FromResult(true);
-                case SudoPermission.Admin when ctx.Member.Roles.Any(x => Globals.AdminRoles.Any(y => y == x.Name)):
+                case SudoPermission.Admin when ctx.Member.Roles.Any(x => Globals.AdminRoles.Any(y => y == x.Name)) || (ctx.Member.PermissionsIn(ctx.Channel) & Permissions.Administrator) != 0:
                     return Task.FromResult(true);
-                case SudoPermission.Mod when ctx.Member.Roles.Any(x => Globals.ModRoles.Any(y => y == x.Name)):
+                case SudoPermission.Mod when ctx.Member.Roles.Any(x => Globals.ModRoles.Any(y => y == x.Name)) || (ctx.Member.PermissionsIn(ctx.Channel) & Permissions.ManageMessages) != 0:
                     return Task.FromResult(true);
                 default:
                     if (!isHelp) ctx.Channel.SendMessageAsync($"Du hast keine Berechtigung dazu {DiscordEmoji.FromName(ctx.Client, ":smirk:")}");

@@ -13,6 +13,7 @@ using SudoBot.Attributes;
 
 namespace SudoBot.Commands
 {
+    [Group("file")]
     public class FileCommands : BaseCommandModule
     {
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]

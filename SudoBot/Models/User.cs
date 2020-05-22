@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -24,6 +25,8 @@ namespace SudoBot.Models
         public bool Blocked { private set; get; }
         
         public DateTime LastUpdated { private set; get; }
+
+        public DateTime LastRankUpdated { private set; get; }
         
         public DateTime JoinDate { private set; get; }
 
@@ -67,10 +70,7 @@ namespace SudoBot.Models
             
             TimeSpan minDelay = TimeSpan.FromMinutes(0.1);
 
-            if (DateTime.UtcNow - minDelay <= LastUpdated)
-            {
-                return false;
-            }
+            if (DateTime.UtcNow - minDelay <= LastUpdated) return false;
 
             int countedMessageLength = 100;
             int count = (message.Content.Length + countedMessageLength)/countedMessageLength;
@@ -81,6 +81,42 @@ namespace SudoBot.Models
             await SaveUser();
             
             return true;
+        }
+
+        private async Task<bool> UpdateUserRankRoles()
+        {
+            Guild guild = await Guild.GetGuild(GuildId);
+            if (guild.RankingRoles.Count == 0) return false;
+            
+            var dGuild = await Globals.Client.GetGuildAsync(GuildId);
+            var member = await dGuild.GetMemberAsync(UserId);
+            
+            TimeSpan minDelay = TimeSpan.FromMinutes(0.05);
+
+            if (DateTime.UtcNow - minDelay <= LastRankUpdated) return false;
+
+            var xp = CalculatePoints();
+
+            bool rvalue = false;
+
+            foreach (var r in guild.RankingRoles)
+            {
+                var role = dGuild.GetRole(r.Role);
+                if (xp > r.Points)
+                {
+                    if (member.Roles.Contains(role)) continue;
+                    rvalue = true;
+                    await member.GrantRoleAsync(role);
+                }
+                else
+                {
+                    if (!member.Roles.Contains(role)) continue;
+                    await member.RevokeRoleAsync(role);
+                }
+                
+            }
+
+            return rvalue;
         }
 
         public async Task AddSpecialPoints(int points)

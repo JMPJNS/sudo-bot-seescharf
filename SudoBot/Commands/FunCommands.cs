@@ -7,21 +7,23 @@ using DSharpPlus.Entities;
 
 namespace SudoBot.Commands
 {
+    [Group("fun")]
+    [Description("Commands für Random Fun Stuff")]
     public class FunCommands : BaseCommandModule
     {
-        [Command("add")]
+        [Command("add"), Description("Addiert 2 Zahlen"), Cooldown(5, 10, CooldownBucketType.User)]
         public async Task Add(CommandContext ctx, int uno, int due)
         {
             var message = await ctx.Channel.SendMessageAsync(uno.ToString() + "+" + due.ToString() + "=" + (uno+due).ToString());
         }
         
-        [Command("subtract")]
+        [Command("subtract"), Description("Subtrahiert 2 Zahlen"), Cooldown(5, 10, CooldownBucketType.User)]
         public async Task Subtract(CommandContext ctx, int uno, int due)
         {
             var message = await ctx.Channel.SendMessageAsync(uno.ToString() + "-" + due.ToString() + "=" + (uno-due).ToString());
         }
 
-        [Command("number")]
+        [Command("number"), Cooldown(3, 30, CooldownBucketType.Channel)]
         [Description("Gibt Information über eine Zahl")]
         public async Task Number(CommandContext ctx, int number)
         {
@@ -40,13 +42,13 @@ namespace SudoBot.Commands
             request.Close();
         }
         
-        [Command("multiply")]
+        [Command("multiply"), Description("Multipliziert 2 Zahlen"), Cooldown(5, 10, CooldownBucketType.User)]
         public async Task Multiply(CommandContext ctx, int uno, int due)
         {
             var message = await ctx.Channel.SendMessageAsync(uno.ToString() + "*" + due.ToString() + "=" + (uno*due).ToString());
         }
         
-        [Command("divide")]
+        [Command("divide"), Description("Dividiert 2 Zahlen"), Cooldown(5, 10, CooldownBucketType.User)]
         public async Task Divide(CommandContext ctx, int uno, int due)
         {
             var message = await ctx.Channel.SendMessageAsync(uno.ToString() + "/" + due.ToString() + "=" + ((float)uno/(float)due).ToString());
