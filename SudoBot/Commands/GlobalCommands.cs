@@ -23,7 +23,8 @@ namespace SudoBot.Commands
                 .WithThumbnailUrl(ctx.Member.AvatarUrl)
                 .WithTitle(ctx.Member.Nickname ?? ctx.Member.Username)
                 .AddField("Bonus Punkte", user.SpecialPoints.ToString(), true)
-                .AddField(guild.RankingPointName ?? "XP", user.CalculatePoints().ToString(), true);
+                .AddField(guild.RankingPointName ?? "XP", user.CalculatePoints().ToString(), true)
+                .AddField("Beigetreten", user.JoinDate.ToString("dd.MM.yyyy H:mm"), true);
             
             await ctx.Channel.SendMessageAsync(embed:embed.Build());
         }
@@ -42,7 +43,8 @@ namespace SudoBot.Commands
                 .WithThumbnailUrl(member.AvatarUrl)
                 .WithTitle(member.Nickname ?? member.Username)
                 .AddField("Bonus Punkte", user.SpecialPoints.ToString(), true)
-                .AddField(guild.RankingPointName ?? "XP", user.CalculatePoints().ToString(), true);
+                .AddField(guild.RankingPointName ?? "XP", user.CalculatePoints().ToString(), true)
+                .AddField("Beigetreten", user.JoinDate.ToString("dd.MM.yyyy H:mm"), true);
             
             await ctx.Channel.SendMessageAsync(embed:embed.Build());
         }
