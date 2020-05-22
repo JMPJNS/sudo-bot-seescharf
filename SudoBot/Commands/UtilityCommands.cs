@@ -13,7 +13,7 @@ using SudoBot.Handlers;
 
 namespace SudoBot.Commands
 {
-    [Group("utility")]
+    [Group("utility"), Aliases("u")]
     public class UtilityCommands : BaseCommandModule
     {
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]

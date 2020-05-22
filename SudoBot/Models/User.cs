@@ -78,6 +78,8 @@ namespace SudoBot.Models
             LastUpdated = DateTime.UtcNow;
             CountedMessages += count;
 
+            var rankUpdated = await UpdateUserRankRoles();
+
             await SaveUser();
             
             return true;
@@ -91,7 +93,7 @@ namespace SudoBot.Models
             var dGuild = await Globals.Client.GetGuildAsync(GuildId);
             var member = await dGuild.GetMemberAsync(UserId);
             
-            TimeSpan minDelay = TimeSpan.FromMinutes(0.05);
+            TimeSpan minDelay = TimeSpan.FromMinutes(5);
 
             if (DateTime.UtcNow - minDelay <= LastRankUpdated) return false;
 

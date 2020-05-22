@@ -7,7 +7,7 @@ using DSharpPlus.Entities;
 
 namespace SudoBot.Commands
 {
-    [Group("fun")]
+    [Group("fun"), Aliases("f")]
     [Description("Commands für Random Fun Stuff")]
     public class FunCommands : BaseCommandModule
     {

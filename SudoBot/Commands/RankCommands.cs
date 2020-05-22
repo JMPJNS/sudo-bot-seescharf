@@ -13,17 +13,9 @@ using SudoBot.Handlers;
 
 namespace SudoBot.Commands
 {
-    [Group("rank")]
+    [Group("ranking"), Aliases("r")]
     public class RankCommands: BaseCommandModule
     {
-        [CheckForPermissions(SudoPermission.Any, GuildPermission.Ranking)]
-        [Command("rank")]
-        public async Task Rank(CommandContext ctx)
-        {
-            var user = await User.GetOrCreateUser(ctx.Member);
-            await ctx.Channel.SendMessageAsync($"{ctx.Member.Mention} hat {user.CountedMessages.ToString()} gesendete Nachrichten, {user.SpecialPoints.ToString()} Spezial Punkte und damit {user.CalculatePoints().ToString()} IQ");
-        }
-        
         [Command("givePoints")]
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Ranking)]
         public async Task GiveSp(CommandContext ctx, DiscordMember member, int count)
@@ -33,7 +25,7 @@ namespace SudoBot.Commands
             await ctx.Channel.SendMessageAsync($"{member.Mention} hat {count.ToString()} IQ erhalten");
         }
 
-        [Command("setRankingRole")]
+        [Command("setRole")]
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.Ranking)]
         public async Task SetRankingRole(CommandContext ctx, int points, DiscordRole role)
         {
@@ -42,7 +34,7 @@ namespace SudoBot.Commands
             await ctx.Channel.SendMessageAsync($"Die Rolle {role.Name} ist mit {points.ToString()} IQ zu Erreichen!");
         }
         
-        [Command("removeRankingRole")]
+        [Command("removeRole")]
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.Ranking)]
         public async Task RemoveRankingRole(CommandContext ctx, DiscordRole role)
         {
@@ -58,16 +50,17 @@ namespace SudoBot.Commands
             }
         }
 
-        [Command("rankList")]
+        [Command("list")]
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Ranking)]
         public async Task ListRankingRoles(CommandContext ctx)
         {
             var guild = await Guild.GetGuild(ctx.Guild.Id);
             var roles = guild.RankingRoles;
 
-            if (roles.Count == 0)
+            if (roles == null || roles.Count == 0)
             {
-                throw new DataException("Es wurden noch keine Rollen festgelegt, siehe `$help setRankingRole`");
+                await ctx.Channel.SendMessageAsync("Es wurden noch keine Rollen festgelegt, siehe `$help ranking setRole`");
+                return;
             } 
             
             var embed = new DiscordEmbedBuilder()
@@ -79,6 +72,8 @@ namespace SudoBot.Commands
                 var drole = ctx.Guild.GetRole(r.Role);
                 embed.AddField(drole.Mention, r.Points.ToString());
             }
+
+            await ctx.Channel.SendMessageAsync(embed: embed.Build());
         }
     }
 }

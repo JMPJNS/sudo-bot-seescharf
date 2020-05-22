@@ -110,6 +110,8 @@ namespace SudoBot.Models
 
         public async Task AddRankingRole(DiscordRole role, int points)
         {
+            if (RankingRoles == null) RankingRoles = new List<RankingRole>();
+            
             var rr = new RankingRole();
             rr.Points = points;
             rr.Role = role.Id;

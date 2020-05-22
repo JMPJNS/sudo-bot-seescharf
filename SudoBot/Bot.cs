@@ -71,7 +71,9 @@ namespace SudoBot
             Commands.RegisterCommands<CustomGamesCommands>();
             Commands.RegisterCommands<TestCommands>();
             Commands.RegisterCommands<AdminCommands>();
+            Commands.RegisterCommands<ModCommands>();
             Commands.RegisterCommands<FileCommands>();
+            Commands.RegisterCommands<GlobalCommands>();
                         
             // Start Bot
             await Client.ConnectAsync();
