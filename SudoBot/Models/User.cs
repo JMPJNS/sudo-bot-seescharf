@@ -88,7 +88,7 @@ namespace SudoBot.Models
         private async Task<bool> UpdateUserRankRoles()
         {
             Guild guild = await Guild.GetGuild(GuildId);
-            if (guild.RankingRoles.Count == 0) return false;
+            if (guild.RankingRoles == null || guild.RankingRoles.Count == 0) return false;
             
             var dGuild = await Globals.Client.GetGuildAsync(GuildId);
             var member = await dGuild.GetMemberAsync(UserId);
