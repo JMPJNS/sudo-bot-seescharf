@@ -75,7 +75,7 @@ namespace SudoBot.Commands
         public async Task ListRankingRoles(CommandContext ctx)
         {
             var guild = await Guild.GetGuild(ctx.Guild.Id);
-            var roles = guild.RankingRoles;
+            var roles = guild.RankingRoles.OrderBy(x => x.Points).ToList();
 
             if (roles == null || roles.Count == 0)
             {
