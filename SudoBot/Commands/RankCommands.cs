@@ -21,8 +21,9 @@ namespace SudoBot.Commands
         public async Task GiveSp(CommandContext ctx, DiscordMember member, int count)
         {
             var user = await User.GetOrCreateUser(member);
+            var guild = await Guild.GetGuild(user.GuildId);
             await user.AddSpecialPoints(count);
-            await ctx.Channel.SendMessageAsync($"{member.Mention} hat {count.ToString()} IQ erhalten");
+            await ctx.Channel.SendMessageAsync($"{member.Mention} hat {count.ToString()} {guild.RankingPointName ?? "XP"} erhalten");
         }
 
         [Command("setRole")]
