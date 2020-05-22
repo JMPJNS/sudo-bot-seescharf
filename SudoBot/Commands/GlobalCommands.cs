@@ -10,7 +10,7 @@ namespace SudoBot.Commands
     public class GlobalCommands : BaseCommandModule
     {
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Ranking)]
-        [Command("rank"), Aliases("rang")]
+        [Command("rank")]
         public async Task Rank(CommandContext ctx)
         {
             var user = await User.GetOrCreateUser(ctx.Member);
@@ -29,7 +29,7 @@ namespace SudoBot.Commands
         }
         
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Ranking)]
-        [Command("rank"), Aliases("rang")]
+        [Command("rank")]
         public async Task RankOther(CommandContext ctx, DiscordMember member)
         {
             var user = await User.GetOrCreateUser(member);
