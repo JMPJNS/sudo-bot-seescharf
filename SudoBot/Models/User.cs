@@ -93,7 +93,7 @@ namespace SudoBot.Models
             var dGuild = await Globals.Client.GetGuildAsync(GuildId);
             var member = await dGuild.GetMemberAsync(UserId);
             
-            TimeSpan minDelay = TimeSpan.FromMinutes(5);
+            TimeSpan minDelay = TimeSpan.FromMinutes(0.005);
 
             if (DateTime.UtcNow - minDelay <= LastRankUpdated) return false;
 
@@ -104,17 +104,25 @@ namespace SudoBot.Models
             foreach (var r in guild.RankingRoles)
             {
                 var role = dGuild.GetRole(r.Role);
-                if (xp > r.Points)
+                try
                 {
-                    if (member.Roles.Contains(role)) continue;
-                    rvalue = true;
-                    await member.GrantRoleAsync(role);
+                    if (xp > r.Points)
+                    {
+                        if (member.Roles.Contains(role)) continue;
+                        rvalue = true;
+                        await member.GrantRoleAsync(role);
+                    }
+                    else
+                    {
+                        if (!member.Roles.Contains(role)) continue;
+                        await member.RevokeRoleAsync(role);
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    if (!member.Roles.Contains(role)) continue;
-                    await member.RevokeRoleAsync(role);
+                    if (e.Message == "Unauthorized: 403") await dGuild.GetChannel(guild.LocalLogChannel).SendMessageAsync($"Der Bot hat keine Berechtigung die Rolle {role.Mention} zu vergeben");
                 }
+                
                 
             }
 

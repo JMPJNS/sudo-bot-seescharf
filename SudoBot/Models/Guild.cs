@@ -49,8 +49,8 @@ namespace SudoBot.Models
         
         public async Task SaveGuild()
         {
-            var cacheIndex = GuildCache.FindIndex(x => x.GuildId == GuildId);
-            GuildCache[cacheIndex] = this;
+            var cacheIndex = Globals.GuildCache.FindIndex(x => x.GuildId == GuildId);
+            Globals.GuildCache[cacheIndex] = this;
             await Mongo.Instance.UpdateGuild(this);
         }
 
@@ -133,12 +133,10 @@ namespace SudoBot.Models
                 return true;
             }
         }
-
-        public static List<Guild> GuildCache = new List<Guild>();
-
+        
         public static async Task<Guild> GetGuild(ulong guildId)
         {
-            var cached = GuildCache.FirstOrDefault(x => x.GuildId == guildId);
+            var cached = Globals.GuildCache.FirstOrDefault(x => x.GuildId == guildId);
 
             if (cached != null)
             {
@@ -146,7 +144,7 @@ namespace SudoBot.Models
             }
             
             var guild = await Mongo.Instance.GetGuild(guildId);
-            GuildCache.Add(guild);
+            if (guild != null) Globals.GuildCache.Add(guild);
             return guild;
         }
     }

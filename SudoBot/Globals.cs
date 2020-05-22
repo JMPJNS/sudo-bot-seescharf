@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DSharpPlus;
 using DSharpPlus.Entities;
+using SudoBot.Models;
 
 namespace SudoBot
 {
@@ -11,6 +12,9 @@ namespace SudoBot
         public static readonly string[] AdminRoles = {"SudoBotAdmin", "Admins", "Senior Moderatoren ✨", "Admin 👑", "Server-Techniker🛠️", "Moderatoren ✨", "Bot Developer"};
         public static DebugLogger Logger;
         public static DiscordClient Client;
+        
+        public static readonly List<Guild> GuildCache = new List<Guild>();
+        
         public static DiscordChannel LogChannel
         {
             get
