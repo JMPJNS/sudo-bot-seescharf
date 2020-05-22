@@ -25,6 +25,9 @@ namespace SudoBot.Commands
                 await Task.Delay(1000);
                 await ctx.Message.DeleteAsync();
             });
+
+            await (ctx.Channel.SendMessageAsync("hört auf zu trollen"));
+            
             await channel.SendMessageAsync(string.Join(" ",words));
         }
         
