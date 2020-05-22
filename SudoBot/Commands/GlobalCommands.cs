@@ -9,30 +9,12 @@ namespace SudoBot.Commands
 {
     public class GlobalCommands : BaseCommandModule
     {
+      
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Ranking)]
         [Command("rank")]
-        public async Task Rank(CommandContext ctx)
+        public async Task RankOther(CommandContext ctx, DiscordMember member = null)
         {
-            var user = await User.GetOrCreateUser(ctx.Member);
-            var guild = await Guild.GetGuild(user.GuildId);
-
-            await user.UpdateRankRoles();
-
-            var embed = new DiscordEmbedBuilder()
-                .WithColor(ctx.Member.Color)
-                .WithThumbnailUrl(ctx.Member.AvatarUrl)
-                .WithTitle(ctx.Member.Nickname ?? ctx.Member.Username)
-                .AddField("Bonus Punkte", user.SpecialPoints.ToString(), true)
-                .AddField(guild.RankingPointName ?? "XP", user.CalculatePoints().ToString(), true)
-                .AddField("Beigetreten", user.JoinDate.ToString("dd.MM.yyyy H:mm"), true);
-            
-            await ctx.Channel.SendMessageAsync(embed:embed.Build());
-        }
-        
-        [CheckForPermissions(SudoPermission.Any, GuildPermission.Ranking)]
-        [Command("rank")]
-        public async Task RankOther(CommandContext ctx, DiscordMember member)
-        {
+            if (member == null) member = ctx.Member;
             var user = await User.GetOrCreateUser(member);
             var guild = await Guild.GetGuild(user.GuildId);
             
