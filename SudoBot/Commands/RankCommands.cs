@@ -90,7 +90,7 @@ namespace SudoBot.Commands
             foreach (var r in roles)
             {
                 var drole = ctx.Guild.GetRole(r.Role);
-                embed.AddField(drole.Name, r.Points.ToString(), true);
+                embed.AddField(drole.Name, $"{r.Points.ToString()} {guild.RankingPointName ?? "XP"}", true);
             }
 
             await ctx.Channel.SendMessageAsync(embed: embed.Build());
