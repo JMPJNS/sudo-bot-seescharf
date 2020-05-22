@@ -71,7 +71,7 @@ namespace SudoBot.Commands
             foreach (var r in roles)
             {
                 var drole = ctx.Guild.GetRole(r.Role);
-                embed.AddField(drole.Name, r.Points.ToString());
+                embed.AddField(drole.Name, r.Points.ToString(), true);
             }
 
             await ctx.Channel.SendMessageAsync(embed: embed.Build());
