@@ -24,6 +24,8 @@ namespace SudoBot.Models
         public ulong CustomsEmoji { get; private set; }
         public ulong CustomsMessage { get; private set; }
         
+        public ulong LocalLogChannel { get; private set; }
+
         private List<RankingRole> RankingRoles { get; set; }
 
         public List<GuildPermission> Permissions { get; set; }
@@ -78,6 +80,12 @@ namespace SudoBot.Models
             await SaveGuild();
         }
 
+        public async Task SetLocalLogChannel(ulong channelId)
+        {
+            LocalLogChannel = channelId;
+            await SaveGuild();
+        }
+
         public async Task SetCustoms(ulong message, ulong channel, ulong emoji)
         {
             CustomsChannel = channel;
@@ -105,6 +113,12 @@ namespace SudoBot.Models
             rr.Role = role.Id;
             RankingRoles.Add(rr);
             await SaveGuild();
+        }
+
+        public static async Task<Guild> GetGuild(ulong guildId)
+        {
+            var guild = await Mongo.Instance.GetGuild(guildId);
+            return guild;
         }
     }
 }

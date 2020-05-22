@@ -4,6 +4,7 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using SudoBot.Database;
+using SudoBot.Models;
 
 namespace SudoBot.Attributes
 {
@@ -21,7 +22,7 @@ namespace SudoBot.Attributes
             bool isHelp = ctx.Command.Name == "help";
             if (ctx.Guild == null || ctx.Member == null) return Task.FromResult(false);
 
-            var guildConfig = Mongo.Instance.GetGuild(ctx.Guild.Id).GetAwaiter().GetResult();
+            var guildConfig = Guild.GetGuild(ctx.Guild.Id).GetAwaiter().GetResult();
 
             if (guildConfig == null)
             {

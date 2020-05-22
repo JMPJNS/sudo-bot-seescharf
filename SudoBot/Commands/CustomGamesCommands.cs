@@ -20,7 +20,7 @@ namespace SudoBot.Commands
         [Command("setCustomsRole")]
         public async Task SetCustomsRole(CommandContext ctx, DiscordRole role)
         {
-            var guild = await Mongo.Instance.GetGuild(ctx.Guild.Id);
+            var guild = await Guild.GetGuild(ctx.Guild.Id);
             await guild.SetCustomsRole(role.Id);
             await ctx.Channel.SendMessageAsync("Die Rolle wurde gesetzt");
         }
@@ -29,7 +29,7 @@ namespace SudoBot.Commands
         [Command("removeAllCustoms")]
         public async Task RemoveAllCustomsRole(CommandContext ctx)
         {
-            var guild = await Mongo.Instance.GetGuild(ctx.Guild.Id);
+            var guild = await Guild.GetGuild(ctx.Guild.Id);
             await ctx.Channel.SendMessageAsync("Die Rolle wird von allen entfernt. Wird ein paar Sekunden dauern.");
             await guild.RemoveAllCustomsRole(ctx);
             await ctx.Channel.SendMessageAsync("Die Rolle wurde von allen entfernt!");
@@ -39,7 +39,7 @@ namespace SudoBot.Commands
         [Command("createCustoms")]
         public async Task CreateCustoms(CommandContext ctx, string title, string message, DiscordEmoji tempJoinEmoji)
         {
-            var guild = await Mongo.Instance.GetGuild(ctx.Guild.Id);
+            var guild = await Guild.GetGuild(ctx.Guild.Id);
 
             if (guild.CustomsRole == 0)
             {
@@ -76,7 +76,7 @@ namespace SudoBot.Commands
         [Command("giveCustoms")]
         public async Task GiveCustoms(CommandContext ctx, int maxMembers)
         {
-            var guild = await Mongo.Instance.GetGuild(ctx.Guild.Id);
+            var guild = await Guild.GetGuild(ctx.Guild.Id);
             
             if (guild.CustomsRole == 0)
             {

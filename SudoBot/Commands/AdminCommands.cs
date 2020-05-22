@@ -2,8 +2,10 @@ using System;
 using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus.Entities;
 using SudoBot.Attributes;
 using SudoBot.Database;
+using SudoBot.Models;
 
 namespace SudoBot.Commands
 {
@@ -19,7 +21,7 @@ namespace SudoBot.Commands
                 await ctx.Channel.SendMessageAsync("Ungültige Eingabe");
                 return;
             }
-            var guildConfig = await Mongo.Instance.GetGuild(ctx.Guild.Id);
+            var guildConfig = await Guild.GetGuild(ctx.Guild.Id);
             if (!guildConfig.Permissions.Contains(perm))
             {
                 await guildConfig.GivePermission(perm);
@@ -38,5 +40,50 @@ namespace SudoBot.Commands
             var perms = string.Join("\n", Enum.GetNames(typeof(GuildPermission)));
             await ctx.Channel.SendMessageAsync(perms);
         }
+
+        [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
+        [Command("setLogChannel")]
+        public async Task SetLogChannel(CommandContext ctx, DiscordChannel channel)
+        {
+            var guild = await Guild.GetGuild(ctx.Guild.Id);
+            await guild.SetLocalLogChannel(channel.Id);
+            await ctx.Channel.SendMessageAsync("Der Channel wurde Gesetzt");
+        }
+
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
+        [Command("ban")]
+        public async Task BanMember(CommandContext ctx, DiscordMember member)
+        {
+            var guild = await Guild.GetGuild(ctx.Guild.Id);
+            try
+            {
+                await member.BanAsync();
+                var embed = new DiscordEmbedBuilder()
+                    .WithColor(DiscordColor.Red)
+                    .WithThumbnailUrl(member.AvatarUrl)
+                    .WithDescription(member.Mention)
+                    .AddField("Von", ctx.Member.Mention)
+                    .WithTitle("Banned");
+                var lChannel = ctx.Guild.GetChannel(guild.LocalLogChannel);
+                await lChannel.SendMessageAsync(embed: embed.Build());
+            }
+            catch (Exception e)
+            {
+                if (e.Message == "Object reference not set to an instance of an object.")
+                {
+                    await ctx.Channel.SendMessageAsync("Kein Log Channel gesetzt!, setze einen mit `$setLogChannel #{Channel}`");
+                }
+                else if (e.Message == "Unauthorized: 403")
+                {
+                    await ctx.Channel.SendMessageAsync("Keine Ban Berechtigung");
+                }
+                else
+                {
+                    await ctx.Channel.SendMessageAsync($"{e.Message}, wenn dies ein Unschlüssiger Fehler ist, JMP#7777 kontaktieren");
+                }
+                
+            }
+        }
+        
     }
 }

@@ -121,7 +121,7 @@ namespace SudoBot
             
             Globals.LogChannel.SendMessageAsync(embed: embed.Build());
             
-            var guild = Mongo.Instance.GetGuild(e.Guild.Id).GetAwaiter().GetResult();
+            var guild = Guild.GetGuild(e.Guild.Id).GetAwaiter().GetResult();
             if (guild == null)
             {
                 Guild g = new Guild(e.Guild.Id);
