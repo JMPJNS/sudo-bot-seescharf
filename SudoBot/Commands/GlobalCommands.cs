@@ -10,11 +10,13 @@ namespace SudoBot.Commands
     public class GlobalCommands : BaseCommandModule
     {
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Ranking)]
-        [Command("rank")]
+        [Command("rank"), Aliases("rang")]
         public async Task Rank(CommandContext ctx)
         {
             var user = await User.GetOrCreateUser(ctx.Member);
-        
+
+            await user.UpdateRankRoles();
+
             var embed = new DiscordEmbedBuilder()
                 .WithColor(ctx.Member.Color)
                 .WithThumbnailUrl(ctx.Member.AvatarUrl)
@@ -27,10 +29,12 @@ namespace SudoBot.Commands
         }
         
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Ranking)]
-        [Command("rank")]
+        [Command("rank"), Aliases("rang")]
         public async Task RankOther(CommandContext ctx, DiscordMember member)
         {
             var user = await User.GetOrCreateUser(member);
+            
+            await user.UpdateRankRoles();
         
             var embed = new DiscordEmbedBuilder()
                 .WithColor(member.Color)

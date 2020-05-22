@@ -78,14 +78,14 @@ namespace SudoBot.Models
             LastUpdated = DateTime.UtcNow;
             CountedMessages += count;
 
-            var rankUpdated = await UpdateUserRankRoles();
+            var rankUpdated = await UpdateRankRoles();
 
             await SaveUser();
             
             return true;
         }
 
-        private async Task<bool> UpdateUserRankRoles()
+        public async Task<bool> UpdateRankRoles()
         {
             Guild guild = await Guild.GetGuild(GuildId);
             if (guild.RankingRoles == null || guild.RankingRoles.Count == 0) return false;
