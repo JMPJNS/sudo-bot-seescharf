@@ -99,7 +99,7 @@ namespace SudoBot.Commands
         }
         
         // Info Commands
-        [Command("memberInfo")]
+        [Command("userInfo")]
         public async Task MemberInfo(CommandContext ctx, DiscordMember member)
         {
             string roles = "";
