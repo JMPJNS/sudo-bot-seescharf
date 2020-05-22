@@ -51,6 +51,7 @@ namespace SudoBot.Commands
         }
 
         [Command("list")]
+        [Description("Auflistung alle Rollen im Ranking System")]
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Ranking)]
         public async Task ListRankingRoles(CommandContext ctx)
         {
@@ -70,7 +71,7 @@ namespace SudoBot.Commands
             foreach (var r in roles)
             {
                 var drole = ctx.Guild.GetRole(r.Role);
-                embed.AddField(drole.Mention, r.Points.ToString());
+                embed.AddField(drole.Name, r.Points.ToString());
             }
 
             await ctx.Channel.SendMessageAsync(embed: embed.Build());
