@@ -48,7 +48,7 @@ namespace SudoBot.Commands
 
             if (guild.CustomsRole == 0)
             {
-                await ctx.Channel.SendMessageAsync("Definiere eine Custom Games Rolle mit: $setCustomsRole {@Rolle}");
+                await ctx.Channel.SendMessageAsync("Definiere eine Custom Games Rolle mit: $custom set {@Rolle}");
                 return;
             }
 
@@ -74,7 +74,7 @@ namespace SudoBot.Commands
             await guild.SetCustoms(sentMessage.Id, ctx.Channel.Id, joinEmoji.Id);
 
             await sentMessage.CreateReactionAsync(joinEmoji);
-            await ctx.Channel.SendMessageAsync("Starten mit `$giveCustoms {anzahl}`");
+            await ctx.Channel.SendMessageAsync("Starten mit `$customs start {anzahl}`");
         }
         
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.CustomGames)]
@@ -86,12 +86,12 @@ namespace SudoBot.Commands
             
             if (guild.CustomsRole == 0)
             {
-                await ctx.Channel.SendMessageAsync("Definiere eine Custom Games Rolle mit: $setCustomsRole {@Rolle}");
+                await ctx.Channel.SendMessageAsync("Definiere eine Custom Games Rolle mit: $custom set {@Rolle}");
                 return;
             }
             if (guild.CustomsMessage == 0)
             {
-                await ctx.Channel.SendMessageAsync("Derzeit kein laufendes Custom Game, Starte eins mit mit: `$createCustoms {Titel} {Nachricht} {Emoji}`");
+                await ctx.Channel.SendMessageAsync("Derzeit kein laufendes Custom Game, Starte eins mit mit: `$customs create {Titel} {Nachricht} {Emoji}`");
                 return;
             }
             var role = ctx.Guild.GetRole(guild.CustomsRole);
