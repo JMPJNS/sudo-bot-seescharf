@@ -21,7 +21,6 @@ namespace SudoBot.Commands
                 .WithColor(ctx.Member.Color)
                 .WithThumbnailUrl(ctx.Member.AvatarUrl)
                 .WithTitle(ctx.Member.Nickname ?? ctx.Member.Username)
-                .AddField("Nachrichten", user.CountedMessages.ToString(), true)
                 .AddField("Bonus Punkte", user.SpecialPoints.ToString(), true)
                 .AddField("IQ", user.CalculatePoints().ToString(), true);
             
@@ -40,7 +39,6 @@ namespace SudoBot.Commands
                 .WithColor(member.Color)
                 .WithThumbnailUrl(member.AvatarUrl)
                 .WithTitle(member.Nickname ?? member.Username)
-                .AddField("Nachrichten", user.CountedMessages.ToString(), true)
                 .AddField("Bonus Punkte", user.SpecialPoints.ToString(), true)
                 .AddField("IQ", user.CalculatePoints().ToString(), true);
             
