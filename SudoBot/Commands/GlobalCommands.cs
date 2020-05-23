@@ -10,9 +10,11 @@ namespace SudoBot.Commands
     public class GlobalCommands : BaseCommandModule
     {
       
-        [CheckForPermissions(SudoPermission.Any, GuildPermission.Ranking)]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
+        [Cooldown(2, 30, CooldownBucketType.User)]
+        [Description("Information über den Aktuellen Rang (30s Cooldown)")]
         [Command("rank")]
-        public async Task RankOther(CommandContext ctx, DiscordMember member = null)
+        public async Task Rank(CommandContext ctx, [Description("Anderer User (optional)")]DiscordMember member = null)
         {
             if (member == null) member = ctx.Member;
             var user = await User.GetOrCreateUser(member);
@@ -25,7 +27,7 @@ namespace SudoBot.Commands
                 .WithColor(member.Color)
                 .WithThumbnailUrl(member.AvatarUrl)
                 .WithTitle(member.Nickname ?? member.Username)
-                .AddField("Rank", rank.ToString(), true)
+                .AddField("Rank", $"#rank.ToString()", true)
                 .AddField(guild.RankingPointName ?? "XP", user.CalculatePoints().ToString(), true)
                 .AddField($"Bonus {guild.RankingPointName ?? "XP"}", user.SpecialPoints.ToString(), true)
                 .AddField("Beigetreten", user.JoinDate.ToString("dd.MM.yyyy H:mm"));

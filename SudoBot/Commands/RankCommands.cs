@@ -16,9 +16,10 @@ namespace SudoBot.Commands
     [Group("ranking"), Aliases("r")]
     public class RankCommands: BaseCommandModule
     {
-        [Command("givePoints")]
+        [Command("givePoints"), Aliases("give")]
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
-        public async Task GiveSp(CommandContext ctx, DiscordMember member, int count)
+        [Description("Einem User Bonus Punkte Geben")]
+        public async Task GiveSp(CommandContext ctx, [Description("Der User der die Punkte Erhalten Soll")]DiscordMember member, [Description("Anzahl der Punkte")]int count)
         {
             var user = await User.GetOrCreateUser(member);
             var guild = await Guild.GetGuild(user.GuildId);
@@ -27,8 +28,9 @@ namespace SudoBot.Commands
         }
 
         [Command("setRole")]
+        [Description("Eine Rolle fürs Ranking System Festlegen")]
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
-        public async Task SetRankingRole(CommandContext ctx, int points, DiscordRole role)
+        public async Task SetRankingRole(CommandContext ctx, DiscordRole role, int points)
         {
             var guild = await Guild.GetGuild(ctx.Guild.Id);
             await guild.AddRankingRole(role, points);
@@ -36,6 +38,7 @@ namespace SudoBot.Commands
         }
         
         [Command("removeRole")]
+        [Description("Eine Rolle aus dem Ranking System Entfernen")]
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
         public async Task RemoveRankingRole(CommandContext ctx, DiscordRole role)
         {
@@ -52,6 +55,7 @@ namespace SudoBot.Commands
         }
 
         [Command("setName")]
+        [Description("Den Namen der Punkte setzen (Default: XP)")]
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
         public async Task SetRankingName(CommandContext ctx, string name)
         {
@@ -62,6 +66,7 @@ namespace SudoBot.Commands
         }
         
         [Command("setTimeMultiplier")]
+        [Description("Setzen wie viel ein Tag als Nachrichten zählt (Default: 10 Nachrichten Pro Tag seit Join Date)")]
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.Ranking)]
         public async Task SetTimeMultiplier(CommandContext ctx, int ammount)
         {
@@ -71,7 +76,7 @@ namespace SudoBot.Commands
         }
 
         [Command("list")]
-        [Description("Auflistung alle Rollen im Ranking System")]
+        [Description("Auflistung aller Rollen im Ranking System")]
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         public async Task ListRankingRoles(CommandContext ctx)
         {

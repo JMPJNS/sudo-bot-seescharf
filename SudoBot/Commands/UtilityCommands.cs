@@ -17,35 +17,23 @@ namespace SudoBot.Commands
     public class UtilityCommands : BaseCommandModule
     {
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
+        [Description("Eine Nachricht als Bot User in einem Speziellen Channel Senden")]
         [Command("say")]
         public async Task SayInChannel(CommandContext ctx, DiscordChannel channel, params string[] words)
         {
             var sentMessage = await (ctx.Channel.SendMessageAsync("hört auf zu trollen"));
             
-            Task.Run(async () =>
-            {
-                await Task.Delay(1000);
-                await ctx.Message.DeleteAsync();
-                await Task.Delay(1000);
-                await sentMessage.DeleteAsync();
-            });
-            
             await channel.SendMessageAsync(string.Join(" ",words));
+
+            await Task.Delay(1000);
+            await ctx.Message.DeleteAsync();
+            await Task.Delay(1000);
+            await sentMessage.DeleteAsync();
+
         }
         
-        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
-        [Command("say")]
-        public async Task Say(CommandContext ctx, params string[] words)
-        {
-            Task.Run(async () =>
-            {
-                await Task.Delay(1000);
-                await ctx.Message.DeleteAsync();
-            });
-            await ctx.Channel.SendMessageAsync(ctx.RawArgumentString);
-        }
-
         [Command("invite")]
+        [Description("Invite Link um den Bot einzuladen (kann jeder verwenden)")]
         public async Task Invite(CommandContext ctx)
         {
             await ctx.Channel.SendMessageAsync(
@@ -53,6 +41,7 @@ namespace SudoBot.Commands
         }
         
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
+        [Description("Ein Emoji vergrößern")]
         [Command("makeBig")]
         public async Task MakeBig(CommandContext ctx, DiscordEmoji e)
         {
@@ -62,6 +51,7 @@ namespace SudoBot.Commands
         }
         
         [Command("ping")]
+        [Description("Der Ping vom Bot zur Discord API")]
         public async Task Ping(CommandContext ctx)
         {
             var message = await ctx.Channel.SendMessageAsync($"{ctx.Client.Ping.ToString()}ms");
@@ -70,24 +60,26 @@ namespace SudoBot.Commands
         // Reminder Stuff
 
         [Command("reminder")]
-        [Description("Eine Erinnerung erstellen")]
+        [Description("Eine Erinnerung zu einem Bestimmten Zeitpunkt Erstellen erstellen")]
         public async Task Reminder(CommandContext ctx, [Description("um")] string format , [Description("Zeitpunkt {beispiel: 12:00}")] DateTime time, [Description("Nachricht")] string message)
         {
-            await this.ReminderCommand(ctx, format, time, message);
+            await this.ReminderCommand(ctx, format, time.ToUniversalTime(), message);
         }
         
         [Command("reminder")]
-        [Description("Eine Erinnerung erstellen")]
+        [Description("Eine Erinnerung in x (s/m/h/d) erstellen")]
         public async Task Reminder(CommandContext ctx, [Description("in")] string format, [Description("Zeitspanne {beispiel: 12m}")] TimeSpan timespan, [Description("Nachricht")] string message)
         {
-            await this.ReminderCommand(ctx, format, DateTime.Now + timespan, message);
+            await this.ReminderCommand(ctx, format, DateTime.UtcNow + timespan, message);
         }
 
         private async Task ReminderCommand(CommandContext ctx, string format, DateTime time, string message)
         {
-            var ts = time - DateTime.Now;
-            var thenTime = DateTime.Now;
-            
+            var tz = TimeZoneInfo.FindSystemTimeZoneById("Europe/Vienna");
+            time = TimeZoneInfo.ConvertTimeFromUtc(time, tz);
+            var thenTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tz);
+            var ts = time - thenTime;
+
             if (format == "um" || format == "in")
             {
                 await ctx.Channel.SendMessageAsync($"Ich werde dich um {time.ToString("h:mm:ss", DateTimeFormatInfo.InvariantInfo)} erinnern");
