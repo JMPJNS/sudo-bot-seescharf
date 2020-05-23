@@ -27,7 +27,7 @@ namespace SudoBot.Commands
                 .WithColor(member.Color)
                 .WithThumbnailUrl(member.AvatarUrl)
                 .WithTitle(member.Nickname ?? member.Username)
-                .AddField("Rank", $"#rank.ToString()", true)
+                .AddField("Rank", $"#{rank.ToString()}", true)
                 .AddField(guild.RankingPointName ?? "XP", user.CalculatePoints().ToString(), true)
                 .AddField($"Bonus {guild.RankingPointName ?? "XP"}", user.SpecialPoints.ToString(), true)
                 .AddField("Beigetreten", user.JoinDate.ToString("dd.MM.yyyy H:mm"));
