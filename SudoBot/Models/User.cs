@@ -33,21 +33,24 @@ namespace SudoBot.Models
         
         public int CountedMessages { private set; get; }
         
+        public long Points { private set; get; }
+        
         public int TicketsRemaining { private set; get; }
 
         // Logic Starts Here
 
         
-        public int CalculatePoints()
+        public long CalculatePoints()
         {
             var guild = Guild.GetGuild(GuildId).GetAwaiter().GetResult();
             int messages = CountedMessages;
-            int points = SpecialPoints;
-
-            int days = (int)(DateTime.UtcNow - JoinDate).TotalDays;
-
-            return messages + points + days*guild.RankingTimeMultiplier;
+            int specialPointspoints = SpecialPoints;
             
+            int days = (int)(DateTime.UtcNow - JoinDate).TotalDays;
+            Points = messages + specialPointspoints + days*guild.RankingTimeMultiplier;
+            SaveUser().GetAwaiter().GetResult();
+            return Points;
+
         }
 
         public async Task RemoveTicket()
@@ -60,6 +63,11 @@ namespace SudoBot.Models
         {
             TicketsRemaining += count;
             await SaveUser();
+        }
+
+        public async Task<long> GetRank()
+        {
+            return await Mongo.Instance.GetUserRank(this) + 1;
         }
         
         public async Task<bool> AddCountedMessages(DiscordMessage message)

@@ -17,16 +17,18 @@ namespace SudoBot.Commands
             if (member == null) member = ctx.Member;
             var user = await User.GetOrCreateUser(member);
             var guild = await Guild.GetGuild(user.GuildId);
-            
+
             await user.UpdateRankRoles();
+            var rank = await user.GetRank();
         
             var embed = new DiscordEmbedBuilder()
                 .WithColor(member.Color)
                 .WithThumbnailUrl(member.AvatarUrl)
                 .WithTitle(member.Nickname ?? member.Username)
-                .AddField("Bonus Punkte", user.SpecialPoints.ToString(), true)
+                .AddField("Rank", rank.ToString(), true)
                 .AddField(guild.RankingPointName ?? "XP", user.CalculatePoints().ToString(), true)
-                .AddField("Beigetreten", user.JoinDate.ToString("dd.MM.yyyy H:mm"), true);
+                .AddField($"Bonus {guild.RankingPointName ?? "XP"}", user.SpecialPoints.ToString(), true)
+                .AddField("Beigetreten", user.JoinDate.ToString("dd.MM.yyyy H:mm"));
             
             await ctx.Channel.SendMessageAsync(embed:embed.Build());
         }

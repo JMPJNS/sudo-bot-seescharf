@@ -85,10 +85,10 @@ namespace SudoBot.Database
                 user);
         }
         
-        public async Task<int> GetUserRank(User user)
+        public async Task<long> GetUserRank(User user)
         {
-            // Count how many users have a higher score
-            throw new NotImplementedException();
+            if (user.Points == 0) user.CalculatePoints();
+            return await _users.CountDocumentsAsync(u => u.GuildId == user.GuildId && u.Points > user.Points);
         }
         
         // Custom Game Stuff
