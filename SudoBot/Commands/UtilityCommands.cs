@@ -20,13 +20,15 @@ namespace SudoBot.Commands
         [Command("say")]
         public async Task SayInChannel(CommandContext ctx, DiscordChannel channel, params string[] words)
         {
+            var sentMessage = await (ctx.Channel.SendMessageAsync("hört auf zu trollen"));
+            
             Task.Run(async () =>
             {
                 await Task.Delay(1000);
                 await ctx.Message.DeleteAsync();
+                await Task.Delay(1000);
+                await sentMessage.DeleteAsync();
             });
-
-            await (ctx.Channel.SendMessageAsync("hört auf zu trollen"));
             
             await channel.SendMessageAsync(string.Join(" ",words));
         }

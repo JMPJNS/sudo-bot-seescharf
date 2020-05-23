@@ -26,7 +26,6 @@ namespace SudoBot.Models
         
         public DateTime LastUpdated { private set; get; }
 
-        public DateTime LastRankUpdated { private set; get; }
         
         public DateTime JoinDate { private set; get; }
 
@@ -35,9 +34,7 @@ namespace SudoBot.Models
         public int CountedMessages { private set; get; }
         
         public int TicketsRemaining { private set; get; }
-        
-        public int HighestOldLevel { private set; get; }
-        
+
         // Logic Starts Here
 
         
@@ -48,8 +45,6 @@ namespace SudoBot.Models
             int points = SpecialPoints;
 
             int days = (int)(DateTime.UtcNow - JoinDate).TotalDays;
-
-            if (HighestOldLevel != 0) return messages + points + days * guild.RankingTimeMultiplier;
 
             return messages + points + days*guild.RankingTimeMultiplier;
             
@@ -71,7 +66,7 @@ namespace SudoBot.Models
         {
             if (Blocked) return false;
             
-            TimeSpan minDelay = TimeSpan.FromMinutes(0.1);
+            TimeSpan minDelay = TimeSpan.FromMinutes(0.5);
 
             if (DateTime.UtcNow - minDelay <= LastUpdated) return false;
 
@@ -102,10 +97,6 @@ namespace SudoBot.Models
             var dGuild = await Globals.Client.GetGuildAsync(GuildId);
             var member = await dGuild.GetMemberAsync(UserId);
             
-            TimeSpan minDelay = TimeSpan.FromMinutes(0.005);
-
-            if (DateTime.UtcNow - minDelay <= LastRankUpdated) return false;
-
             var xp = CalculatePoints();
 
             bool rvalue = false;
@@ -160,11 +151,6 @@ namespace SudoBot.Models
             await SaveUser();
         }
 
-        public async Task SetHighestOldLevel(int level)
-        {
-            HighestOldLevel = level;
-            await SaveUser();
-        }
         
         // Database Management stuff here
 

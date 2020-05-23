@@ -59,11 +59,6 @@ namespace SudoBot.Database
                 guild);
         }
 
-        public async Task<List<User>> GetAllUsersWithPrevRole()
-        {
-            return await _users.FindAsync(user => user.HighestOldLevel != 0).Result.ToListAsync();
-        }
-
         // User Stuff
         public async Task<User> GetUser(ulong userId, ulong guildId)
         {

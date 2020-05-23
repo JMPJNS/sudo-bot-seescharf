@@ -30,5 +30,12 @@ namespace SudoBot.Commands
             
             await ctx.Channel.SendMessageAsync(embed:embed.Build());
         }
+
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
+        [Command("say")]
+        public async Task Say(CommandContext ctx, params string[] words)
+        {
+            
+        }
     }
 }
