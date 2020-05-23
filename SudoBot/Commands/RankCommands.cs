@@ -17,7 +17,7 @@ namespace SudoBot.Commands
     public class RankCommands: BaseCommandModule
     {
         [Command("givePoints")]
-        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Ranking)]
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         public async Task GiveSp(CommandContext ctx, DiscordMember member, int count)
         {
             var user = await User.GetOrCreateUser(member);
@@ -27,7 +27,7 @@ namespace SudoBot.Commands
         }
 
         [Command("setRole")]
-        [CheckForPermissions(SudoPermission.Admin, GuildPermission.Ranking)]
+        [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
         public async Task SetRankingRole(CommandContext ctx, int points, DiscordRole role)
         {
             var guild = await Guild.GetGuild(ctx.Guild.Id);
@@ -36,7 +36,7 @@ namespace SudoBot.Commands
         }
         
         [Command("removeRole")]
-        [CheckForPermissions(SudoPermission.Admin, GuildPermission.Ranking)]
+        [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
         public async Task RemoveRankingRole(CommandContext ctx, DiscordRole role)
         {
             var guild = await Guild.GetGuild(ctx.Guild.Id);
@@ -52,7 +52,7 @@ namespace SudoBot.Commands
         }
 
         [Command("setName")]
-        [CheckForPermissions(SudoPermission.Admin, GuildPermission.Ranking)]
+        [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
         public async Task SetRankingName(CommandContext ctx, string name)
         {
             var guild = await Guild.GetGuild(ctx.Guild.Id);
@@ -72,7 +72,7 @@ namespace SudoBot.Commands
 
         [Command("list")]
         [Description("Auflistung alle Rollen im Ranking System")]
-        [CheckForPermissions(SudoPermission.Any, GuildPermission.Ranking)]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         public async Task ListRankingRoles(CommandContext ctx)
         {
             var guild = await Guild.GetGuild(ctx.Guild.Id);
