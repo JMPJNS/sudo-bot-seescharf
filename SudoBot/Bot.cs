@@ -98,7 +98,7 @@ namespace SudoBot
 
             if (e.Exception.Message == "No matching subcommands were found, and this group is not executable.")
             {
-                e.Context.Channel.SendMessageAsync("Dies ist eine Command Gruppe, bitte einen Subcommand Spezifizieren");
+                e.Context.Channel.SendMessageAsync("Dies ist eine Command Gruppe, bitte einen Subcommand Spezifizieren").GetAwaiter().GetResult();
                 var commandName = e.Command.Name;
                 var help = e.Context.CommandsNext.FindCommand("help", out commandName);
 
@@ -110,7 +110,7 @@ namespace SudoBot
 
             if (e.Exception.Message == "Could not find a suitable overload for the command.")
             {
-                e.Context.Channel.SendMessageAsync("Invalide Argumente");
+                e.Context.Channel.SendMessageAsync("Invalide Argumente").GetAwaiter().GetResult();
                 var commandName = e.Command.Name;
                 var help = e.Context.CommandsNext.FindCommand("help", out commandName);
 
