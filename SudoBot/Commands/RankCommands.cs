@@ -28,6 +28,7 @@ namespace SudoBot.Commands
         }
 
         [Command("setRole")]
+        [Aliases("sr")]
         [Description("Eine Rolle fürs Ranking System Festlegen")]
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
         public async Task SetRankingRole(CommandContext ctx, DiscordRole role, int points)
@@ -38,6 +39,7 @@ namespace SudoBot.Commands
         }
         
         [Command("removeRole")]
+        [Aliases("rr")]
         [Description("Eine Rolle aus dem Ranking System Entfernen")]
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
         public async Task RemoveRankingRole(CommandContext ctx, DiscordRole role)
