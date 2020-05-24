@@ -36,7 +36,7 @@ namespace SudoBot
                 LogLevel = LogLevel.Debug,
                 UseInternalLogHandler = true
             };
-            
+
             Client = new DiscordClient(config);
             Client.Ready += OnClientReady;
             Client.GuildAvailable += OnGuildAvailable;

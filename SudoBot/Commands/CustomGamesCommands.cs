@@ -18,7 +18,7 @@ namespace SudoBot.Commands
     [Description("Custom Games Commands")]
     public class CustomGamesCommands: BaseCommandModule
     {
-        [CheckForPermissions(SudoPermission.Admin, GuildPermission.CustomGames)]
+        [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
         [Description("Setze die Custom Games Rolle")]
         [Command("set")]
         public async Task SetCustomsRole(CommandContext ctx, DiscordRole role)
@@ -28,7 +28,8 @@ namespace SudoBot.Commands
             await ctx.Channel.SendMessageAsync("Die Rolle wurde gesetzt");
         }
 
-        [CheckForPermissions(SudoPermission.Mod, GuildPermission.CustomGames)]
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
+        [Cooldown(1, 240, CooldownBucketType.Guild)]
         [Description("Entferne alle aus der Custom Games Rolle")]
         [Command("end")]
         public async Task RemoveAllCustomsRole(CommandContext ctx)
@@ -39,7 +40,7 @@ namespace SudoBot.Commands
             await ctx.Channel.SendMessageAsync("Die Rolle wurde von allen entfernt!");
         }
         
-        [CheckForPermissions(SudoPermission.Mod, GuildPermission.CustomGames)]
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         [Description("Erstelle ein Custom Game")]
         [Command("create")]
         public async Task CreateCustoms(CommandContext ctx, string title, string message, DiscordEmoji tempJoinEmoji)
@@ -77,7 +78,7 @@ namespace SudoBot.Commands
             await ctx.Channel.SendMessageAsync("Starten mit `$customs start {anzahl}`");
         }
         
-        [CheckForPermissions(SudoPermission.Mod, GuildPermission.CustomGames)]
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         [Description("Starte das Custom Game")]
         [Command("start")]
         public async Task GiveCustoms(CommandContext ctx, int maxMembers)
