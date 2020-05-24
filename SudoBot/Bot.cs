@@ -46,7 +46,7 @@ namespace SudoBot
             Client.MessageCreated += MessageCreated;
 
             Client.GuildMemberUpdated += OnMemberUpdated;
-            
+
             //Commands
             var commandsConfig = new CommandsNextConfiguration
             {
@@ -56,6 +56,8 @@ namespace SudoBot
             };
 
             Commands = Client.UseCommandsNext(commandsConfig);
+
+            Commands.CommandErrored += OnCommandErrored;
             
             //Interactivity
             var interactivityConfig = new InteractivityConfiguration
@@ -88,6 +90,38 @@ namespace SudoBot
 
             return Task.CompletedTask;
         }
+
+        private Task OnCommandErrored(CommandErrorEventArgs e)
+        {
+            if (e.Exception.Message == "Specified command was not found.")
+                e.Context.Channel.SendMessageAsync($"Command nicht Gefunden");
+
+            if (e.Exception.Message == "No matching subcommands were found, and this group is not executable.")
+            {
+                e.Context.Channel.SendMessageAsync("Dies ist eine Command Gruppe, bitte einen Subcommand Spezifizieren");
+                var commandName = e.Command.Name;
+                var help = e.Context.CommandsNext.FindCommand("help", out commandName);
+
+                var helpContext = e.Context.CommandsNext.CreateFakeContext(e.Context.User, e.Context.Channel,
+                    e.Context.Message.Content, e.Context.Prefix, help, e.Command.Name);
+                
+                help.ExecuteAsync(helpContext);
+            }
+
+            if (e.Exception.Message == "Could not find a suitable overload for the command.")
+            {
+                e.Context.Channel.SendMessageAsync("Invalide Argumente");
+                var commandName = e.Command.Name;
+                var help = e.Context.CommandsNext.FindCommand("help", out commandName);
+
+                var helpContext = e.Context.CommandsNext.CreateFakeContext(e.Context.User, e.Context.Channel,
+                    e.Context.Message.Content, e.Context.Prefix, help, $"{e.Command.QualifiedName}");
+                
+                help.ExecuteAsync(helpContext);
+            }
+
+            return Task.CompletedTask;
+            }
 
         private Task OnGuildCreated(GuildCreateEventArgs e)
         {

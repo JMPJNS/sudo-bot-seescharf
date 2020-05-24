@@ -10,12 +10,13 @@ using SudoBot.Models;
 namespace SudoBot.Commands
 {
     [Group("admin")]
+    [Aliases("a")]
     [Description("Administrations Stuff")]
     public class AdminCommands : BaseCommandModule
     {
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
-        [Command("giveGuildPermission")]
-        [Aliases("GGP")]
+        [Command("give-guild-permission")]
+        [Aliases("ggp")]
         public async Task GiveGuildPermission(CommandContext ctx, string p)
         {
             Enum.TryParse(p, out GuildPermission perm);
@@ -36,8 +37,8 @@ namespace SudoBot.Commands
         // // Alle Rollen weg nehmen, und 639522863023521822 geben, bei unmuted wieder rollen geben
         
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
-        [Command("getAllPermissions")]
-        [Aliases("GAP")]
+        [Command("get-all-permissions")]
+        [Aliases("gap")]
         public async Task GetAllPermissions(CommandContext ctx)
         {
             var perms = string.Join("\n", Enum.GetNames(typeof(GuildPermission)));
@@ -45,9 +46,9 @@ namespace SudoBot.Commands
         }
 
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
-        [Description("Setze den Log Channel")]
-        [Command("logChannel")]
-        public async Task SetLogChannel(CommandContext ctx, DiscordChannel channel)
+        [Description("Setze den Log Channel für diverse Bot Aktionen")]
+        [Command("set-log-channel"), Aliases("slc")]
+        public async Task SetLogChannel(CommandContext ctx, [Description("Der Channel für die Nachrichten")]DiscordChannel channel)
         {
             var guild = await Guild.GetGuild(ctx.Guild.Id);
             await guild.SetLocalLogChannel(channel.Id);

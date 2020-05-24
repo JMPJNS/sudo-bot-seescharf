@@ -13,10 +13,37 @@ using SudoBot.Handlers;
 
 namespace SudoBot.Commands
 {
-    [Group("ranking"), Aliases("r")]
+    [Group("rank"), Aliases("r")]
+    [Description("Leveling System")]
     public class RankCommands: BaseCommandModule
     {
-        [Command("givePoints"), Aliases("give")]
+        
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
+        [Cooldown(2, 30, CooldownBucketType.User)]
+        [Description("Information über den Aktuellen Rang (30s Cooldown)")]
+        [GroupCommand]
+        public async Task Rank(CommandContext ctx, [Description("Anderer User (optional)")]DiscordMember member = null)
+        {
+            if (member == null) member = ctx.Member;
+            var user = await User.GetOrCreateUser(member);
+            var guild = await Guild.GetGuild(user.GuildId);
+
+            await user.UpdateRankRoles();
+            var rank = await user.GetRank();
+        
+            var embed = new DiscordEmbedBuilder()
+                .WithColor(member.Color)
+                .WithThumbnailUrl(member.AvatarUrl)
+                .WithTitle(member.Nickname ?? member.Username)
+                .AddField("Rank", $"#{rank.ToString()}", true)
+                .AddField(guild.RankingPointName ?? "XP", user.CalculatePoints().ToString(), true)
+                .AddField($"Bonus {guild.RankingPointName ?? "XP"}", user.SpecialPoints.ToString(), true)
+                .AddField("Beigetreten", user.JoinDate.ToString("dd.MM.yyyy H:mm"));
+            
+            await ctx.Channel.SendMessageAsync(embed:embed.Build());
+        }
+        
+        [Command("give-points"), Aliases("give")]
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         [Description("Einem User Bonus Punkte Geben")]
         public async Task GiveSp(CommandContext ctx, [Description("Der User der die Punkte Erhalten Soll")]DiscordMember member, [Description("Anzahl der Punkte")]int count)
@@ -26,23 +53,34 @@ namespace SudoBot.Commands
             await user.AddSpecialPoints(count);
             await ctx.Channel.SendMessageAsync($"{member.Mention} hat {count.ToString()} {guild.RankingPointName ?? "XP"} erhalten");
         }
+        
+        [Command("remove-points"), Aliases("remove")]
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
+        [Description("Einem User Bonus Punkte Entfernen")]
+        public async Task RemoveSp(CommandContext ctx, [Description("Der User dem die Punkte abgezogen werden")]DiscordMember member, [Description("Anzahl der Punkte")]int count)
+        {
+            var user = await User.GetOrCreateUser(member);
+            var guild = await Guild.GetGuild(user.GuildId);
+            await user.AddSpecialPoints(-count);
+            await ctx.Channel.SendMessageAsync($"{member.Mention} hat {count.ToString()} {guild.RankingPointName ?? "XP"} verloren");
+        }
 
-        [Command("setRole")]
+        [Command("set-role")]
         [Aliases("sr")]
         [Description("Eine Rolle fürs Ranking System Festlegen")]
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
-        public async Task SetRankingRole(CommandContext ctx, DiscordRole role, int points)
+        public async Task SetRankingRole(CommandContext ctx, [Description("Die Rolle die zu erhalten ist")]DiscordRole role, [Description("Anzahl der Punkte bei der man die Rolle erhält")]int points)
         {
             var guild = await Guild.GetGuild(ctx.Guild.Id);
             await guild.AddRankingRole(role, points);
             await ctx.Channel.SendMessageAsync($"Die Rolle {role.Name} ist mit {points.ToString()} IQ zu Erreichen!");
         }
         
-        [Command("removeRole")]
+        [Command("remove-role")]
         [Aliases("rr")]
         [Description("Eine Rolle aus dem Ranking System Entfernen")]
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
-        public async Task RemoveRankingRole(CommandContext ctx, DiscordRole role)
+        public async Task RemoveRankingRole(CommandContext ctx, [Description("Die zu entfernende Rolle")]DiscordRole role)
         {
             var guild = await Guild.GetGuild(ctx.Guild.Id);
             var success = await guild.RemoveRankingRole(role);
@@ -56,10 +94,10 @@ namespace SudoBot.Commands
             }
         }
 
-        [Command("setName")]
-        [Description("Den Namen der Punkte setzen (Default: XP)")]
+        [Command("set-name")]
+        [Description("Den Namen der Punkte setzen")]
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
-        public async Task SetRankingName(CommandContext ctx, string name)
+        public async Task SetRankingName(CommandContext ctx, [Description("Der Name den die Punkte haben sollen (Default: XP)")]string name)
         {
             var guild = await Guild.GetGuild(ctx.Guild.Id);
             var oldname = guild.RankingPointName;
@@ -67,10 +105,10 @@ namespace SudoBot.Commands
             await ctx.Channel.SendMessageAsync($"Der Name wurde von {oldname} auf {guild.RankingPointName} geändert!");
         }
         
-        [Command("setTimeMultiplier")]
+        [Command("set-time-multiplier")]
         [Description("Setzen wie viel ein Tag als Nachrichten zählt (Default: 10 Nachrichten Pro Tag seit Join Date)")]
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.Ranking)]
-        public async Task SetTimeMultiplier(CommandContext ctx, int ammount)
+        public async Task SetTimeMultiplier(CommandContext ctx, [Description("Der Multiplikator")]int ammount)
         {
             var guild = await Guild.GetGuild(ctx.Guild.Id);
             await guild.SetRankingTimeMultipier(ammount);

@@ -21,7 +21,7 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
         [Description("Setze die Custom Games Rolle")]
         [Command("set")]
-        public async Task SetCustomsRole(CommandContext ctx, DiscordRole role)
+        public async Task SetCustomsRole(CommandContext ctx, [Description("Die Custom Games Rolle")]DiscordRole role)
         {
             var guild = await Guild.GetGuild(ctx.Guild.Id);
             await guild.SetCustomsRole(role.Id);
@@ -30,7 +30,7 @@ namespace SudoBot.Commands
 
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         [Cooldown(1, 240, CooldownBucketType.Guild)]
-        [Description("Entferne alle aus der Custom Games Rolle")]
+        [Description("Entferne alle aus der Custom Games Rolle (4 Minuten Cooldown)")]
         [Command("end")]
         public async Task RemoveAllCustomsRole(CommandContext ctx)
         {
@@ -43,7 +43,7 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         [Description("Erstelle ein Custom Game")]
         [Command("create")]
-        public async Task CreateCustoms(CommandContext ctx, string title, string message, DiscordEmoji tempJoinEmoji)
+        public async Task CreateCustoms(CommandContext ctx, [Description("Titel der Custom Games")]string title, [Description("Eine Beschreibung dazu")]string message, [Description("Das Emote mit dem Reagiert werden soll")]DiscordEmoji tempJoinEmoji)
         {
             var guild = await Guild.GetGuild(ctx.Guild.Id);
 
@@ -79,9 +79,9 @@ namespace SudoBot.Commands
         }
         
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
-        [Description("Starte das Custom Game")]
+        [Description("Starte das Custom Game (Lost die Rolle unter den Leuten die Reagiert haben aus)")]
         [Command("start")]
-        public async Task GiveCustoms(CommandContext ctx, int maxMembers)
+        public async Task GiveCustoms(CommandContext ctx, [Description("Wie viele Leute die Custom Games Rolle erhalten sollen")]int maxMembers)
         {
             var guild = await Guild.GetGuild(ctx.Guild.Id);
             

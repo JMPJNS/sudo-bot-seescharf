@@ -19,7 +19,7 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         [Description("Eine Nachricht als Bot User in einem Speziellen Channel Senden")]
         [Command("say")]
-        public async Task SayInChannel(CommandContext ctx, DiscordChannel channel, params string[] words)
+        public async Task SayInChannel(CommandContext ctx, [Description("Der Channel")]DiscordChannel channel, [Description("Die Nachricht")]params string[] words)
         {
             var sentMessage = await (ctx.Channel.SendMessageAsync("hört auf zu trollen"));
             
@@ -31,19 +31,11 @@ namespace SudoBot.Commands
             await sentMessage.DeleteAsync();
 
         }
-        
-        [Command("invite")]
-        [Description("Invite Link um den Bot einzuladen (kann jeder verwenden)")]
-        public async Task Invite(CommandContext ctx)
-        {
-            await ctx.Channel.SendMessageAsync(
-                "https://discord.com/oauth2/authorize?client_id=705548602994458684&scope=bot&permissions=1544023122");
-        }
-        
+
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         [Description("Ein Emoji vergrößern")]
-        [Command("makeBig")]
-        public async Task MakeBig(CommandContext ctx, DiscordEmoji e)
+        [Command("make-big"), Aliases("mb")]
+        public async Task MakeBig(CommandContext ctx, [Description("Das Emoji zu vergrößern")]DiscordEmoji e)
         {
             var embed = new DiscordEmbedBuilder()
                 .WithImageUrl(e.Url);
@@ -93,8 +85,9 @@ namespace SudoBot.Commands
         }
         
         // Info Commands
-        [Command("userInfo")]
-        public async Task MemberInfo(CommandContext ctx, DiscordMember member = null)
+        [Command("member-info"), Aliases("userInfo")]
+        [Description("Information über einen Member")]
+        public async Task MemberInfo(CommandContext ctx, [Description("Der Member (optional)")]DiscordMember member = null)
         {
             if (member == null) member = ctx.Member;
             string roles = "";

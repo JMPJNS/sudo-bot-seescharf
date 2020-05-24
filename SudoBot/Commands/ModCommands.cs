@@ -10,13 +10,14 @@ using SudoBot.Models;
 namespace SudoBot.Commands
 {
     [Group("mod")]
+    [Aliases("m")]
     [Description("Moderation Stuff")]
     public class ModCommands : BaseCommandModule
     {
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         [Description("Banne einen Member")]
         [Command("ban")]
-        public async Task BanMember(CommandContext ctx, DiscordMember member)
+        public async Task BanMember(CommandContext ctx, [Description("Der zu bannende Member")]DiscordMember member)
         {
             var guild = await Guild.GetGuild(ctx.Guild.Id);
             try
