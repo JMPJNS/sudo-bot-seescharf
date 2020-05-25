@@ -136,7 +136,13 @@ namespace SudoBot.Models
                 }
                 catch (Exception e)
                 {
-                    if (e.Message == "Unauthorized: 403") await dGuild.GetChannel(guild.LocalLogChannel).SendMessageAsync($"Der Bot hat keine Berechtigung die Rolle {role.Mention} zu vergeben");
+                    if (e.Message == "Unauthorized: 403")
+                        if (guild.LocalLogChannel != 0)
+                            await dGuild.GetChannel(guild.LocalLogChannel)
+                                .SendMessageAsync(
+                                    $"Der Bot hat keine Berechtigung die Rolle {role.Mention} zu vergeben");
+                        else
+                            throw new Exception("NO LOG CHANNEL");
                 }
                 
                 

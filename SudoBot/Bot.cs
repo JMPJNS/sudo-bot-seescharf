@@ -96,6 +96,13 @@ namespace SudoBot
             if (e.Exception.Message == "Specified command was not found.")
                 e.Context.Channel.SendMessageAsync($"Command nicht Gefunden");
 
+            if (e.Command.Name == "list")
+                if (e.Exception.Message == "Value cannot be null. (Parameter 'source')")
+                    e.Context.Channel.SendMessageAsync("Keine Rollen im Ranking, füge eine mit `$rank set-role {@rolle} {punkte}` hinzu");
+
+            if (e.Exception.Message == "NO LOG CHANNEL")
+                e.Context.Channel.SendMessageAsync("Es ist ein fehler aufgetreten, allerdings konnte dieser nicht gemeldet werden da kein Error Log channel festgelegt wurde, bitte lege einen mit `$admin set-log-channel #channel` fest");
+            
             if (e.Exception.Message == "No matching subcommands were found, and this group is not executable.")
             {
                 e.Context.Channel.SendMessageAsync("Dies ist eine Command Gruppe, bitte einen Subcommand Spezifizieren").GetAwaiter().GetResult();

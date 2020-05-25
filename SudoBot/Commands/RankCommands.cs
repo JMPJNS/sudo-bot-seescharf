@@ -28,6 +28,11 @@ namespace SudoBot.Commands
             var user = await User.GetOrCreateUser(member);
             var guild = await Guild.GetGuild(user.GuildId);
 
+            // if (guild.LocalLogChannel == 0)
+            // {
+            //     await ctx.Channel.SendMessageAsync("Bitte setze einen Log Channel für fehler, $a set-log-channel #channel");
+            // }
+
             await user.UpdateRankRoles();
             var rank = await user.GetRank();
         
