@@ -61,7 +61,7 @@ namespace SudoBot.Commands
                 .AddField(guild.RankingTimeMultiplier == 0
                         ? $"```{guild.RankingPointName} kriegt man durch Nachrichten schreiben!```"
                         : $"```{guild.RankingPointName} kriegt man durch Nachrichten schreiben!\nAußerdem erhälst du jeden Tag {guild.RankingTimeMultiplier.ToString()} {guild.RankingPointName}, rückwirkend seit du dem Discord Beigetreten bist!```",
-                    "`$r list` um alle Ränge an zu zeigen.");
+                    "`$r list` um alle Ränge anzuzeigen.");
             
             await ctx.Channel.SendMessageAsync(embed:embed.Build());
         }
