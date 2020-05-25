@@ -165,13 +165,13 @@ namespace SudoBot
         {
             Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Bot Logged in on: [{e.Guild.Id}] {e.Guild.Name}", DateTime.Now);
 
-            var embed = new DiscordEmbedBuilder()
-                .WithColor(DiscordColor.Aquamarine)
-                .WithThumbnailUrl(e.Guild.IconUrl)
-                .WithTitle("Bot Logged In")
-                .WithDescription(e.Guild.Name);
-            
-            Globals.LogChannel.SendMessageAsync(embed: embed.Build());
+            // var embed = new DiscordEmbedBuilder()
+            //     .WithColor(DiscordColor.Aquamarine)
+            //     .WithThumbnailUrl(e.Guild.IconUrl)
+            //     .WithTitle("Bot Logged In")
+            //     .WithDescription(e.Guild.Name);
+            //
+            // Globals.LogChannel.SendMessageAsync(embed: embed.Build());
             
             var guild = Guild.GetGuild(e.Guild.Id).GetAwaiter().GetResult();
             if (guild == null)
@@ -218,7 +218,21 @@ namespace SudoBot
         private Task MessageCreated(MessageCreateEventArgs e)
         {
             Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Message Created: [{e.Guild.Id} : {e.Channel.Id}] ({e.Author.Username}): {e.Message.Content}", DateTime.Now);
-            _messageHandler.HandleMessage(e).GetAwaiter().GetResult();
+            try
+            {
+                _messageHandler.HandleMessage(e).GetAwaiter().GetResult();
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "NO LOG CHANNEL")
+                {
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
+            
             return Task.CompletedTask;
         }
     }
