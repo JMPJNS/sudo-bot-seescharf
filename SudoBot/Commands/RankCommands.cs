@@ -39,9 +39,9 @@ namespace SudoBot.Commands
             var embed = new DiscordEmbedBuilder()
                 .WithColor(member.Color)
                 .WithThumbnailUrl(member.AvatarUrl)
-                .WithDescription(guild.RankingTimeMultiplier > 0 ?
-                      $"{guild.RankingPointName} kriegt man durch Nachrichten schreiben!"
-                    : $"{guild.RankingPointName} kriegt man durch Nachrichten schreiben!\nAußerdem erhälst du jeden Tag {guild.RankingTimeMultiplier.ToString()} {guild.RankingPointName}, rückwirkend seit du dem Discord Beigetreten bist!\n`$r list` um alle Ränge an zu zeigen.")
+                .WithDescription(guild.RankingTimeMultiplier == 0 ?
+                      $"```{guild.RankingPointName} kriegt man durch Nachrichten schreiben!````$r list` um alle Ränge an zu zeigen.\n"
+                    : $"```{guild.RankingPointName} kriegt man durch Nachrichten schreiben!\nAußerdem erhälst du jeden Tag {guild.RankingTimeMultiplier.ToString()} {guild.RankingPointName}, rückwirkend seit du dem Discord Beigetreten bist!````$r list` um alle Ränge an zu zeigen.\n")
                 .WithTitle(member.Nickname ?? member.Username)
                 .AddField("Rank", $"#{rank.ToString()}", true)
                 .AddField(guild.RankingPointName ?? "XP", user.CalculatePoints().ToString(), true)
@@ -118,6 +118,11 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.Ranking)]
         public async Task SetTimeMultiplier(CommandContext ctx, [Description("Der Multiplikator")]int ammount)
         {
+            if (ammount < 0)
+            {
+                await ctx.Channel.SendMessageAsync("Muss ein Positiver Wert sein!");
+                return;
+            }
             var guild = await Guild.GetGuild(ctx.Guild.Id);
             await guild.SetRankingTimeMultipier(ammount);
             await ctx.Channel.SendMessageAsync($"Der Zeit Multiplikator wurde auf {guild.RankingTimeMultiplier.ToString()} gesetzt!");
