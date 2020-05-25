@@ -35,18 +35,18 @@ namespace SudoBot.Commands
 
             await user.UpdateRankRoles();
             var rank = await user.GetRank();
-        
+
             var embed = new DiscordEmbedBuilder()
                 .WithColor(member.Color)
                 .WithThumbnailUrl(member.AvatarUrl)
-                .WithDescription(guild.RankingTimeMultiplier == 0 ?
-                      $"```{guild.RankingPointName} kriegt man durch Nachrichten schreiben!````$r list` um alle Ränge an zu zeigen.\n"
-                    : $"```{guild.RankingPointName} kriegt man durch Nachrichten schreiben!\nAußerdem erhälst du jeden Tag {guild.RankingTimeMultiplier.ToString()} {guild.RankingPointName}, rückwirkend seit du dem Discord Beigetreten bist!````$r list` um alle Ränge an zu zeigen.\n")
                 .WithTitle(member.Nickname ?? member.Username)
                 .AddField("Rank", $"#{rank.ToString()}", true)
                 .AddField(guild.RankingPointName ?? "XP", user.CalculatePoints().ToString(), true)
                 .AddField($"Bonus {guild.RankingPointName ?? "XP"}", user.SpecialPoints.ToString(), true)
-                .AddField("Beigetreten", user.JoinDate.ToString("dd.MM.yyyy H:mm"));
+                .AddField("Beigetreten", user.JoinDate.ToString("dd.MM.yyyy H:mm"))
+                .AddField(guild.RankingTimeMultiplier == 0
+                    ? $"```{guild.RankingPointName} kriegt man durch Nachrichten schreiben!```"
+                    : $"```{guild.RankingPointName} kriegt man durch Nachrichten schreiben!\nAußerdem erhälst du jeden Tag {guild.RankingTimeMultiplier.ToString()} {guild.RankingPointName}, rückwirkend seit du dem Discord Beigetreten bist!```", "`$r list` um alle Ränge an zu zeigen.");
             
             await ctx.Channel.SendMessageAsync(embed:embed.Build());
         }
