@@ -39,6 +39,9 @@ namespace SudoBot.Commands
             var embed = new DiscordEmbedBuilder()
                 .WithColor(member.Color)
                 .WithThumbnailUrl(member.AvatarUrl)
+                .WithDescription(guild.RankingTimeMultiplier > 0 ?
+                      $"{guild.RankingPointName} kriegt man durch Nachrichten schreiben!"
+                    : $"{guild.RankingPointName} kriegt man durch Nachrichten schreiben!\nAußerdem erhälst du jeden Tag {guild.RankingTimeMultiplier.ToString()} {guild.RankingPointName}, rückwirkend seit du dem Discord Beigetreten bist!\n`$r list` um alle Ränge an zu zeigen.")
                 .WithTitle(member.Nickname ?? member.Username)
                 .AddField("Rank", $"#{rank.ToString()}", true)
                 .AddField(guild.RankingPointName ?? "XP", user.CalculatePoints().ToString(), true)
