@@ -9,18 +9,16 @@ using SudoBot.Models;
 
 namespace SudoBot.Commands
 {
-    [Group("test")]
     public class TestCommands : BaseCommandModule
     {
 
-        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         [Command("test")]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.TestCommands)]
+        [Cooldown(1, 20, CooldownBucketType.User)]
+        [Description("test")]
         public async Task Test(CommandContext ctx)
         {
-            await ctx.Channel.SendMessageAsync("Starting");
-            var user = await User.GetOrCreateUser(ctx.Member);
-            var rank = await Mongo.Instance.GetUserRank(user);
-            await ctx.Channel.SendMessageAsync(rank.ToString());
+            await ctx.Channel.SendMessageAsync("asdf");
         }
         
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.TestCommands)]

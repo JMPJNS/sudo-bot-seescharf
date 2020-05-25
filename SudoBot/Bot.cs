@@ -136,6 +136,18 @@ namespace SudoBot
                 help.ExecuteAsync(helpContext);
             }
 
+            if (e.Exception.Message == "One or more pre-execution checks failed." &&
+                e.Exception.Source == "DSharpPlus.CommandsNext")
+            {
+                var sentMessage = e.Context.Channel.SendMessageAsync("Zurzeit im Cooldown, bitte warten vor der nächsten Ausführung.").GetAwaiter().GetResult();
+                Task.Run(() =>
+                {
+                    Task.Delay(5000).GetAwaiter().GetResult();
+                    sentMessage.DeleteAsync();
+                    e.Context.Message.DeleteAsync();
+                });
+            }
+
             return Task.CompletedTask;
             }
 

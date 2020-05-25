@@ -19,7 +19,6 @@ namespace SudoBot.Commands
     {
         
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
-        [Cooldown(2, 30, CooldownBucketType.User)]
         [Description("Information über den Aktuellen Rang (30s Cooldown)")]
         [GroupCommand]
         public async Task Rank(CommandContext ctx, [Description("Anderer User (optional)")]DiscordMember member = null)
@@ -35,18 +34,34 @@ namespace SudoBot.Commands
 
             await user.UpdateRankRoles();
             var rank = await user.GetRank();
+            var currNext = await user.GetCurrentAndNextRole();
 
             var embed = new DiscordEmbedBuilder()
                 .WithColor(member.Color)
                 .WithThumbnailUrl(member.AvatarUrl)
                 .WithTitle(member.Nickname ?? member.Username)
                 .AddField("Rank", $"#{rank.ToString()}", true)
-                .AddField(guild.RankingPointName ?? "XP", user.CalculatePoints().ToString(), true)
                 .AddField($"Bonus {guild.RankingPointName ?? "XP"}", user.SpecialPoints.ToString(), true)
-                .AddField("Beigetreten", user.JoinDate.ToString("dd.MM.yyyy H:mm"))
+                .AddField(guild.RankingPointName ?? "XP", user.CalculatePoints().ToString(), true);
+
+            if (currNext.Current != null)
+            {
+                embed.AddField("Aktuell", $"{currNext.Current.Mention}", true);
+            }
+            if (currNext.Next != null)
+            {
+                embed.AddField("Als Nächstes", $"{currNext.Next.Mention}", true);
+            }
+            if (currNext.Remaining != 0)
+            {
+                embed.AddField("Verbleibend", $"{currNext.Remaining.ToString()} {guild.RankingPointName ?? "XP"}", true);
+            }
+
+            embed.AddField("Beigetreten", user.JoinDate.ToString("dd.MM.yyyy H:mm"))
                 .AddField(guild.RankingTimeMultiplier == 0
-                    ? $"```{guild.RankingPointName} kriegt man durch Nachrichten schreiben!```"
-                    : $"```{guild.RankingPointName} kriegt man durch Nachrichten schreiben!\nAußerdem erhälst du jeden Tag {guild.RankingTimeMultiplier.ToString()} {guild.RankingPointName}, rückwirkend seit du dem Discord Beigetreten bist!```", "`$r list` um alle Ränge an zu zeigen.");
+                        ? $"```{guild.RankingPointName} kriegt man durch Nachrichten schreiben!```"
+                        : $"```{guild.RankingPointName} kriegt man durch Nachrichten schreiben!\nAußerdem erhälst du jeden Tag {guild.RankingTimeMultiplier.ToString()} {guild.RankingPointName}, rückwirkend seit du dem Discord Beigetreten bist!```",
+                    "`$r list` um alle Ränge an zu zeigen.");
             
             await ctx.Channel.SendMessageAsync(embed:embed.Build());
         }
