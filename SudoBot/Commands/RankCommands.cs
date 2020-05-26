@@ -41,20 +41,20 @@ namespace SudoBot.Commands
                 .WithThumbnailUrl(member.AvatarUrl)
                 .WithTitle(member.Nickname ?? member.Username)
                 .AddField("Rank", $"#{rank.ToString()}", true)
-                .AddField($"Bonus {guild.RankingPointName ?? "XP"}", user.SpecialPoints.ToString(), true)
-                .AddField(guild.RankingPointName ?? "XP", user.CalculatePoints().ToString(), true);
+                .AddField(guild.RankingPointName ?? "XP", user.CalculatePoints().ToString(), true)
+                .AddField($"Bonus {guild.RankingPointName ?? "XP"}", user.SpecialPoints.ToString(), true);
 
             if (currNext.Current != null)
             {
                 embed.AddField("Aktuell", $"{currNext.Current.Mention}", true);
             }
-            if (currNext.Next != null)
-            {
-                embed.AddField("Als Nächstes", $"{currNext.Next.Mention}", true);
-            }
             if (currNext.Remaining != 0)
             {
                 embed.AddField("Verbleibend", $"{currNext.Remaining.ToString()} {guild.RankingPointName ?? "XP"}", true);
+            }
+            if (currNext.Next != null)
+            {
+                embed.AddField("Als Nächstes", $"{currNext.Next.Mention}", true);
             }
 
             embed.AddField("Beigetreten", user.JoinDate.ToString("dd.MM.yyyy H:mm"))
