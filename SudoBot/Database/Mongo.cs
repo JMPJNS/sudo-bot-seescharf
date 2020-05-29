@@ -70,7 +70,23 @@ namespace SudoBot.Database
             {
                 return null;
             }
-            
+        }
+
+        public async Task<List<User>> GetLeaderboard(int position, ulong guildId)
+        {
+            try
+            {
+                return await _users.Find(u => u.GuildId == guildId)
+                    .SortByDescending(x => x.Points)
+                    .Skip(position > 5 ? position - 5 : position - 2)
+                    .Limit(10)
+                    .ToListAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
         }
 
         public async Task InsertUser(User user)

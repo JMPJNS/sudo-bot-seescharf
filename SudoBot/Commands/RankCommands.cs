@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -64,6 +65,41 @@ namespace SudoBot.Commands
                     "`$r list` um alle Ränge anzuzeigen.");
             
             await ctx.Channel.SendMessageAsync(embed:embed.Build());
+        }
+
+        [Command("leaderboard")]
+        [Description("Das Globale Leaderboard anzeigen.")]
+        public async Task Leaderboard(CommandContext ctx)
+        {
+            var skip = 0;
+
+            var lb = await Mongo.Instance.GetLeaderboard(skip, ctx.Guild.Id);
+            await SendLeaderboard(ctx, lb, ctx.Member);
+        }
+        [Command("leaderboard")]
+        [Description("Das Leaderboard anzeigen.")]
+        public async Task LeaderboardOther(CommandContext ctx, DiscordMember member = null)
+        {
+            var user = await User.GetOrCreateUser(member);
+            var skip = (int)await user.GetRank();
+
+            var lb = await Mongo.Instance.GetLeaderboard(skip, ctx.Guild.Id);
+            await SendLeaderboard(ctx, lb, member);
+        }
+
+        private async Task SendLeaderboard(CommandContext ctx, List<User> lb, DiscordMember wanted)
+        {
+            var embed = new DiscordEmbedBuilder()
+                .WithTitle("Leaderboard")
+                .WithColor(DiscordColor.Chartreuse);
+            var guild = await Guild.GetGuild(ctx.Guild.Id);
+            foreach (var u in lb)
+            {
+                var rank = await u.GetRank();
+                embed.AddField($"#{rank.ToString()} {u.UserName}", $"{u.Points.ToString()} {guild.RankingPointName}");
+            }
+
+            await ctx.Channel.SendMessageAsync(embed: embed.Build());
         }
         
         [Command("give-points"), Aliases("give")]
