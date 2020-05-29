@@ -78,7 +78,7 @@ namespace SudoBot.Database
             {
                 return await _users.Find(u => u.GuildId == guildId)
                     .SortByDescending(x => x.Points)
-                    .Skip(position > 5 ? position - 5 : position - 2)
+                    .Skip(position > 5 ? position - 5 : position)
                     .Limit(10)
                     .ToListAsync();
             }
