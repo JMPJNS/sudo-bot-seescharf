@@ -100,7 +100,7 @@ namespace SudoBot.Commands
                 var rank = await u.GetRank();
                 if (rank == wantedRank)
                 {
-                    embed.AddField($"> #{rank.ToString()} {u.UserName}", $"> {u.Points.ToString()} {guild.RankingPointName}");
+                    embed.AddField($"> #{rank.ToString()} {u.UserName}", $"{u.Points.ToString()} {guild.RankingPointName}");
                 }
                 else
                 {

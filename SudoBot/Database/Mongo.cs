@@ -74,11 +74,20 @@ namespace SudoBot.Database
 
         public async Task<List<User>> GetLeaderboard(int position, ulong guildId)
         {
+            int skip;
+            if (position > 5)
+            {
+                skip = position - 5;
+            }
+            else
+            {
+                skip = 0;
+            }
             try
             {
                 return await _users.Find(u => u.GuildId == guildId)
                     .SortByDescending(x => x.Points)
-                    .Skip(position > 5 ? position - 5 : position)
+                    .Skip(skip)
                     .Limit(10)
                     .ToListAsync();
             }
