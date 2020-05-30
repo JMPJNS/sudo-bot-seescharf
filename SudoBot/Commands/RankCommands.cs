@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,7 +20,6 @@ namespace SudoBot.Commands
     {
         
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
-        [Cooldown(2, 30, CooldownBucketType.User)]
         [Description("Information über den Aktuellen Rang (30s Cooldown)")]
         [GroupCommand]
         public async Task Rank(CommandContext ctx, [Description("Anderer User (optional)")]DiscordMember member = null)
@@ -28,19 +28,88 @@ namespace SudoBot.Commands
             var user = await User.GetOrCreateUser(member);
             var guild = await Guild.GetGuild(user.GuildId);
 
+            // if (guild.LocalLogChannel == 0)
+            // {
+            //     await ctx.Channel.SendMessageAsync("Bitte setze einen Log Channel für fehler, $a set-log-channel #channel");
+            // }
+
             await user.UpdateRankRoles();
             var rank = await user.GetRank();
-        
+            var currNext = await user.GetCurrentAndNextRole();
+
             var embed = new DiscordEmbedBuilder()
                 .WithColor(member.Color)
                 .WithThumbnailUrl(member.AvatarUrl)
                 .WithTitle(member.Nickname ?? member.Username)
                 .AddField("Rank", $"#{rank.ToString()}", true)
                 .AddField(guild.RankingPointName ?? "XP", user.CalculatePoints().ToString(), true)
-                .AddField($"Bonus {guild.RankingPointName ?? "XP"}", user.SpecialPoints.ToString(), true)
-                .AddField("Beigetreten", user.JoinDate.ToString("dd.MM.yyyy H:mm"));
+                .AddField($"Bonus {guild.RankingPointName ?? "XP"}", user.SpecialPoints.ToString(), true);
+
+            if (currNext.Current != null)
+            {
+                embed.AddField("Aktuell", $"{currNext.Current.Mention}", true);
+            }
+            if (currNext.Remaining != 0)
+            {
+                embed.AddField("Verbleibend", $"{currNext.Remaining.ToString()} {guild.RankingPointName ?? "XP"}", true);
+            }
+            if (currNext.Next != null)
+            {
+                embed.AddField("Als Nächstes", $"{currNext.Next.Mention}", true);
+            }
+
+            embed.AddField("Beigetreten", user.JoinDate.ToString("dd.MM.yyyy H:mm"))
+                .AddField(guild.RankingTimeMultiplier == 0
+                        ? $"```{guild.RankingPointName} kriegt man durch Nachrichten schreiben!```"
+                        : $"```{guild.RankingPointName} kriegt man durch Nachrichten schreiben!\nAußerdem erhälst du jeden Tag {guild.RankingTimeMultiplier.ToString()} {guild.RankingPointName}, rückwirkend seit du dem Discord Beigetreten bist!```",
+                    "`$r list` um alle Ränge anzuzeigen.");
             
             await ctx.Channel.SendMessageAsync(embed:embed.Build());
+        }
+
+        [Command("leaderboard")]
+        [Description("Das Globale Leaderboard anzeigen.")]
+        public async Task Leaderboard(CommandContext ctx)
+        {
+            var skip = 0;
+            var user = await User.GetOrCreateUser(ctx.Member);
+
+            var lb = await Mongo.Instance.GetLeaderboard(skip, ctx.Guild.Id);
+            await SendLeaderboard(ctx, lb, user);
+        }
+        [Command("leaderboard")]
+        [Description("Das Leaderboard anzeigen.")]
+        public async Task LeaderboardOther(CommandContext ctx, DiscordMember member = null)
+        {
+            var user = await User.GetOrCreateUser(member);
+            var skip = (int)await user.GetRank();
+
+            var lb = await Mongo.Instance.GetLeaderboard(skip, ctx.Guild.Id);
+            await SendLeaderboard(ctx, lb, user);
+        }
+
+        private async Task SendLeaderboard(CommandContext ctx, List<User> lb, User wanted)
+        {
+            var embed = new DiscordEmbedBuilder()
+                .WithTitle("Leaderboard")
+                .WithColor(DiscordColor.Chartreuse);
+            var guild = await Guild.GetGuild(ctx.Guild.Id);
+            var wantedRank = await wanted.GetRank();
+            foreach (var u in lb)
+            {
+                var rank = await u.GetRank();
+                if (rank == wantedRank)
+                {
+                    embed.AddField($"> #{rank.ToString()} {u.UserName}", $"{u.Points.ToString()} {guild.RankingPointName}");
+                }
+                else
+                {
+                    embed.AddField($"#{rank.ToString()} {u.UserName}", $"{u.Points.ToString()} {guild.RankingPointName}");
+                }
+                
+            }
+
+            await ctx.Channel.SendMessageAsync(embed: embed.Build());
         }
         
         [Command("give-points"), Aliases("give")]
@@ -110,6 +179,11 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.Ranking)]
         public async Task SetTimeMultiplier(CommandContext ctx, [Description("Der Multiplikator")]int ammount)
         {
+            if (ammount < 0)
+            {
+                await ctx.Channel.SendMessageAsync("Muss ein Positiver Wert sein!");
+                return;
+            }
             var guild = await Guild.GetGuild(ctx.Guild.Id);
             await guild.SetRankingTimeMultipier(ammount);
             await ctx.Channel.SendMessageAsync($"Der Zeit Multiplikator wurde auf {guild.RankingTimeMultiplier.ToString()} gesetzt!");

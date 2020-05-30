@@ -12,6 +12,7 @@ namespace SudoBot
         public static readonly string[] AdminRoles = {"SudoBotAdmin", "Admins", "Admin 👑", "Server-Techniker🛠️", "Moderatoren ✨", "Bot Developer"};
         public static DebugLogger Logger;
         public static DiscordClient Client;
+        public static ulong MyId = 272809112851578881;
         
         public static readonly List<Guild> GuildCache = new List<Guild>();
         

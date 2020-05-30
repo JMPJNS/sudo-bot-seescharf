@@ -26,5 +26,17 @@ namespace SudoBot.Commands
             await ctx.Channel.SendMessageAsync(string.Join(" ",words));
             await ctx.Message.DeleteAsync();
         }
+
+        [Description("Der Developer des Bots")] [Command("developer"), Aliases("dev")]
+        public async Task Developer(CommandContext ctx, params string[] nix)
+        {
+            var me = await ctx.Client.GetUserAsync(Globals.MyId);
+            var embed = new DiscordEmbedBuilder()
+                .WithColor(DiscordColor.Aquamarine)
+                .WithThumbnailUrl(me.AvatarUrl)
+                .WithTitle("Entwickler des Bots")
+                .WithDescription($"{me.Username}#{me.Discriminator}");
+            await ctx.Channel.SendMessageAsync(embed:embed.Build());
+        }
     }
 }

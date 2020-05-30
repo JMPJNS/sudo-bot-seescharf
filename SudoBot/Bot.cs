@@ -96,8 +96,24 @@ namespace SudoBot
         private Task OnCommandErrored(CommandErrorEventArgs e)
         {
             if (e.Exception.Message == "Specified command was not found.")
+            {
                 e.Context.Channel.SendMessageAsync($"Command nicht Gefunden");
+            }
 
+            if (e.Command.Name == "list")
+            {
+                if (e.Exception.Message == "Value cannot be null. (Parameter 'source')")
+                {
+                    e.Context.Channel.SendMessageAsync("Keine Rollen im Ranking, füge eine mit `$rank set-role {@rolle} {punkte}` hinzu");
+                } 
+            }
+
+
+            if (e.Exception.Message == "NO LOG CHANNEL")
+            {
+                e.Context.Channel.SendMessageAsync("Es ist ein fehler aufgetreten, allerdings konnte dieser nicht gemeldet werden da kein Error Log channel festgelegt wurde, bitte lege einen mit `$admin set-log-channel #channel` fest");
+            }
+            
             if (e.Exception.Message == "No matching subcommands were found, and this group is not executable.")
             {
                 e.Context.Channel.SendMessageAsync("Dies ist eine Command Gruppe, bitte einen Subcommand Spezifizieren").GetAwaiter().GetResult();
@@ -120,6 +136,18 @@ namespace SudoBot
                     e.Context.Message.Content, e.Context.Prefix, help, $"{e.Command.QualifiedName}");
                 
                 help.ExecuteAsync(helpContext);
+            }
+
+            if (e.Exception.Message == "One or more pre-execution checks failed." &&
+                e.Exception.Source == "DSharpPlus.CommandsNext")
+            {
+                var sentMessage = e.Context.Channel.SendMessageAsync("Zurzeit im Cooldown, bitte warten vor der nächsten Ausführung.").GetAwaiter().GetResult();
+                Task.Run(() =>
+                {
+                    Task.Delay(5000).GetAwaiter().GetResult();
+                    sentMessage.DeleteAsync();
+                    e.Context.Message.DeleteAsync();
+                });
             }
 
             return Task.CompletedTask;
@@ -151,13 +179,13 @@ namespace SudoBot
         {
             Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Bot Logged in on: [{e.Guild.Id}] {e.Guild.Name}", DateTime.Now);
 
-            var embed = new DiscordEmbedBuilder()
-                .WithColor(DiscordColor.Aquamarine)
-                .WithThumbnailUrl(e.Guild.IconUrl)
-                .WithTitle("Bot Logged In")
-                .WithDescription(e.Guild.Name);
-            
-            Globals.LogChannel.SendMessageAsync(embed: embed.Build());
+            // var embed = new DiscordEmbedBuilder()
+            //     .WithColor(DiscordColor.Aquamarine)
+            //     .WithThumbnailUrl(e.Guild.IconUrl)
+            //     .WithTitle("Bot Logged In")
+            //     .WithDescription(e.Guild.Name);
+            //
+            // Globals.LogChannel.SendMessageAsync(embed: embed.Build());
             
             var guild = Guild.GetGuild(e.Guild.Id).GetAwaiter().GetResult();
             if (guild == null)
@@ -204,7 +232,21 @@ namespace SudoBot
         private Task MessageCreated(MessageCreateEventArgs e)
         {
             Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Message Created: [{e.Guild.Id} : {e.Channel.Id}] ({e.Author.Username}): {e.Message.Content}", DateTime.Now);
-            _messageHandler.HandleMessage(e).GetAwaiter().GetResult();
+            try
+            {
+                _messageHandler.HandleMessage(e).GetAwaiter().GetResult();
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "NO LOG CHANNEL")
+                {
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
+            
             return Task.CompletedTask;
         }
     }

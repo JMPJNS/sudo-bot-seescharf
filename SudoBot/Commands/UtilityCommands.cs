@@ -109,6 +109,7 @@ namespace SudoBot.Commands
                 .AddField("#", member.Discriminator, true)
                 .AddField("ID", member.Id.ToString(), true)
                 .AddField("Beigetreten", member.JoinedAt.ToString())
+                .AddField("Erstellt", member.CreationTimestamp.ToString())
                 .AddField("Rollen", roles.Length != 0 ? roles : "Keine")
                 .WithThumbnailUrl(member.AvatarUrl);
 

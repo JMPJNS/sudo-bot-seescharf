@@ -1,31 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\JMP\\RiderProjects\\sudo-bot-seescharf\\SudoBot\\SudoBot.csproj": {}
+    "/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/SudoBot.csproj": {}
   },
   "projects": {
-    "C:\\Users\\JMP\\RiderProjects\\sudo-bot-seescharf\\SudoBot\\SudoBot.csproj": {
+    "/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/SudoBot.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\JMP\\RiderProjects\\sudo-bot-seescharf\\SudoBot\\SudoBot.csproj",
+        "projectUniqueName": "/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/SudoBot.csproj",
         "projectName": "SudoBot",
-        "projectPath": "C:\\Users\\JMP\\RiderProjects\\sudo-bot-seescharf\\SudoBot\\SudoBot.csproj",
-        "packagesPath": "C:\\Users\\JMP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\JMP\\RiderProjects\\sudo-bot-seescharf\\SudoBot\\obj\\",
+        "projectPath": "/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/SudoBot.csproj",
+        "packagesPath": "/home/jmp/.nuget/packages/",
+        "outputPath": "/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet"
-        ],
         "configFilePaths": [
-          "C:\\Users\\JMP\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "/home/jmp/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {},
           "https://nuget.emzi0767.com/api/v3/index.json": {}
         },
@@ -78,7 +72,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.103/RuntimeIdentifierGraph.json"
         }
       }
     }

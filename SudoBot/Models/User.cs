@@ -97,6 +97,44 @@ namespace SudoBot.Models
             await SaveUser();
         }
 
+        public async Task<CurrentNextRoleReturnType> GetCurrentAndNextRole()
+        {
+            Guild guild = await Guild.GetGuild(GuildId);
+            var r = new CurrentNextRoleReturnType();
+            if (guild.RankingRoles == null || guild.RankingRoles.Count == 0) return r;
+            
+            var dGuild = await Globals.Client.GetGuildAsync(GuildId);
+            
+            var sorted = guild.RankingRoles.OrderBy(x => x.Points).ToList();
+
+            var current = sorted.LastOrDefault(x => x.Points < Points);
+            var next = sorted.FirstOrDefault(x => x.Points > Points);
+
+
+            r.Current = current != null ? dGuild.GetRole(current.Role) : null;
+            
+            if (next != null)
+            {
+                r.Next = dGuild.GetRole(next.Role);
+
+                r.Remaining = next.Points - Points;
+            }
+            else
+            {
+                r.Next = null;
+                r.Remaining = 0;
+            }
+
+            return r;
+        }
+
+        public struct CurrentNextRoleReturnType
+        {
+            public DiscordRole Current;
+            public DiscordRole Next;
+            public long Remaining;
+        }
+
         public async Task<bool> UpdateRankRoles()
         {
             Guild guild = await Guild.GetGuild(GuildId);
@@ -136,7 +174,19 @@ namespace SudoBot.Models
                 }
                 catch (Exception e)
                 {
-                    if (e.Message == "Unauthorized: 403") await dGuild.GetChannel(guild.LocalLogChannel).SendMessageAsync($"Der Bot hat keine Berechtigung die Rolle {role.Mention} zu vergeben");
+                    if (e.Message == "Unauthorized: 403")
+                    {
+                        if (guild.LocalLogChannel != 0)
+                        {
+                            await dGuild.GetChannel(guild.LocalLogChannel)
+                                .SendMessageAsync(
+                                    $"Der Bot hat keine Berechtigung die Rolle {role.Mention} zu vergeben");
+                        }
+                        else
+                        {
+                            throw new Exception("NO LOG CHANNEL");
+                        }
+                    }
                 }
                 
                 

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -9,19 +10,40 @@ using SudoBot.Models;
 
 namespace SudoBot.Commands
 {
-    [Group("test")]
     public class TestCommands : BaseCommandModule
     {
 
-        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         [Command("test")]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.TestCommands)]
+        [Cooldown(1, 20, CooldownBucketType.User)]
+        [Description("test")]
         public async Task Test(CommandContext ctx)
         {
-            await ctx.Channel.SendMessageAsync("Starting");
-            var user = await User.GetOrCreateUser(ctx.Member);
-            var rank = await Mongo.Instance.GetUserRank(user);
-            await ctx.Channel.SendMessageAsync(rank.ToString());
+            await ctx.Channel.SendMessageAsync("asdf");
         }
+
+        [Command("divide-channels")]
+        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
+        public async Task DivideChannels(CommandContext ctx)
+        {
+            ulong[] channels = { 716321254537297920, 716321265081647164 };
+            DiscordChannel messageChannel = ctx.Guild.GetChannel(710985729655701577);
+            DiscordEmoji emoji = DiscordEmoji.FromName(ctx.Client, ":Tofu:");
+            DiscordMessage message = await messageChannel.GetMessageAsync(716321439728402543);
+            int usersPerChannel = 1;
+            int currentChannel = 0;
+            int index = 0;
+            
+            foreach (var member in await message.GetReactionsAsync(emoji))
+            {
+                if (index % usersPerChannel == 0) currentChannel += 1;
+                
+                
+            }
+
+
+        }
+        
         
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.TestCommands)]
         [Command("e")]
