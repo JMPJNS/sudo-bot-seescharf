@@ -50,12 +50,14 @@ namespace SudoBot
             //Commands
             var commandsConfig = new CommandsNextConfiguration
             {
-                StringPrefixes = new []{"$"},
+                StringPrefixes = new []{"$", "sudo "},
                 EnableMentionPrefix = true,
-                EnableDms = false
+                EnableDms = false,
+                IgnoreExtraArguments = true
             };
 
             Commands = Client.UseCommandsNext(commandsConfig);
+            Commands.SetHelpFormatter<SudoHelpFormatter>();
 
             Commands.CommandErrored += OnCommandErrored;
             
