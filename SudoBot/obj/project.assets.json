@@ -6552,24 +6552,31 @@
     ]
   },
   "packageFolders": {
-    "/home/jmp/.nuget/packages/": {}
+    "C:\\Users\\JMP\\.nuget\\packages\\": {},
+    "C:\\Microsoft\\Xamarin\\NuGet": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/SudoBot.csproj",
+      "projectUniqueName": "C:\\Users\\JMP\\RiderProjects\\sudo-bot-seescharf\\SudoBot\\SudoBot.csproj",
       "projectName": "SudoBot",
-      "projectPath": "/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/SudoBot.csproj",
-      "packagesPath": "/home/jmp/.nuget/packages/",
-      "outputPath": "/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/obj/",
+      "projectPath": "C:\\Users\\JMP\\RiderProjects\\sudo-bot-seescharf\\SudoBot\\SudoBot.csproj",
+      "packagesPath": "C:\\Users\\JMP\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\JMP\\RiderProjects\\sudo-bot-seescharf\\SudoBot\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Microsoft\\Xamarin\\NuGet"
+      ],
       "configFilePaths": [
-        "/home/jmp/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\JMP\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {},
         "https://nuget.emzi0767.com/api/v3/index.json": {}
       },
@@ -6622,7 +6629,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.103/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.202\\RuntimeIdentifierGraph.json"
       }
     }
   }

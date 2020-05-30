@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using DSharpPlus.EventArgs;
 using SudoBot.Database;
 using SudoBot.Models;
+using SudoBot.Specifics;
 
 namespace SudoBot.Handlers
 {
@@ -9,7 +10,9 @@ namespace SudoBot.Handlers
     {
         public async Task HandleRoleChange(GuildMemberUpdateEventArgs args)
         {
-            var guild = Guild.GetGuild(args.Guild.Id);
+            var guild = await Guild.GetGuild(args.Guild.Id);
+
+            await StanFunctions.RemoveVerified(args);
 
         }
     }
