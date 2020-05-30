@@ -7,6 +7,7 @@ using DSharpPlus.Entities;
 using SudoBot.Attributes;
 using SudoBot.Database;
 using SudoBot.Models;
+using SudoBot.Specifics;
 
 namespace SudoBot.Commands
 {
@@ -21,6 +22,15 @@ namespace SudoBot.Commands
         {
             await ctx.Channel.SendMessageAsync("asdf");
         }
+
+        // [Command("RemoveAllNotVerified")]
+        // [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
+        // public async Task ranv(CommandContext ctx)
+        // {
+        //     await ctx.Channel.SendMessageAsync("removing the role");
+        //     await StanFunctions.RemoveAllNotVerified(ctx);
+        //     await ctx.Channel.SendMessageAsync("done");
+        // }
 
         [Command("divide-channels")]
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]

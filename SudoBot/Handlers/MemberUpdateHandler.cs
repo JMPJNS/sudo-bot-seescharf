@@ -12,7 +12,7 @@ namespace SudoBot.Handlers
         {
             var guild = await Guild.GetGuild(args.Guild.Id);
 
-            await StanFunctions.RemoveVerified(args);
+            await StanFunctions.RemoveNotVerified(args);
 
         }
     }
