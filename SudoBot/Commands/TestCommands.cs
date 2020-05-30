@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -20,6 +21,29 @@ namespace SudoBot.Commands
         {
             await ctx.Channel.SendMessageAsync("asdf");
         }
+
+        [Command("divide-channels")]
+        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
+        public async Task DivideChannels(CommandContext ctx)
+        {
+            ulong[] channels = { 716321254537297920, 716321265081647164 };
+            DiscordChannel messageChannel = ctx.Guild.GetChannel(710985729655701577);
+            DiscordEmoji emoji = DiscordEmoji.FromName(ctx.Client, ":Tofu:");
+            DiscordMessage message = await messageChannel.GetMessageAsync(716321439728402543);
+            int usersPerChannel = 1;
+            int currentChannel = 0;
+            int index = 0;
+            
+            foreach (var member in await message.GetReactionsAsync(emoji))
+            {
+                if (index % usersPerChannel == 0) currentChannel += 1;
+                
+                
+            }
+
+
+        }
+        
         
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.TestCommands)]
         [Command("e")]
