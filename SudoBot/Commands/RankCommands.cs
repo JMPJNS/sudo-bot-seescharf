@@ -176,7 +176,7 @@ namespace SudoBot.Commands
         
         [Command("set-time-multiplier")]
         [Description("Setzen wie viel ein Tag als Nachrichten zählt (Default: 10 Nachrichten Pro Tag seit Join Date)")]
-        [CheckForPermissions(SudoPermission.Admin, GuildPermission.Ranking)]
+        [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
         public async Task SetTimeMultiplier(CommandContext ctx, [Description("Der Multiplikator")]int ammount)
         {
             if (ammount < 0)
@@ -187,6 +187,22 @@ namespace SudoBot.Commands
             var guild = await Guild.GetGuild(ctx.Guild.Id);
             await guild.SetRankingTimeMultipier(ammount);
             await ctx.Channel.SendMessageAsync($"Der Zeit Multiplikator wurde auf {guild.RankingTimeMultiplier.ToString()} gesetzt!");
+        }
+
+        [Command("set-multiplier")]
+        [Description("Lege einen XP Multiplier fest (default 1), um beispilesweise Double XP Weekends zu machen")]
+        [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
+        public async Task SetMultiplier(CommandContext ctx, [Description("Der Multiplikator")] int ammount)
+        {
+            if (ammount < 0)
+            {
+                await ctx.Channel.SendMessageAsync("Muss ein Positiver Wert sein!");
+                return;
+            }
+            var guild = await Guild.GetGuild(ctx.Guild.Id);
+            await guild.SetRankingMultipier(ammount);
+            await ctx.Channel.SendMessageAsync($"Der Multiplikator wurde auf {guild.RankingMultiplier.ToString()} gesetzt!");
+
         }
 
         [Command("list")]

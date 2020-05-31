@@ -74,15 +74,29 @@ namespace SudoBot.Models
         {
             if (Blocked) return false;
             
-            TimeSpan minDelay = TimeSpan.FromMinutes(0.5);
+            TimeSpan minDelay = TimeSpan.FromMinutes(0.005);
 
             if (DateTime.UtcNow - minDelay <= LastUpdated) return false;
 
+            var guild = await Guild.GetGuild(GuildId);
+
             int countedMessageLength = 100;
+            int multiplier;
+
+            if (guild.RankingMultiplier == 0)
+            {
+                multiplier = 1;
+                
+            }
+            else
+            {
+                multiplier = guild.RankingMultiplier;
+            }
+            
             int count = (message.Content.Length + countedMessageLength)/countedMessageLength;
 
             LastUpdated = DateTime.UtcNow;
-            CountedMessages += count;
+            CountedMessages += count * multiplier;
 
             var rankUpdated = await UpdateRankRoles();
 

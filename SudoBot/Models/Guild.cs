@@ -28,6 +28,7 @@ namespace SudoBot.Models
 
         public List<RankingRole> RankingRoles { get; private set; }
         public int RankingTimeMultiplier { get; private set; }
+        public int RankingMultiplier { get; private set; }
         public string RankingPointName { get; private set; }
 
         public List<GuildPermission> Permissions { get; set; }
@@ -39,6 +40,7 @@ namespace SudoBot.Models
             RankingRoles = new List<RankingRole>();
             Permissions = new List<GuildPermission>();
             RankingTimeMultiplier = 10;
+            RankingMultiplier = 1;
             RankingPointName = "XP";
             TicketCount = 1;
         }
@@ -72,6 +74,12 @@ namespace SudoBot.Models
         public async Task SetRankingTimeMultipier(int num)
         {
             RankingTimeMultiplier = num;
+            await SaveGuild();
+        }
+        
+        public async Task SetRankingMultipier(int num)
+        {
+            RankingMultiplier = num;
             await SaveGuild();
         }
         
