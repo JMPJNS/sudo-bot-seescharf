@@ -52,8 +52,7 @@ namespace SudoBot
             {
                 StringPrefixes = new []{"$", "sudo "},
                 EnableMentionPrefix = true,
-                EnableDms = false,
-                IgnoreExtraArguments = true
+                EnableDms = false
             };
 
             Commands = Client.UseCommandsNext(commandsConfig);
