@@ -31,6 +31,11 @@ namespace SudoBot.Commands
             int index = ctx.RawArgumentString.IndexOf(ctx.RawArguments[1], StringComparison.Ordinal);
             string cleanArgs = ctx.RawArgumentString.Remove(0, index);
 
+            if (cleanArgs.EndsWith('"'))
+            {
+                cleanArgs = cleanArgs.Remove(cleanArgs.Length - 1);
+            }
+
             var t = new Tag
             {
                 Content = cleanArgs,
