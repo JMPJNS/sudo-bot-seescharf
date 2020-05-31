@@ -29,6 +29,9 @@ namespace SudoBot
 
             Eb.WithDescription(Formatter.InlineCode(command.Name) + ": " + (command.Description ?? "Keine Beschreibung vorhanden."));
 
+            if (command is CommandGroup cr && cr.IsExecutableWithoutSubcommands)
+                Eb.WithDescription(Eb.Description + "\n\nDies ist eine Ausführbare Command Gruppe, optional einen Subcommand spezifizieren. \n`$help " + cr.Name + " [Subcommand]`");
+            
             if (command is CommandGroup commandGroup && !commandGroup.IsExecutableWithoutSubcommands)
                 Eb.WithDescription(Eb.Description + "\n\nDies ist eine Command Gruppe, bitte einen Subcommand spezifizieren. \n`$help " + commandGroup.Name + " [Subcommand]`");
 
