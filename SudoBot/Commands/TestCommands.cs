@@ -36,7 +36,7 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         public async Task DivideChannels(CommandContext ctx)
         {
-            ulong[] channels = { 716321254537297920, 716321265081647164 };
+            ulong group;
             DiscordChannel messageChannel = ctx.Guild.GetChannel(710985729655701577);
             DiscordEmoji emoji = DiscordEmoji.FromName(ctx.Client, ":Tofu:");
             DiscordMessage message = await messageChannel.GetMessageAsync(716321439728402543);

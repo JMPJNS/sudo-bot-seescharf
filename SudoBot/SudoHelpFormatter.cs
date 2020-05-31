@@ -30,7 +30,7 @@ namespace SudoBot
             Eb.WithDescription(Formatter.InlineCode(command.Name) + ": " + (command.Description ?? "Keine Beschreibung vorhanden."));
 
             if (command is CommandGroup commandGroup && !commandGroup.IsExecutableWithoutSubcommands)
-                Eb.WithDescription(Eb.Description + "\n\nDieser Command ist eine Command Gruppe, bitte einen Subcommand spezifizieren.");
+                Eb.WithDescription(Eb.Description + "\n\nDies ist eine Command Gruppe, bitte einen Subcommand spezifizieren. \n`$help " + commandGroup.Name + " [Subcommand]`");
 
             IReadOnlyList<string> aliases = command.Aliases;
             if (aliases != null && aliases.Count > 0)
@@ -52,18 +52,32 @@ namespace SudoBot
                 }
                 Eb.AddField("Arguments", stringBuilder.ToString().Trim(), false);
             }
+
+            if (!(command is CommandGroup))
+            {
+                Eb.AddField("Ausführung", $"`${command.Parent.Name} {command.Name}`");
+            }
+            
             return (BaseHelpFormatter)this;
         }
 
         public override BaseHelpFormatter WithSubcommands(IEnumerable<Command> subcommands)
         {
-            return this._d.WithSubcommands(subcommands);
+            Eb.AddField(this.Command != (Command) null ? "Subcommands" : "Commands", string.Join(", ", subcommands.Select(x => Formatter.InlineCode(x.Name))));
+
+            if (this.Command != null)
+                Eb.AddField("Ausführung", $"`${this.Command.Name} [Subcommand]`");
+            
+            return this;
         }
+        
 
         public override CommandHelpMessage Build()
         {
-            var hmsg = this._d.Build();
-            var embed = new DiscordEmbedBuilder(hmsg.Embed)
+            if (this.Command == null)
+                this.Eb.WithDescription("Auflistung aller Toplevel Commands und Commandgruppen.\n Für weitere informationen `$help [gruppe]`");
+            
+            var embed = new DiscordEmbedBuilder(Eb)
             {
                 Color = new DiscordColor(0xD091B2)
             };
