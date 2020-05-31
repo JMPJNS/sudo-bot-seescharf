@@ -47,7 +47,7 @@ namespace SudoBot
                         stringBuilder.Append(commandArgument.IsOptional || commandArgument.IsCatchAll ? " [" : " <").Append(commandArgument.Name).Append(commandArgument.IsCatchAll ? "..." : "").Append(commandArgument.IsOptional || commandArgument.IsCatchAll ? ']' : '>');
                     stringBuilder.Append("`\n");
                     foreach (CommandArgument commandArgument in (IEnumerable<CommandArgument>)commandOverload.Arguments)
-                        stringBuilder.Append('`').Append(commandArgument.Name).Append(" (").Append(this.CommandsNext.GetUserFriendlyTypeName(commandArgument.Type)).Append(")`: ").Append(commandArgument.Description ?? "No description provided.").Append('\n');
+                        stringBuilder.Append('`').Append(commandArgument.Name).Append(" (").Append(this.CommandsNext.GetUserFriendlyTypeName(commandArgument.Type)).Append(")`: ").Append(commandArgument.Description ?? "Keine Beschreibung vorhanden.").Append('\n');
                     stringBuilder.Append('\n');
                 }
                 Eb.AddField("Arguments", stringBuilder.ToString().Trim(), false);
@@ -75,7 +75,7 @@ namespace SudoBot
         public override CommandHelpMessage Build()
         {
             if (this.Command == null)
-                this.Eb.WithDescription("Auflistung aller Toplevel Commands und Commandgruppen.\n Für weitere informationen `$help [gruppe]`");
+                this.Eb.WithDescription("Auflistung aller Toplevel Commands und Commandgruppen.\n Für weitere informationen `$help [Command]`");
             
             var embed = new DiscordEmbedBuilder(Eb)
             {
