@@ -24,7 +24,7 @@ namespace SudoBot.Commands
 
             if (foundTag != null)
             {
-                await ctx.Channel.SendMessageAsync($"Der Tag `{name}` exestiert bereits.");
+                await ctx.Channel.SendMessageAsync($"Der Tag `{name}` existiert bereits.");
                 return;
             }
             
@@ -71,8 +71,8 @@ namespace SudoBot.Commands
                 }
 
                 var sendString = similar.Count > 0
-                    ? $"Tag `{name}` exestiert nicht\n{similarMessage}"
-                    : $"Tag `{name}` exestiert nicht";
+                    ? $"Tag `{name}` existiert nicht\n{similarMessage}"
+                    : $"Tag `{name}` existiert nicht";
                 
                 await ctx.Channel.SendMessageAsync(sendString);
 
