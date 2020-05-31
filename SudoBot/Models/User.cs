@@ -74,7 +74,7 @@ namespace SudoBot.Models
         {
             if (Blocked) return false;
             
-            TimeSpan minDelay = TimeSpan.FromMinutes(0.005);
+            TimeSpan minDelay = TimeSpan.FromMinutes(0.5);
 
             if (DateTime.UtcNow - minDelay <= LastUpdated) return false;
 
