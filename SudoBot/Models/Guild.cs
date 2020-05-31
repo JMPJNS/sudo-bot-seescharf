@@ -25,6 +25,7 @@ namespace SudoBot.Models
         public ulong CustomsMessage { get; private set; }
         
         public ulong LocalLogChannel { get; private set; }
+        public ulong CommandChannel { get; private set; }
 
         public List<RankingRole> RankingRoles { get; private set; }
         public int RankingTimeMultiplier { get; private set; }
@@ -108,6 +109,12 @@ namespace SudoBot.Models
         public async Task SetLocalLogChannel(ulong channelId)
         {
             LocalLogChannel = channelId;
+            await SaveGuild();
+        }
+        
+        public async Task SetCommandChannel(ulong channelId)
+        {
+            CommandChannel = channelId;
             await SaveGuild();
         }
 

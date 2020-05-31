@@ -54,5 +54,25 @@ namespace SudoBot.Commands
             await guild.SetLocalLogChannel(channel.Id);
             await ctx.Channel.SendMessageAsync("Der Channel wurde Gesetzt");
         }
+        
+        [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
+        [Description("Setze den Channel, der für diverse Bot Aktionen erlaubt ist. \nSobald dieser gesetzt wurde ist Beispielsweise `$rank` nur noch in dem verfügbar.\n`$admin unset-command-channel` um dies wieder zu Deaktivieren.")]
+        [Command("set-command-channel"), Aliases("scc")]
+        public async Task SetCommandChannel(CommandContext ctx, [Description("Der Channel für die Commands")]DiscordChannel channel)
+        {
+            var guild = await Guild.GetGuild(ctx.Guild.Id);
+            await guild.SetCommandChannel(channel.Id);
+            await ctx.Channel.SendMessageAsync("Der Channel wurde Gesetzt");
+        }
+        
+        [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
+        [Description("Deaktivieren, dass einige Commands nur in Einem Channel funktionieren")]
+        [Command("unset-command-channel"), Aliases("uscc")]
+        public async Task SetCommandChannel(CommandContext ctx)
+        {
+            var guild = await Guild.GetGuild(ctx.Guild.Id);
+            await guild.SetCommandChannel(0);
+            await ctx.Channel.SendMessageAsync("Command Limitierung wurde Aufgehoben.");
+        }
     }
 }

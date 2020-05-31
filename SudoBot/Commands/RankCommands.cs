@@ -28,6 +28,19 @@ namespace SudoBot.Commands
             var user = await User.GetOrCreateUser(member);
             var guild = await Guild.GetGuild(user.GuildId);
 
+            if (guild.CommandChannel != 0 && guild.CommandChannel != ctx.Channel.Id)
+            {
+                var channel = ctx.Guild.GetChannel(guild.CommandChannel);
+                var sentMessage = await ctx.Channel.SendMessageAsync($"In diesem Channel nicht erlaubt, bitte in {channel.Mention} verwenden!");
+                Task.Run(() =>
+                {
+                    Task.Delay(5000).GetAwaiter().GetResult();
+                    sentMessage.DeleteAsync();
+                    ctx.Message.DeleteAsync();
+                });
+                return;
+            }
+
             // if (guild.LocalLogChannel == 0)
             // {
             //     await ctx.Channel.SendMessageAsync("Bitte setze einen Log Channel für fehler, $a set-log-channel #channel");
