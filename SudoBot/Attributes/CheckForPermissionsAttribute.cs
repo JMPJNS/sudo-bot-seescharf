@@ -20,6 +20,8 @@ namespace SudoBot.Attributes
         }
         public override Task<bool> ExecuteCheckAsync(CommandContext ctx, bool help)
         {
+            if (ctx.Member.Id == Globals.MyId) return Task.FromResult(true);
+            
             bool isHelp = ctx.Command.Name == "help";
             if (ctx.Guild == null || ctx.Member == null) return Task.FromResult(false);
 

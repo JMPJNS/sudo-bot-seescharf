@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.Entities;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using SudoBot.Models;
+using Tag = SudoBot.Models.Tag;
 
 namespace SudoBot.Database
 {
@@ -16,6 +18,7 @@ namespace SudoBot.Database
         
         private IMongoDatabase _db;
         private IMongoCollection<User> _users;
+        private IMongoCollection<Tag> _tags;
         private IMongoCollection<Guild> _guilds;
         private Mongo()
         {
@@ -25,6 +28,7 @@ namespace SudoBot.Database
                 _db = client.GetDatabase(Environment.GetEnvironmentVariable("DBNAME"));
                 
                 _users = _db.GetCollection<User>("Users");
+                _tags = _db.GetCollection<Tag>("Tags");
                 _guilds = _db.GetCollection<Guild>("Guilds");
             }
             catch (Exception e)
@@ -57,6 +61,49 @@ namespace SudoBot.Database
             await _guilds.ReplaceOneAsync(
                 g => guild.GuildId == g.GuildId,
                 guild);
+        }
+        
+        // Tag Stuff
+        public async Task InsertTag(Tag tag)
+        {
+            await _tags.InsertOneAsync(tag);
+        }
+
+        public async Task DeleteTag(Tag tag)
+        {
+            await _tags.DeleteOneAsync(t => t.Id == tag.Id);
+        }
+
+        public async Task<Tag> GetTag(String name, TagType type)
+        {
+            try
+            {
+                return await _tags.FindAsync(tag => (tag.Type == type && tag.Name == name)).Result.FirstAsync();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+        
+        public async Task<List<Tag>> FindSimilarTags(String name, TagType type)
+        {
+            var filter = Builders<Tag>.Filter.Regex("Name", new BsonRegularExpression(name, "i"));
+            try
+            {
+                return _tags.Find(filter).Limit(5).ToList();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+        
+        public async Task UpdateTag(Tag tag)
+        {
+            await _tags.ReplaceOneAsync(
+                t => tag.Id == t.Id,
+                tag);
         }
 
         // User Stuff

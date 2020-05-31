@@ -77,6 +77,7 @@ namespace SudoBot
             Commands.RegisterCommands<ModCommands>();
             Commands.RegisterCommands<FileCommands>();
             Commands.RegisterCommands<GlobalCommands>();
+            Commands.RegisterCommands<TagCommands>();
                         
             // Start Bot
             await Client.ConnectAsync();
