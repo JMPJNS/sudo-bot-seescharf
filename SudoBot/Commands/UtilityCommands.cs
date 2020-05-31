@@ -89,6 +89,21 @@ namespace SudoBot.Commands
         [Description("Information über einen Member")]
         public async Task MemberInfo(CommandContext ctx, [Description("Der Member (optional)")]DiscordMember member = null)
         {
+            var guild = await Guild.GetGuild(ctx.Guild.Id);
+            
+            if (guild.CommandChannel != 0 && guild.CommandChannel != ctx.Channel.Id)
+            {
+                var channel = ctx.Guild.GetChannel(guild.CommandChannel);
+                var sentMessage = await ctx.Channel.SendMessageAsync($"In diesem Channel nicht erlaubt, bitte in {channel.Mention} verwenden!");
+                Task.Run(() =>
+                {
+                    Task.Delay(5000).GetAwaiter().GetResult();
+                    sentMessage.DeleteAsync();
+                    ctx.Message.DeleteAsync();
+                });
+                return;
+            }
+            
             if (member == null) member = ctx.Member;
             string roles = "";
             foreach (var role in member.Roles)
