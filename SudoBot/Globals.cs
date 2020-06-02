@@ -8,8 +8,8 @@ namespace SudoBot
 {
     public class Globals
     {
-        public static readonly string[] ModRoles = {"SudoAdmin", "SudoMod", "Admins", "Mods", "Moderatoren ✨", "Senior Moderatoren ✨ ✨", "Admin 👑", "Server-Techniker🛠️", "Bot Developer", "Helferleine ✨"};
-        public static readonly string[] AdminRoles = {"SudoAdmin", "Admins", "Admin 👑", "Server-Techniker🛠️", "Moderatoren ✨", "Bot Developer"};
+        public static readonly string[] ModRoles = {"SudoAdmin", "SudoMod", "Admins", "Mods", "✨ | Server-Techniker👑", "️✨│Senior Moderatoren", "🔧│Bot Developer✨", "✨│Helferleine", "✨│Moderatoren"};
+        public static readonly string[] AdminRoles = {"SudoAdmin", "Admins", "✨ | Server-Techniker👑", "️✨│Senior Moderatoren", "🔧│Bot Developer✨"};
         public static DebugLogger Logger;
         public static DiscordClient Client;
         public static ulong MyId = 272809112851578881;
