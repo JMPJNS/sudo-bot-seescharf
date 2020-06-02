@@ -38,5 +38,17 @@ namespace SudoBot.Commands
                 .WithDescription($"{me.Username}#{me.Discriminator}");
             await ctx.Channel.SendMessageAsync(embed:embed.Build());
         }
+
+        [Description("Say in guild / channel")]
+        [Command("sg")]
+        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
+        public async Task sayGlobal(CommandContext ctx, ulong guild, ulong channel,
+            params string[] words)
+        {
+            var g = await ctx.Client.GetGuildAsync(guild);
+            var c = g.GetChannel(channel);
+            
+            await c.SendMessageAsync(string.Join(" ",words));
+        }
     }
 }

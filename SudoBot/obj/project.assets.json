@@ -6548,7 +6548,8 @@
       "DSharpPlus >= 4.0.0-nightly-00697",
       "DSharpPlus.CommandsNext >= 4.0.0-nightly-00697",
       "DSharpPlus.Interactivity >= 4.0.0-nightly-00697",
-      "MongoDB.Driver >= 2.10.4"
+      "MongoDB.Driver >= 2.10.4",
+      "Newtonsoft.Json >= 12.0.3"
     ]
   },
   "packageFolders": {
@@ -6602,6 +6603,10 @@
           "MongoDB.Driver": {
             "target": "Package",
             "version": "[2.10.4, )"
+          },
+          "Newtonsoft.Json": {
+            "target": "Package",
+            "version": "[12.0.3, )"
           }
         },
         "imports": [

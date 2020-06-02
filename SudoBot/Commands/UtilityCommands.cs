@@ -1,12 +1,17 @@
 using System;
 using System.Globalization;
+using System.IO;
+using System.Net;
 using System.Security;
+using System.Text.Encodings.Web;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
+using Newtonsoft.Json.Linq;
 using SudoBot.Attributes;
 using SudoBot.Models;
 using SudoBot.Handlers;
@@ -82,6 +87,28 @@ namespace SudoBot.Commands
                 await ctx.Channel.SendMessageAsync("Falsch Verwendet! $reminder {um/in} {uhrzeit/zeitspanne} {nachricht}");
                 return;
             }
+        }
+
+        [Command("google")]
+        [Description("Suche etwas im Internet")]
+        [Hidden]
+        public async Task Google(CommandContext ctx, params String[] begriff)
+        {
+            var param = Uri.EscapeDataString(ctx.RawArgumentString);
+            
+            var url = $"http://api.duckduckgo.com/?q={param}&format=json";
+            
+            var request = await WebRequest.Create(url).GetResponseAsync();
+
+            using (Stream data = request.GetResponseStream())
+            {
+                StreamReader reader = new StreamReader(data);
+                var content = await reader.ReadToEndAsync();
+                var parsed = JObject.Parse(content);
+                Console.WriteLine("test");
+            }
+            request.Close();
+            
         }
         
         // Info Commands

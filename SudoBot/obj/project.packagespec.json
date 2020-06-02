@@ -42,6 +42,10 @@
         "MongoDB.Driver": {
           "target": "Package",
           "version": "[2.10.4, )"
+        },
+        "Newtonsoft.Json": {
+          "target": "Package",
+          "version": "[12.0.3, )"
         }
       },
       "imports": [

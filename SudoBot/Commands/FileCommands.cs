@@ -38,7 +38,7 @@ namespace SudoBot.Commands
 
                 await ctx.Channel.SendMessageAsync($"https://files.jmp.blue/d/{ctx.Message.Id.ToString()}{fileExtension}");
             }
-            catch
+            catch (Exception e)
             {
                 await ctx.Channel.SendMessageAsync("Fehler!, Eine Bild muss mitgesendet werden");
             }
