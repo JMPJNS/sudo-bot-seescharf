@@ -28,7 +28,7 @@ namespace SudoBot.Commands
             await ctx.Channel.SendMessageAsync("Die Rolle wurde gesetzt");
         }
 
-        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.CustomGames)]
         [Cooldown(1, 240, CooldownBucketType.Guild)]
         [Description("Entferne alle aus der Custom Games Rolle (4 Minuten Cooldown)")]
         [Command("end")]
@@ -77,11 +77,33 @@ namespace SudoBot.Commands
             await sentMessage.CreateReactionAsync(joinEmoji);
             await ctx.Channel.SendMessageAsync("Starten mit `$customs start {anzahl}`");
         }
+
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
+        [Description("Einem Member Tickets für die Custom Games geben / nehmen")]
+        [Command("add-ticket")]
+        public async Task AddTicket(CommandContext ctx, DiscordMember member, [Description("Negativ um Tickets zu nehmen")]int count = 1)
+        {
+            var user = await User.GetOrCreateUser(member);
+
+            await user.AddTickets(count);
+            await ctx.Channel.SendMessageAsync($"{member.Mention} hat {count.ToString()} Tickets erhalten!");
+        }
+        
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
+        [Description("Die Ticket Anzahl wieder auf den Standard wert setzen (1)")]
+        [Command("reset-tickets")]
+        public async Task ResetTickets(CommandContext ctx)
+        {
+            var guild = await Guild.GetGuild(ctx.Guild.Id);
+
+            await guild.ResetTickets();
+            await ctx.Channel.SendMessageAsync("Die Tickets wurden zurückgesetzt!");
+        }
         
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         [Description("Starte das Custom Game (Lost die Rolle unter den Leuten die Reagiert haben aus)")]
         [Command("start")]
-        public async Task GiveCustoms(CommandContext ctx, [Description("Wie viele Leute die Custom Games Rolle erhalten sollen")]int maxMembers)
+        public async Task GiveCustoms(CommandContext ctx, [Description("Wie viele Leute die Custom Games Rolle erhalten sollen")]int maxMembers, [Description("Ob beitreten ein Ticket verwenden soll.\nTickets können mit `$customs add-ticket [@User] [(optional) Anzahl]` vergeben werden\n mit `$customs reset-tickets` alle tickets auf den Standard wert (1) setzen.")]bool useTickets = false)
         {
             var guild = await Guild.GetGuild(ctx.Guild.Id);
             
@@ -133,13 +155,29 @@ namespace SudoBot.Commands
 
             if (rUsers.Count < maxMembers) maxMembers = rUsers.Count;
 
+            await ctx.Channel.SendMessageAsync($"Die Rolle wird unter {maxMembers.ToString()} Leuten Ausgelost!");
+
             for (int i = 0; i < maxMembers; i++)
             {
                 try
                 {
                     var m = await message.Channel.Guild.GetMemberAsync(rUsers[i].Id);
-                    users += $"{m.Mention}, ";
-                    await m.GrantRoleAsync(role);
+                    var user = await User.GetOrCreateUser(m);
+                    
+                    if (user.TicketsRemaining > 0 || useTickets == false) {
+                        if (useTickets) await user.RemoveTicket();
+                        
+                        users += $"{m.Mention}, ";
+                        await m.GrantRoleAsync(role);
+                    }
+                    else
+                    {
+                        if (maxMembers < rUsers.Count)
+                        {
+                            maxMembers++;
+                        }
+                    }
+                    
                 }
                 catch (Exception e)
                 {
@@ -157,7 +195,7 @@ namespace SudoBot.Commands
             if (maxMembers > 1)
             {
                 users += " haben die Rolle Gekriegt!";
-            } else if (maxMembers == 1)
+            } else if (maxMembers == 1 && users.Length > 2)
             {
                 users += " hat die Rolle Gekriegt!"; 
             }

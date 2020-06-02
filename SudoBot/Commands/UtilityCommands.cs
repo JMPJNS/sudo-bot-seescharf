@@ -117,7 +117,7 @@ namespace SudoBot.Commands
         public async Task MemberInfo(CommandContext ctx, [Description("Der Member (optional)")]DiscordMember member = null)
         {
             var guild = await Guild.GetGuild(ctx.Guild.Id);
-            
+
             if (guild.CommandChannel != 0 && guild.CommandChannel != ctx.Channel.Id)
             {
                 var channel = ctx.Guild.GetChannel(guild.CommandChannel);
@@ -132,6 +132,7 @@ namespace SudoBot.Commands
             }
             
             if (member == null) member = ctx.Member;
+            var user = await User.GetOrCreateUser(member);
             string roles = "";
             foreach (var role in member.Roles)
             {
@@ -153,6 +154,7 @@ namespace SudoBot.Commands
                 .AddField("Beigetreten", member.JoinedAt.ToString())
                 .AddField("Erstellt", member.CreationTimestamp.ToString())
                 .AddField("Rollen", roles.Length != 0 ? roles : "Keine")
+                .AddField("Tickets", user.TicketsRemaining.ToString())
                 .WithThumbnailUrl(member.AvatarUrl);
 
             await ctx.Channel.SendMessageAsync(embed: embed.Build());
