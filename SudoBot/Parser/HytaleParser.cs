@@ -43,6 +43,7 @@ namespace SudoBot.Parser
                 }
                 catch (Exception e)
                 {
+                    
                     Console.WriteLine($"Hytale Parser: {e}");
                 }
                 
