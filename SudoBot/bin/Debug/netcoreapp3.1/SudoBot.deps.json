@@ -27,6 +27,8 @@
           "DSharpPlus": "4.0.0-nightly-00697",
           "DSharpPlus.CommandsNext": "4.0.0-nightly-00697",
           "DSharpPlus.Interactivity": "4.0.0-nightly-00697",
+          "Fizzler.Systems.HtmlAgilityPack": "1.2.1",
+          "HtmlAgilityPack": "1.11.24",
           "MongoDB.Driver": "2.10.4",
           "Newtonsoft.Json": "12.0.3",
           "Microsoft.AspNetCore.Antiforgery": "3.1.0.0",
@@ -374,6 +376,43 @@
         },
         "compile": {
           "lib/netstandard2.0/DSharpPlus.Interactivity.dll": {}
+        }
+      },
+      "Fizzler/1.2.0": {
+        "runtime": {
+          "lib/netstandard2.0/Fizzler.dll": {
+            "assemblyVersion": "1.2.0.0",
+            "fileVersion": "1.2.0.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/Fizzler.dll": {}
+        }
+      },
+      "Fizzler.Systems.HtmlAgilityPack/1.2.1": {
+        "dependencies": {
+          "Fizzler": "1.2.0",
+          "HtmlAgilityPack": "1.11.24"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Fizzler.Systems.HtmlAgilityPack.dll": {
+            "assemblyVersion": "1.2.1.0",
+            "fileVersion": "1.2.1.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/Fizzler.Systems.HtmlAgilityPack.dll": {}
+        }
+      },
+      "HtmlAgilityPack/1.11.24": {
+        "runtime": {
+          "lib/netstandard2.0/HtmlAgilityPack.dll": {
+            "assemblyVersion": "1.11.24.0",
+            "fileVersion": "1.11.24.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/HtmlAgilityPack.dll": {}
         }
       },
       "Microsoft.Extensions.DependencyInjection/3.1.1": {
@@ -3225,6 +3264,27 @@
       "sha512": "sha512-z34PYJvklKRAXFIqriVmV3L8FMKol+4WqiSncCRwgUQHj5uc6cH6YUTm+dvZ7a4xY9yuBrLGFQpF2p7AYg5ZcQ==",
       "path": "dsharpplus.interactivity/4.0.0-nightly-00697",
       "hashPath": "dsharpplus.interactivity.4.0.0-nightly-00697.nupkg.sha512"
+    },
+    "Fizzler/1.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-CPxuWF8EPvM0rwAtMTR5G+7EuLoGNXsEfqyx06upN9JyVALZ73KgbGn3SLFwGosifiUAXrvNHtXlUwGGytdECg==",
+      "path": "fizzler/1.2.0",
+      "hashPath": "fizzler.1.2.0.nupkg.sha512"
+    },
+    "Fizzler.Systems.HtmlAgilityPack/1.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-JVWdUgFd8KdsIoertmc9jgVc3eNpZmrXgk3rW91s0ymizAT3S/QresLY+bf+V8XO/kMy4mTV34h517g03fUqqw==",
+      "path": "fizzler.systems.htmlagilitypack/1.2.1",
+      "hashPath": "fizzler.systems.htmlagilitypack.1.2.1.nupkg.sha512"
+    },
+    "HtmlAgilityPack/1.11.24": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DLcytINO8EfCdBgMGsaz8Tvdgu2Aewoo2XX7WfZuRG9cBQRtbm8JZ4/sMRtFvzehjdIDqubdlQb8TqNfjRMEWg==",
+      "path": "htmlagilitypack/1.11.24",
+      "hashPath": "htmlagilitypack.1.11.24.nupkg.sha512"
     },
     "Microsoft.Extensions.DependencyInjection/3.1.1": {
       "type": "package",

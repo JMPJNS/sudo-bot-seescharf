@@ -20,6 +20,7 @@ namespace SudoBot.Database
         private IMongoCollection<User> _users;
         private IMongoCollection<Tag> _tags;
         private IMongoCollection<Guild> _guilds;
+        private IMongoCollection<ParserResult> _parserResults;
         private Mongo()
         {
             try
@@ -30,6 +31,7 @@ namespace SudoBot.Database
                 _users = _db.GetCollection<User>("Users");
                 _tags = _db.GetCollection<Tag>("Tags");
                 _guilds = _db.GetCollection<Guild>("Guilds");
+                _parserResults = _db.GetCollection<ParserResult>("ParserResults");
             }
             catch (Exception e)
             {
@@ -61,6 +63,18 @@ namespace SudoBot.Database
             await _guilds.ReplaceOneAsync(
                 g => guild.GuildId == g.GuildId,
                 guild);
+        }
+        
+        // Parser Stuff
+        
+        public async Task InsertParserResult(ParserResult res)
+        {
+            await _parserResults.InsertOneAsync(res);
+        }
+
+        public async Task GetLatestParserResult(String parser)
+        {
+            await _parserResults.Find(r => r.Parser == parser).SortByDescending(r => r.ParsedTime).FirstAsync();
         }
         
         // Tag Stuff

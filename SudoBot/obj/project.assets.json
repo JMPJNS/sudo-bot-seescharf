@@ -53,6 +53,37 @@
           "lib/netstandard2.0/DSharpPlus.Interactivity.dll": {}
         }
       },
+      "Fizzler/1.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Fizzler.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Fizzler.dll": {}
+        }
+      },
+      "Fizzler.Systems.HtmlAgilityPack/1.2.1": {
+        "type": "package",
+        "dependencies": {
+          "Fizzler": "1.2.0",
+          "HtmlAgilityPack": "1.5.1"
+        },
+        "compile": {
+          "lib/netstandard2.0/Fizzler.Systems.HtmlAgilityPack.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Fizzler.Systems.HtmlAgilityPack.dll": {}
+        }
+      },
+      "HtmlAgilityPack/1.11.24": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/HtmlAgilityPack.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/HtmlAgilityPack.dll": {}
+        }
+      },
       "Microsoft.Extensions.DependencyInjection/3.1.1": {
         "type": "package",
         "dependencies": {
@@ -2009,6 +2040,85 @@
         "lib/netstandard1.3/DSharpPlus.Interactivity.xml",
         "lib/netstandard2.0/DSharpPlus.Interactivity.dll",
         "lib/netstandard2.0/DSharpPlus.Interactivity.xml"
+      ]
+    },
+    "Fizzler/1.2.0": {
+      "sha512": "CPxuWF8EPvM0rwAtMTR5G+7EuLoGNXsEfqyx06upN9JyVALZ73KgbGn3SLFwGosifiUAXrvNHtXlUwGGytdECg==",
+      "type": "package",
+      "path": "fizzler/1.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "COPYING.LESSER.txt",
+        "COPYING.txt",
+        "fizzler.1.2.0.nupkg.sha512",
+        "fizzler.nuspec",
+        "lib/netstandard1.0/Fizzler.dll",
+        "lib/netstandard2.0/Fizzler.dll"
+      ]
+    },
+    "Fizzler.Systems.HtmlAgilityPack/1.2.1": {
+      "sha512": "JVWdUgFd8KdsIoertmc9jgVc3eNpZmrXgk3rW91s0ymizAT3S/QresLY+bf+V8XO/kMy4mTV34h517g03fUqqw==",
+      "type": "package",
+      "path": "fizzler.systems.htmlagilitypack/1.2.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "COPYING.txt",
+        "fizzler.systems.htmlagilitypack.1.2.1.nupkg.sha512",
+        "fizzler.systems.htmlagilitypack.nuspec",
+        "lib/netstandard1.3/Fizzler.Systems.HtmlAgilityPack.dll",
+        "lib/netstandard1.3/Fizzler.Systems.HtmlAgilityPack.pdb",
+        "lib/netstandard2.0/Fizzler.Systems.HtmlAgilityPack.dll",
+        "lib/netstandard2.0/Fizzler.Systems.HtmlAgilityPack.pdb"
+      ]
+    },
+    "HtmlAgilityPack/1.11.24": {
+      "sha512": "DLcytINO8EfCdBgMGsaz8Tvdgu2Aewoo2XX7WfZuRG9cBQRtbm8JZ4/sMRtFvzehjdIDqubdlQb8TqNfjRMEWg==",
+      "type": "package",
+      "path": "htmlagilitypack/1.11.24",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "htmlagilitypack.1.11.24.nupkg.sha512",
+        "htmlagilitypack.nuspec",
+        "lib/Net35/HtmlAgilityPack.dll",
+        "lib/Net35/HtmlAgilityPack.pdb",
+        "lib/Net35/HtmlAgilityPack.xml",
+        "lib/Net40-client/HtmlAgilityPack.dll",
+        "lib/Net40-client/HtmlAgilityPack.pdb",
+        "lib/Net40-client/HtmlAgilityPack.xml",
+        "lib/Net40/HtmlAgilityPack.XML",
+        "lib/Net40/HtmlAgilityPack.dll",
+        "lib/Net40/HtmlAgilityPack.pdb",
+        "lib/Net45/HtmlAgilityPack.XML",
+        "lib/Net45/HtmlAgilityPack.dll",
+        "lib/Net45/HtmlAgilityPack.pdb",
+        "lib/NetCore45/HtmlAgilityPack.XML",
+        "lib/NetCore45/HtmlAgilityPack.dll",
+        "lib/NetCore45/HtmlAgilityPack.pdb",
+        "lib/netstandard1.3/HtmlAgilityPack.deps.json",
+        "lib/netstandard1.3/HtmlAgilityPack.dll",
+        "lib/netstandard1.3/HtmlAgilityPack.pdb",
+        "lib/netstandard1.3/HtmlAgilityPack.xml",
+        "lib/netstandard1.6/HtmlAgilityPack.deps.json",
+        "lib/netstandard1.6/HtmlAgilityPack.dll",
+        "lib/netstandard1.6/HtmlAgilityPack.pdb",
+        "lib/netstandard1.6/HtmlAgilityPack.xml",
+        "lib/netstandard2.0/HtmlAgilityPack.deps.json",
+        "lib/netstandard2.0/HtmlAgilityPack.dll",
+        "lib/netstandard2.0/HtmlAgilityPack.pdb",
+        "lib/netstandard2.0/HtmlAgilityPack.xml",
+        "lib/portable-net45+netcore45+wp8+MonoAndroid+MonoTouch/HtmlAgilityPack.XML",
+        "lib/portable-net45+netcore45+wp8+MonoAndroid+MonoTouch/HtmlAgilityPack.dll",
+        "lib/portable-net45+netcore45+wp8+MonoAndroid+MonoTouch/HtmlAgilityPack.pdb",
+        "lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid+MonoTouch/HtmlAgilityPack.XML",
+        "lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid+MonoTouch/HtmlAgilityPack.dll",
+        "lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid+MonoTouch/HtmlAgilityPack.pdb",
+        "lib/uap10.0/HtmlAgilityPack.XML",
+        "lib/uap10.0/HtmlAgilityPack.dll",
+        "lib/uap10.0/HtmlAgilityPack.pdb",
+        "lib/uap10.0/HtmlAgilityPack.pri"
       ]
     },
     "Microsoft.Extensions.DependencyInjection/3.1.1": {
@@ -6548,36 +6658,31 @@
       "DSharpPlus >= 4.0.0-nightly-00697",
       "DSharpPlus.CommandsNext >= 4.0.0-nightly-00697",
       "DSharpPlus.Interactivity >= 4.0.0-nightly-00697",
+      "Fizzler.Systems.HtmlAgilityPack >= 1.2.1",
+      "HtmlAgilityPack >= 1.11.24",
       "MongoDB.Driver >= 2.10.4",
       "Newtonsoft.Json >= 12.0.3"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\JMP\\.nuget\\packages\\": {},
-    "C:\\Microsoft\\Xamarin\\NuGet": {}
+    "/home/jmp/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\JMP\\RiderProjects\\sudo-bot-seescharf\\SudoBot\\SudoBot.csproj",
+      "projectUniqueName": "/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/SudoBot.csproj",
       "projectName": "SudoBot",
-      "projectPath": "C:\\Users\\JMP\\RiderProjects\\sudo-bot-seescharf\\SudoBot\\SudoBot.csproj",
-      "packagesPath": "C:\\Users\\JMP\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\JMP\\RiderProjects\\sudo-bot-seescharf\\SudoBot\\obj\\",
+      "projectPath": "/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/SudoBot.csproj",
+      "packagesPath": "/home/jmp/.nuget/packages/",
+      "outputPath": "/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Microsoft\\Xamarin\\NuGet"
-      ],
       "configFilePaths": [
-        "C:\\Users\\JMP\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "/home/jmp/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {},
         "https://nuget.emzi0767.com/api/v3/index.json": {}
       },
@@ -6607,6 +6712,14 @@
             "target": "Package",
             "version": "[4.0.0-nightly-00697, )"
           },
+          "Fizzler.Systems.HtmlAgilityPack": {
+            "target": "Package",
+            "version": "[1.2.1, )"
+          },
+          "HtmlAgilityPack": {
+            "target": "Package",
+            "version": "[1.11.24, )"
+          },
           "MongoDB.Driver": {
             "target": "Package",
             "version": "[2.10.4, )"
@@ -6634,7 +6747,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.103/RuntimeIdentifierGraph.json"
       }
     }
   }

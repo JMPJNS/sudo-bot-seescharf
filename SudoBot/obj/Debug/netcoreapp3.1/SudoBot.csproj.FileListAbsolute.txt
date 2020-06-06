@@ -161,3 +161,6 @@ C:/Users/JMP/RiderProjects/sudo-bot-seescharf/SudoBot/obj/Debug/netcoreapp3.1/st
 C:/Users/JMP/RiderProjects/sudo-bot-seescharf/SudoBot/obj/Debug/netcoreapp3.1/SudoBot.dll
 C:/Users/JMP/RiderProjects/sudo-bot-seescharf/SudoBot/obj/Debug/netcoreapp3.1/SudoBot.pdb
 C:/Users/JMP/RiderProjects/sudo-bot-seescharf/SudoBot/obj/Debug/netcoreapp3.1/SudoBot.genruntimeconfig.cache
+/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/bin/Debug/netcoreapp3.1/HtmlAgilityPack.dll
+/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/bin/Debug/netcoreapp3.1/Fizzler.dll
+/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/bin/Debug/netcoreapp3.1/Fizzler.Systems.HtmlAgilityPack.dll
