@@ -21,7 +21,7 @@ namespace SudoBot.Commands
 
             var embed = new DiscordEmbedBuilder()
                 .WithColor(DiscordColor.CornflowerBlue)
-                .WithTitle(res.Posts?[0].Titel)
+                .WithTitle($"Hytale: {res.Posts?[0].Titel}")
                 .WithImageUrl(res.Posts?[0].ImgUrl)
                 .WithDescription(res.Posts?[0].Details)
                 .WithUrl(res.Posts?[0].PostUrl)
