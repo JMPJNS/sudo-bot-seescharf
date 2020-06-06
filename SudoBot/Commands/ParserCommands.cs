@@ -20,7 +20,7 @@ namespace SudoBot.Commands
             var res = await hp.ParseAsync(0, 1);
 
             var embed = new DiscordEmbedBuilder()
-                .WithColor(DiscordColor.CornflowerBlue)
+                .WithColor(DiscordColor.DarkButNotBlack)
                 .WithTitle($"Hytale: {res.Posts?[0].Titel}")
                 .WithImageUrl(res.Posts?[0].ImgUrl)
                 .WithDescription(res.Posts?[0].Details)

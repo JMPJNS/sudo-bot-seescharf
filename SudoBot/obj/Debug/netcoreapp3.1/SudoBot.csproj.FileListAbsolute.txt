@@ -164,3 +164,6 @@ C:/Users/JMP/RiderProjects/sudo-bot-seescharf/SudoBot/obj/Debug/netcoreapp3.1/Su
 /home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/bin/Debug/netcoreapp3.1/HtmlAgilityPack.dll
 /home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/bin/Debug/netcoreapp3.1/Fizzler.dll
 /home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/bin/Debug/netcoreapp3.1/Fizzler.Systems.HtmlAgilityPack.dll
+/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/bin/Debug/netcoreapp3.1/out/web.config
+/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/bin/Debug/netcoreapp3.1/out/SudoBot.deps.json
+/home/jmp/RiderProjects/sudo-bot-seescharf/SudoBot/bin/Debug/netcoreapp3.1/out/SudoBot.runtimeconfig.json

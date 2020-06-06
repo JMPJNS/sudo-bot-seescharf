@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
+using DSharpPlus.Interactivity;
 using SudoBot.Attributes;
 using SudoBot.Database;
 using SudoBot.Models;
@@ -52,6 +53,22 @@ namespace SudoBot.Commands
             }
 
 
+        }
+
+        [Command("leave-guild")]
+        [CheckForPermissions(SudoPermission.Me, GuildPermission.TestCommands)]
+        public async Task LeaveGuild(CommandContext ctx, ulong guildId)
+        {
+            var guild = await ctx.Client.GetGuildAsync(guildId);
+
+            await ctx.Channel.SendMessageAsync($"Do you want to Leave guild {guild.Name} with {guild.MemberCount.ToString()} Members? Send yes to confirm");
+            var interactivity = ctx.Client.GetInteractivity();
+            var msg = interactivity.WaitForMessageAsync(m=> m.Author == ctx.Member && m.Content == "yes", TimeSpan.FromMinutes(1));
+
+            if (msg != null)
+            {
+                await guild.LeaveAsync();
+            }
         }
         
         
