@@ -68,6 +68,7 @@ namespace SudoBot.Commands
             if (msg != null)
             {
                 await guild.LeaveAsync();
+                await ctx.Channel.SendMessageAsync("Left Guild");
             }
         }
         
