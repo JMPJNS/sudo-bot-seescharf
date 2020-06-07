@@ -13,7 +13,7 @@ namespace SudoBot.Commands
     public class ParserCommands: BaseCommandModule
     {
         [Command("hytale")]
-        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         public async Task ParseHytale(CommandContext ctx)
         {
             var hp = new HytaleParser();
@@ -32,7 +32,7 @@ namespace SudoBot.Commands
         }
         
         [Command("youtube-channel"), Aliases("yc")]
-        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         public async Task ParseYoutubeChannel(CommandContext ctx, string channelId)
         {
             var ycp = new YoutubeChannelParser();
