@@ -28,16 +28,23 @@ namespace SudoBot.Parser
             res.Name = res.Name.Substring(0, res.Name.IndexOf("\n")).Trim();
             res.ImgUrl = page.Html.QuerySelector(".appbar-nav-avatar").GetAttributeValue("src", "src");
             res.Url = url;
+            try
+            {
+                res.LatestVideoUrl = page.Html.QuerySelector("div.yt-lockup-content").QuerySelector("[href]")
+                    .GetAttributeValue("href", "href");
 
-            res.LatestVideoUrl = page.Html.QuerySelector("div.yt-lockup-content").QuerySelector("[href]")
-                .GetAttributeValue("href", "href");
+                res.LatestVideoThumbnailUrl = page.Html.QuerySelectorAll("[data-ytimg]").ToImmutableList()
+                    .Find(x => x.OuterHtml.Contains("ytimg.com")).GetAttributeValue("src", "src");
 
-            res.LatestVideoThumbnailUrl = page.Html.QuerySelectorAll("[data-ytimg]").ToImmutableList()
-                .Find(x => x.OuterHtml.Contains("ytimg.com")).GetAttributeValue("src", "src");
+                res.LatestVideoTitle = page.Html.QuerySelector(".yt-lockup-title").InnerText;
+                res.LatestVideoViewCount = page.Html.QuerySelector(".yt-lockup-meta-info").FirstChild.InnerText;
+                res.NoVideo = false;
+            }
+            catch (Exception e)
+            {
+                res.NoVideo = true;
+            }
 
-            res.LatestVideoTitle = page.Html.QuerySelector(".yt-lockup-title").InnerText;
-            res.LatestVideoViewCount = page.Html.QuerySelector(".yt-lockup-meta-info").FirstChild.InnerText;
-            
             return res;
         }
     }
@@ -49,6 +56,8 @@ namespace SudoBot.Parser
         public string SubCountString;
         public string Name;
         public string Url;
+
+        public bool NoVideo;
         
         public string LatestVideoUrl;
         public string LatestVideoThumbnailUrl;

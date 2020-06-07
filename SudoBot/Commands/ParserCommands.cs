@@ -42,11 +42,15 @@ namespace SudoBot.Commands
                 .WithColor(DiscordColor.IndianRed)
                 .WithTitle($"Youtube: {res.Name}")
                 .WithThumbnailUrl(res.ImgUrl)
-                .WithImageUrl(res.LatestVideoThumbnailUrl)
                 .WithDescription($"Subscriber: {res.SubCountString}")
-                .WithUrl(res.Url)
-                .AddField($"Letztes Video", $"[{res.LatestVideoTitle}] [{res.LatestVideoViewCount}]")
-                .AddField("Link", $"https://youtube.com{res.LatestVideoUrl}");
+                .WithUrl(res.Url);
+
+            if (res.NoVideo == false)
+            {
+                embed.WithImageUrl(res.LatestVideoThumbnailUrl)
+                    .AddField($"Letztes Video", $"[{res.LatestVideoTitle}] [{res.LatestVideoViewCount}]")
+                    .AddField("Link", $"https://youtube.com{res.LatestVideoUrl}");
+            }
 
             await ctx.Channel.SendMessageAsync(embed: embed.Build());
         }
