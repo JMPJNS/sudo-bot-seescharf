@@ -20,13 +20,33 @@ namespace SudoBot.Commands
             var res = await hp.ParseAsync(0, 1);
 
             var embed = new DiscordEmbedBuilder()
-                .WithColor(DiscordColor.DarkButNotBlack)
+                .WithColor(DiscordColor.CornflowerBlue)
                 .WithTitle($"Hytale: {res.Posts?[0].Titel}")
                 .WithImageUrl(res.Posts?[0].ImgUrl)
                 .WithDescription(res.Posts?[0].Details)
                 .WithUrl(res.Posts?[0].PostUrl)
                 .AddField(res.Posts?[0].Date, res.Posts?[0].Author);
 
+
+            await ctx.Channel.SendMessageAsync(embed: embed.Build());
+        }
+        
+        [Command("youtube-channel"), Aliases("yc")]
+        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
+        public async Task ParseYoutubeChannel(CommandContext ctx, string channelId)
+        {
+            var ycp = new YoutubeChannelParser();
+            var res = await ycp.ParseAsync($"https://www.youtube.com/channel/{channelId}/videos");
+
+            var embed = new DiscordEmbedBuilder()
+                .WithColor(DiscordColor.IndianRed)
+                .WithTitle($"Youtube: {res.Name}")
+                .WithThumbnailUrl(res.ImgUrl)
+                .WithImageUrl(res.LatestVideoThumbnailUrl)
+                .WithDescription($"Subscriber: {res.SubCountString}")
+                .WithUrl(res.Url)
+                .AddField($"Letztes Video", $"[{res.LatestVideoTitle}] [{res.LatestVideoViewCount}]")
+                .AddField("Link", $"https://youtube.com{res.LatestVideoUrl}");
 
             await ctx.Channel.SendMessageAsync(embed: embed.Build());
         }
