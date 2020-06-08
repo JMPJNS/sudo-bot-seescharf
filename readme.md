@@ -1,4 +1,5 @@
 env variables:
 
-SUDOBOT_EDITION : dev/release version
-GOOGLE_APPLICATION_CREDENTIALS : path to google creds json
+BOTTOKEN : discord bot token
+DBNAME: Database Name
+DBSTRING: Mongodb Connection String
