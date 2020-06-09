@@ -255,7 +255,7 @@ namespace SudoBot.Commands
                     foreach (var r in roles)
                     {
                         var drole = ctx.Guild.GetRole(r.Role);
-                        msg += $"{drole.Name}\t{r.Points.ToString()}\t{guild.RankingPointName ?? "XP"}\n";
+                        msg += $"**{drole.Name}** `{r.Points.ToString()} {guild.RankingPointName ?? "XP"}`\n";
                     }
                     embed.AddField("Rollen", msg, true);
                 }
