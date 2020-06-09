@@ -241,11 +241,25 @@ namespace SudoBot.Commands
                     .WithColor(DiscordColor.Aquamarine)
                     .WithTitle("Rollen");
 
-                foreach (var r in roles)
+                if (roles.Count < 25)
                 {
-                    var drole = ctx.Guild.GetRole(r.Role);
-                    embed.AddField(drole.Name, $"{r.Points.ToString()} {guild.RankingPointName ?? "XP"}", true);
+                    foreach (var r in roles)
+                    {
+                        var drole = ctx.Guild.GetRole(r.Role);
+                        embed.AddField(drole.Name, $"{r.Points.ToString()} {guild.RankingPointName ?? "XP"}", true);
+                    }
                 }
+                else
+                {
+                    string msg = "";
+                    foreach (var r in roles)
+                    {
+                        var drole = ctx.Guild.GetRole(r.Role);
+                        msg += $"{r.Points.ToString()} {guild.RankingPointName ?? "XP"}\n";
+                    }
+                    embed.AddField("Rollen", msg, true);
+                }
+                
 
                 await ctx.Channel.SendMessageAsync(embed: embed.Build());
             }
