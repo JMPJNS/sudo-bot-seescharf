@@ -237,31 +237,39 @@ namespace SudoBot.Commands
                     return;
                 }
 
-                var embed = new DiscordEmbedBuilder()
-                    .WithColor(DiscordColor.Aquamarine)
-                    .WithTitle("Rollen");
+                int embedCount = 1 + roles.Count / 24;
+                
+                List<DiscordEmbedBuilder> embeds = new List<DiscordEmbedBuilder>();
 
-                if (roles.Count < 25)
+                for (var i = 0; i < embedCount; i++)
                 {
-                    foreach (var r in roles)
+                    var currRoles = roles.Skip(i * 24).Take(24);
+                    DiscordEmbedBuilder embed;
+                    if (i == 0)
+                    {
+                        embed = new DiscordEmbedBuilder()
+                            .WithColor(DiscordColor.Aquamarine)
+                            .WithTitle("Rollen");
+                    }
+                    else
+                    {
+                        embed = new DiscordEmbedBuilder()
+                            .WithColor(DiscordColor.Aquamarine);
+                    }
+                    
+                
+                    foreach (var r in currRoles)
                     {
                         var drole = ctx.Guild.GetRole(r.Role);
                         embed.AddField(drole.Name, $"{r.Points.ToString()} {guild.RankingPointName ?? "XP"}", true);
                     }
+                    embeds.Add(embed);
                 }
-                else
-                {
-                    string msg = "";
-                    foreach (var r in roles)
-                    {
-                        var drole = ctx.Guild.GetRole(r.Role);
-                        msg += $"**{drole.Name}** `{r.Points.ToString()} {guild.RankingPointName ?? "XP"}`\n";
-                    }
-                    embed.AddField("Rollen", msg, true);
-                }
-                
 
-                await ctx.Channel.SendMessageAsync(embed: embed.Build());
+                foreach (var embed in embeds)
+                {
+                    await ctx.Channel.SendMessageAsync(embed: embed.Build());
+                }
             }
             catch (Exception e)
             {
