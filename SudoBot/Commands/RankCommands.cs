@@ -223,26 +223,36 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         public async Task ListRankingRoles(CommandContext ctx)
         {
-            var guild = await Guild.GetGuild(ctx.Guild.Id);
-            var roles = guild.RankingRoles.OrderBy(x => x.Points).ToList();
+            try
+            {
 
-            if (roles == null || roles.Count == 0)
-            {
-                await ctx.Channel.SendMessageAsync("Es wurden noch keine Rollen festgelegt, siehe `$help ranking setRole`");
-                return;
-            } 
-            
-            var embed = new DiscordEmbedBuilder()
-                .WithColor(DiscordColor.Aquamarine)
-                .WithTitle("Rollen");
-            
-            foreach (var r in roles)
-            {
-                var drole = ctx.Guild.GetRole(r.Role);
-                embed.AddField(drole.Name, $"{r.Points.ToString()} {guild.RankingPointName ?? "XP"}", true);
+
+                var guild = await Guild.GetGuild(ctx.Guild.Id);
+                var roles = guild.RankingRoles.OrderBy(x => x.Points).ToList();
+
+                if (roles == null || roles.Count == 0)
+                {
+                    await ctx.Channel.SendMessageAsync(
+                        "Es wurden noch keine Rollen festgelegt, siehe `$help ranking setRole`");
+                    return;
+                }
+
+                var embed = new DiscordEmbedBuilder()
+                    .WithColor(DiscordColor.Aquamarine)
+                    .WithTitle("Rollen");
+
+                foreach (var r in roles)
+                {
+                    var drole = ctx.Guild.GetRole(r.Role);
+                    embed.AddField(drole.Name, $"{r.Points.ToString()} {guild.RankingPointName ?? "XP"}", true);
+                }
+
+                await ctx.Channel.SendMessageAsync(embed: embed.Build());
             }
-
-            await ctx.Channel.SendMessageAsync(embed: embed.Build());
+            catch (Exception e)
+            {
+                await ctx.RespondAsync($"Es ist ein fehler aufgetreten: {e.Message}");
+            }
         }
     }
 }

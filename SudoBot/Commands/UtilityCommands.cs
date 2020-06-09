@@ -143,6 +143,7 @@ namespace SudoBot.Commands
             {
                 roles = roles.Substring(0, roles.Length - 2);   
             }
+            
 
             var embed = new DiscordEmbedBuilder()
                 .WithDescription(member.Mention)

@@ -59,7 +59,7 @@ namespace SudoBot
             Commands.SetHelpFormatter<SudoHelpFormatter>();
 
             Commands.CommandErrored += OnCommandErrored;
-            
+
             //Interactivity
             var interactivityConfig = new InteractivityConfiguration
             {
@@ -171,7 +171,16 @@ namespace SudoBot
             Guild g = new Guild(e.Guild.Id);
             g.Name = e.Guild.Name;
             g.MemberCount = e.Guild.MemberCount;
-            Mongo.Instance.InsertGuild(g).GetAwaiter().GetResult();
+            var foundGuild = Guild.GetGuild(e.Guild.Id).GetAwaiter().GetResult();
+            if (foundGuild == null)
+            {
+                Mongo.Instance.InsertGuild(g).GetAwaiter().GetResult();
+            }
+            else
+            {
+                Mongo.Instance.UpdateGuild(g).GetAwaiter().GetResult();
+            }
+            
             
             return Task.CompletedTask;
         }
