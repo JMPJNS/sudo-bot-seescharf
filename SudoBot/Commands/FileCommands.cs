@@ -36,7 +36,7 @@ namespace SudoBot.Commands
 
                 await File.WriteAllBytesAsync(path, img);
 
-                await ctx.Channel.SendMessageAsync($"https://files.jmp.blue/d/{ctx.Message.Id.ToString()}{fileExtension}");
+                await ctx.Channel.SendMessageAsync($"https://cdn.jmp.blue/files/d/{ctx.Message.Id.ToString()}{fileExtension}");
             }
             catch (Exception e)
             {
