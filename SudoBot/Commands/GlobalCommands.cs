@@ -22,7 +22,7 @@ namespace SudoBot.Commands
 	[Description("Den Bot auf top.gg voten")]
 	public async Task Vote(CommandContext ctx)
 	{
-		await ctx.Channel.SendMessageAsync("https://top.gg/bot/705548602994458684")
+		await ctx.Channel.SendMessageAsync("https://top.gg/bot/705548602994458684");
 	}
         
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
