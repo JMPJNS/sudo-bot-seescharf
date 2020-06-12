@@ -17,6 +17,13 @@ namespace SudoBot.Commands
             await ctx.Channel.SendMessageAsync(
                 "https://discord.com/oauth2/authorize?client_id=705548602994458684&scope=bot&permissions=1544023122");
         }
+
+	[Command("vote")]
+	[Description("Den Bot auf top.gg voten")]
+	public async Task Vote(CommandContext ctx)
+	{
+		await ctx.Channel.SendMessageAsync("https://top.gg/bot/705548602994458684")
+	}
         
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         [Description("Schreibe eine Nachricht als Bot user in den aktuellen Channel")]
