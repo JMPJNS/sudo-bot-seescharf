@@ -17,11 +17,13 @@ namespace SudoBot.Commands
 
         [Command("test")]
         [CheckForPermissions(SudoPermission.Any, GuildPermission.TestCommands)]
-        [Cooldown(1, 20, CooldownBucketType.User)]
         [Description("test")]
         public async Task Test(CommandContext ctx)
         {
-            await ctx.Channel.SendMessageAsync("asdf");
+            var user = ctx.Client.CurrentUser;
+            var member = await ctx.Guild.GetMemberAsync(user.Id);
+
+            await ctx.Channel.SendMessageAsync(member.Nickname);
         }
 
         // [Command("RemoveAllNotVerified")]

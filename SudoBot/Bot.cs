@@ -100,8 +100,8 @@ namespace SudoBot
             {
                 e.Context.Channel.SendMessageAsync($"Command nicht Gefunden");
             }
-
-            if (e.Command.Name == "list")
+            
+            else if (e.Command.Name == "list")
             {
                 if (e.Exception.Message == "Value cannot be null. (Parameter 'source')")
                 {
@@ -110,12 +110,12 @@ namespace SudoBot
             }
 
 
-            if (e.Exception.Message == "NO LOG CHANNEL")
+            else if (e.Exception.Message == "NO LOG CHANNEL")
             {
                 e.Context.Channel.SendMessageAsync("Es ist ein fehler aufgetreten, allerdings konnte dieser nicht gemeldet werden da kein Error Log channel festgelegt wurde, bitte lege einen mit `$admin set-log-channel #channel` fest");
             }
             
-            if (e.Exception.Message == "No matching subcommands were found, and this group is not executable.")
+            else if (e.Exception.Message == "No matching subcommands were found, and this group is not executable.")
             {
                 e.Context.Channel.SendMessageAsync("Dies ist eine Command Gruppe, bitte einen Subcommand Spezifizieren").GetAwaiter().GetResult();
                 var commandName = e.Command.Name;
@@ -127,7 +127,7 @@ namespace SudoBot
                 help.ExecuteAsync(helpContext);
             }
 
-            if (e.Exception.Message == "Could not find a suitable overload for the command.")
+            else if (e.Exception.Message == "Could not find a suitable overload for the command.")
             {
                 e.Context.Channel.SendMessageAsync("Invalide Argumente").GetAwaiter().GetResult();
                 var commandName = e.Command.Name;
@@ -139,17 +139,9 @@ namespace SudoBot
                 help.ExecuteAsync(helpContext);
             }
 
-            // if (e.Exception.Message == "One or more pre-execution checks failed." &&
-            //     e.Exception.Source == "DSharpPlus.CommandsNext")
-            // {
-            //     var sentMessage = e.Context.Channel.SendMessageAsync("Fehler Bei der Command Ausführung, Keine Berechtigung oder zurzeit im Cooldown, bitte warten vor der nächsten Ausführung.").GetAwaiter().GetResult();
-            //     Task.Run(() =>
-            //     {
-            //         Task.Delay(5000).GetAwaiter().GetResult();
-            //         sentMessage.DeleteAsync();
-            //         e.Context.Message.DeleteAsync();
-            //     });
-            // }
+            else {
+                e.Context.Channel.SendMessageAsync($"{e.Exception.Message}\n\nWenn dies ein unbekannter Fehler ist bitte auf den `$guild` Discord kommen und JMP#7777 kontaktieren.").GetAwaiter().GetResult();
+            }
 
             return Task.CompletedTask;
             }

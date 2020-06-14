@@ -9,7 +9,7 @@ namespace SudoBot.Commands
 {
     public class GlobalCommands : BaseCommandModule
     {
-      
+
         [Command("invite")]
         [Description("Invite Link um den Bot einzuladen (kann jeder verwenden)")]
         public async Task Invite(CommandContext ctx)
@@ -18,23 +18,31 @@ namespace SudoBot.Commands
                 "https://discord.com/oauth2/authorize?client_id=705548602994458684&scope=bot&permissions=1544023122");
         }
 
-	[Command("vote")]
-	[Description("Den Bot auf top.gg voten")]
-	public async Task Vote(CommandContext ctx)
-	{
-		await ctx.Channel.SendMessageAsync("https://top.gg/bot/705548602994458684");
-	}
-        
+        [Command("vote")]
+        [Description("Den Bot auf top.gg voten")]
+        public async Task Vote(CommandContext ctx)
+        {
+            await ctx.Channel.SendMessageAsync("https://top.gg/bot/705548602994458684");
+        }
+
+        [Command("guild")]
+        [Description("Invite link zum Sudo Discord")]
+        public async Task Guild(CommandContext ctx)
+        {
+            await ctx.Channel.SendMessageAsync("https://discord.gg/gHV2uhb");
+        }
+
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         [Description("Schreibe eine Nachricht als Bot user in den aktuellen Channel")]
         [Command("say")]
-        public async Task Say(CommandContext ctx, [Description("Die Nachricht")]params string[] words)
+        public async Task Say(CommandContext ctx, [Description("Die Nachricht")] params string[] words)
         {
-            await ctx.Channel.SendMessageAsync(string.Join(" ",words));
+            await ctx.Channel.SendMessageAsync(string.Join(" ", words));
             await ctx.Message.DeleteAsync();
         }
 
-        [Description("Der Developer des Bots")] [Command("developer"), Aliases("dev")]
+        [Description("Der Developer des Bots")]
+        [Command("developer"), Aliases("dev")]
         public async Task Developer(CommandContext ctx, params string[] nix)
         {
             var me = await ctx.Client.GetUserAsync(Globals.MyId);
@@ -43,7 +51,7 @@ namespace SudoBot.Commands
                 .WithThumbnailUrl(me.AvatarUrl)
                 .WithTitle("Entwickler des Bots")
                 .WithDescription($"{me.Username}#{me.Discriminator}");
-            await ctx.Channel.SendMessageAsync(embed:embed.Build());
+            await ctx.Channel.SendMessageAsync(embed: embed.Build());
         }
 
         [Description("Say in guild / channel")]
@@ -54,8 +62,8 @@ namespace SudoBot.Commands
         {
             var g = await ctx.Client.GetGuildAsync(guild);
             var c = g.GetChannel(channel);
-            
-            await c.SendMessageAsync(string.Join(" ",words));
+
+            await c.SendMessageAsync(string.Join(" ", words));
         }
     }
 }
