@@ -29,7 +29,6 @@ namespace SudoBot.Commands
         }
 
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.CustomGames)]
-        [Cooldown(1, 240, CooldownBucketType.Guild)]
         [Description("Entferne alle aus der Custom Games Rolle (4 Minuten Cooldown)")]
         [Command("end")]
         public async Task RemoveAllCustomsRole(CommandContext ctx)
