@@ -32,6 +32,7 @@ namespace SudoBot.Database
                 _tags = _db.GetCollection<Tag>("Tags");
                 _guilds = _db.GetCollection<Guild>("Guilds");
                 _parserResults = _db.GetCollection<ParserResult>("ParserResults");
+                Console.WriteLine("Connected to Mongo");
             }
             catch (Exception e)
             {

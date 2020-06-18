@@ -98,7 +98,10 @@ namespace SudoBot
         {
             if (e.Exception.Message == "Specified command was not found.")
             {
-                e.Context.Channel.SendMessageAsync($"Command nicht Gefunden");
+                var sentMessage = e.Context.Channel.SendMessageAsync($"Command nicht Gefunden").GetAwaiter().GetResult();
+                Task.Delay(2000).GetAwaiter().GetResult();
+                sentMessage.DeleteAsync();
+
             }
             
             else if (e.Command.Name == "list")
@@ -142,6 +145,9 @@ namespace SudoBot
             else {
                 e.Context.Channel.SendMessageAsync($"{e.Exception.Message}\n\nWenn dies ein unbekannter Fehler ist bitte auf den `$guild` Discord kommen und JMP#7777 kontaktieren.").GetAwaiter().GetResult();
             }
+
+            Task.Delay(2000).GetAwaiter().GetResult();
+            e.Context.Message.DeleteAsync();
 
             return Task.CompletedTask;
             }
