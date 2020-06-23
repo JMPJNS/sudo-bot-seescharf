@@ -70,18 +70,17 @@ namespace SudoBot.Commands
 
                     try {
                         var member = await ctx.Guild.GetMemberAsync(user.Id);
+                        try {
+                            await channels[currentChannel].AddOverwriteAsync(member, DSharpPlus.Permissions.AccessChannels);
+                        } catch (Exception ec) {
+                            await ctx.Channel.SendMessageAsync($"Channel Not Found, {currentChannel}, All Channels {channels.ToString()} {channels.Count}");
+                            continue;
+                        }
                     } catch (Exception em) {
                         await ctx.Channel.SendMessageAsync($"Member Not Found, {user.Id} {user.Username}");
                         continue;
                     }
 
-                    try {
-                        await channels[currentChannel].AddOverwriteAsync(member, DSharpPlus.Permissions.AccessChannels);
-                    } catch (Exception ec) {
-                        await ctx.Channel.SendMessageAsync($"Channel Not Found, {currentChannel}, All Channels {channels.ToString()} {channels.Count}");
-                        continue;
-                    }
-                    
                     index++;
 
                 } catch (Exception e) {
