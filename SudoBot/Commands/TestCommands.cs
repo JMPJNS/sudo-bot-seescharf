@@ -42,16 +42,19 @@ namespace SudoBot.Commands
         {
             await ctx.RespondAsync("starting");
             DiscordEmoji emoji = DiscordEmoji.FromName(ctx.Client, ":raised_hand:");
+            await ctx.RespondAsync("got emoji");
             DiscordChannel mChannel = ctx.Guild.GetChannel(707341293717553183);
+            await ctx.RespondAsync("got channel");
             DiscordMessage message = await mChannel.GetMessageAsync(716658998153052240);
+            await ctx.RespondAsync("got message");
             int usersPerChannel = 100;
             int currentChannel = 0;
             int index = 0;
             var category = ctx.Guild.GetChannel(725097053335715890);
+            await ctx.RespondAsync("got category");
 
             List<DiscordChannel> channels = new List<DiscordChannel>();
 
-            await ctx.RespondAsync("got message");
 
             var allUsers = await message.GetReactionsAsync(emoji, 999);
 
