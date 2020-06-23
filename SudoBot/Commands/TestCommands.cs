@@ -55,8 +55,13 @@ namespace SudoBot.Commands
 
             await ctx.Channel.SendMessageAsync($"Sorting {allUsers.Count} members");
 
+            var delayTime = 2;
+
+            await ctx.RespondAsync($"wird vorraussichtlich ${(double)delayTime * allUsers.Count} sekunden dauern");
+
             foreach (var user in allUsers)
             {
+                await Task.Delay(delayTime*1000);
                 try {
                     if (index < usersPerChannel)
                     {
