@@ -40,37 +40,45 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         public async Task DivideChannels(CommandContext ctx)
         {
-            DiscordEmoji emoji = DiscordEmoji.FromName(ctx.Client, ":Tofu:");
-            DiscordMessage message = await ctx.Channel.GetMessageAsync(725085826660434030);
-            int usersPerChannel = 1;
-            int currentChannel = 0;
-            int index = 0;
-
-            List<DiscordChannel> channels = new List<DiscordChannel>();
-            
-            foreach (var user in await message.GetReactionsAsync(emoji))
+            try
             {
-                if (index < usersPerChannel) {
-                    if (index == 0) {
-                        var category = ctx.Guild.GetChannel(725088157414064169);
-                        var channel = await ctx.Guild.CreateTextChannelAsync($"Gruppe {currentChannel.ToString()}", category);
-                        channels.Add(channel);
+                await ctx.RespondAsync("starting");
+                DiscordEmoji emoji = DiscordEmoji.FromName(ctx.Client, ":raised_hand:");
+                DiscordChannel mChannel = ctx.Guild.GetChannel(707341293717553183);
+                DiscordMessage message = await mChannel.GetMessageAsync(716658998153052240);
+                int usersPerChannel = 1;
+                int currentChannel = 0;
+                int index = 0;
+
+                List<DiscordChannel> channels = new List<DiscordChannel>();
+
+                foreach (var user in await message.GetReactionsAsync(emoji))
+                {
+                    if (index < usersPerChannel)
+                    {
+                        if (index == 0)
+                        {
+                            var category = ctx.Guild.GetChannel(725097053335715890);
+                            var channel = await ctx.Guild.CreateTextChannelAsync($"Gruppe {currentChannel.ToString()}", category);
+                            channels.Add(channel);
+                        }
                     }
-                } else {
-                    index = 0;
-                    currentChannel += 1;
+                    else
+                    {
+                        index = 0;
+                        currentChannel += 1;
+                    }
+
+                    var member = await ctx.Guild.GetMemberAsync(user.Id);
+                    await channels[currentChannel].AddOverwriteAsync(member, DSharpPlus.Permissions.AccessChannels);
+                    index++;
+
                 }
 
-                var member = await ctx.Guild.GetMemberAsync(user.Id);
-
-                await channels[currentChannel].AddOverwriteAsync(member, DSharpPlus.Permissions.SendMessages);
-                await channels[currentChannel].AddOverwriteAsync(member, DSharpPlus.Permissions.ReadMessageHistory);
-                await channels[currentChannel].AddOverwriteAsync(member, DSharpPlus.Permissions.AccessChannels);
-                index++;               
-                
+                await ctx.RespondAsync("done");
+            } catch (Exception e) {
+                await ctx.Channel.SendMessageAsync(e.Message);
             }
-
-
         }
 
         [Command("leave-guild")]
@@ -81,7 +89,7 @@ namespace SudoBot.Commands
 
             await ctx.Channel.SendMessageAsync($"Do you want to Leave guild {guild.Name} with {guild.MemberCount.ToString()} Members? Send yes to confirm");
             var interactivity = ctx.Client.GetInteractivity();
-            var msg = interactivity.WaitForMessageAsync(m=> m.Author == ctx.Member && m.Content == "yes", TimeSpan.FromMinutes(1));
+            var msg = interactivity.WaitForMessageAsync(m => m.Author == ctx.Member && m.Content == "yes", TimeSpan.FromMinutes(1));
 
             if (msg != null)
             {
@@ -89,8 +97,8 @@ namespace SudoBot.Commands
                 await ctx.Channel.SendMessageAsync("Left Guild");
             }
         }
-        
-        
+
+
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.TestCommands)]
         [Command("e")]
         public async Task E(CommandContext ctx, DiscordChannel channel)
