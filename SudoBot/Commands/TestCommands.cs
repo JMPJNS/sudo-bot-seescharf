@@ -67,8 +67,14 @@ namespace SudoBot.Commands
                     {
                         if (index == 0)
                         {
-                            var channel = await ctx.Guild.CreateTextChannelAsync($"Gruppe {currentChannel.ToString()}", category);
-                            channels.Add(channel);
+                            try {
+                                var channel = await ctx.Guild.CreateTextChannelAsync($"Gruppe {currentChannel.ToString()}", category);
+                                channels.Add(channel);
+                            } catch (Exception ecr) {
+                                await ctx.RespondAsync("No Channel Create Permission");
+                                return;
+                            }
+                            
                         }
                     }
                     else
