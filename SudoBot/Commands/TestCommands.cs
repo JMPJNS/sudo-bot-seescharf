@@ -64,11 +64,11 @@ namespace SudoBot.Commands
 
             var delayTime = 2;
 
-            await ctx.RespondAsync($"wird vorraussichtlich ${(double)delayTime * allUsers.Count} sekunden dauern");
+            await ctx.RespondAsync($"wird vorraussichtlich {(double)delayTime * allUsers.Count} sekunden dauern");
 
             foreach (var user in allUsers)
             {
-                await Task.Delay(delayTime*1000);
+                await ctx.Channel.SendMessageAsync($"currChannel {currentChannel}, index {index}");
                 try {
                     if (index < usersPerChannel)
                     {
@@ -77,6 +77,7 @@ namespace SudoBot.Commands
                             try {
                                 var channel = await ctx.Guild.CreateTextChannelAsync($"Gruppe {currentChannel.ToString()}", category);
                                 channels.Add(channel);
+                                await Task.Delay(2000);
                             } catch (Exception ecr) {
                                 await ctx.RespondAsync("No Channel Create Permission");
                                 return;
@@ -95,7 +96,7 @@ namespace SudoBot.Commands
                         try {
                             await channels[currentChannel].AddOverwriteAsync(member, DSharpPlus.Permissions.AccessChannels);
                         } catch (Exception ec) {
-                            await ctx.Channel.SendMessageAsync($"Channel Not Found, {currentChannel}, All Channels {channels.ToString()} {channels.Count}");
+                            await ctx.Channel.SendMessageAsync($"Channel Not Found, {currentChannel}, All Channels");
                             continue;
                         }
                     } catch (Exception em) {
