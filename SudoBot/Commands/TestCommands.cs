@@ -51,7 +51,11 @@ namespace SudoBot.Commands
 
             List<DiscordChannel> channels = new List<DiscordChannel>();
 
-            foreach (var user in await message.GetReactionsAsync(emoji))
+            var allUsers = await message.GetReactionsAsync(emoji);
+
+            await ctx.Channel.SendMessageAsync($"Sorting {allUsers.Count} members");
+
+            foreach (var user in allUsers)
             {
                 try {
                     if (index < usersPerChannel)
@@ -93,6 +97,8 @@ namespace SudoBot.Commands
             }
 
             await ctx.RespondAsync("done");
+            await ctx.Channel.SendMessageAsync($"Index {index}");
+            await ctx.Channel.SendMessageAsync($"CurrChannel {currentChannel}");
         }
 
         [Command("leave-guild")]
