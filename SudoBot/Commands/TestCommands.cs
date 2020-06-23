@@ -47,6 +47,7 @@ namespace SudoBot.Commands
             int usersPerChannel = 100;
             int currentChannel = 0;
             int index = 0;
+            var category = ctx.Guild.GetChannel(725097053335715890);
 
             List<DiscordChannel> channels = new List<DiscordChannel>();
 
@@ -57,7 +58,6 @@ namespace SudoBot.Commands
                     {
                         if (index == 0)
                         {
-                            var category = ctx.Guild.GetChannel(725097053335715890);
                             var channel = await ctx.Guild.CreateTextChannelAsync($"Gruppe {currentChannel.ToString()}", category);
                             channels.Add(channel);
                         }
@@ -68,8 +68,20 @@ namespace SudoBot.Commands
                         currentChannel += 1;
                     }
 
-                    var member = await ctx.Guild.GetMemberAsync(user.Id);
-                    await channels[currentChannel].AddOverwriteAsync(member, DSharpPlus.Permissions.AccessChannels);
+                    try {
+                        var member = await ctx.Guild.GetMemberAsync(user.Id);
+                    } catch (Exception em) {
+                        await ctx.Channel.SendMessageAsync($"Member Not Found, {user.Id} {user.Username}");
+                        continue;
+                    }
+
+                    try {
+                        await channels[currentChannel].AddOverwriteAsync(member, DSharpPlus.Permissions.AccessChannels);
+                    } catch (Exception ec) {
+                        await ctx.Channel.SendMessageAsync($"Channel Not Found, {currentChannel}, All Channels {channels.ToString()} {channels.Count}");
+                        continue;
+                    }
+                    
                     index++;
 
                 } catch (Exception e) {
