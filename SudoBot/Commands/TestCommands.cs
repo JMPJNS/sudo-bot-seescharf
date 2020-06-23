@@ -40,20 +40,19 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         public async Task DivideChannels(CommandContext ctx)
         {
-            try
+            await ctx.RespondAsync("starting");
+            DiscordEmoji emoji = DiscordEmoji.FromName(ctx.Client, ":raised_hand:");
+            DiscordChannel mChannel = ctx.Guild.GetChannel(707341293717553183);
+            DiscordMessage message = await mChannel.GetMessageAsync(716658998153052240);
+            int usersPerChannel = 100;
+            int currentChannel = 0;
+            int index = 0;
+
+            List<DiscordChannel> channels = new List<DiscordChannel>();
+
+            foreach (var user in await message.GetReactionsAsync(emoji))
             {
-                await ctx.RespondAsync("starting");
-                DiscordEmoji emoji = DiscordEmoji.FromName(ctx.Client, ":raised_hand:");
-                DiscordChannel mChannel = ctx.Guild.GetChannel(707341293717553183);
-                DiscordMessage message = await mChannel.GetMessageAsync(716658998153052240);
-                int usersPerChannel = 1;
-                int currentChannel = 0;
-                int index = 0;
-
-                List<DiscordChannel> channels = new List<DiscordChannel>();
-
-                foreach (var user in await message.GetReactionsAsync(emoji))
-                {
+                try {
                     if (index < usersPerChannel)
                     {
                         if (index == 0)
@@ -73,12 +72,16 @@ namespace SudoBot.Commands
                     await channels[currentChannel].AddOverwriteAsync(member, DSharpPlus.Permissions.AccessChannels);
                     index++;
 
+                } catch (Exception e) {
+                    await ctx.Channel.SendMessageAsync($"Index {index}");
+                    await ctx.Channel.SendMessageAsync($"CurrChannel {currentChannel}");
+                    await ctx.Channel.SendMessageAsync(e.Message);
+                    return;
                 }
 
-                await ctx.RespondAsync("done");
-            } catch (Exception e) {
-                await ctx.Channel.SendMessageAsync(e.Message);
             }
+
+            await ctx.RespondAsync("done");
         }
 
         [Command("leave-guild")]
