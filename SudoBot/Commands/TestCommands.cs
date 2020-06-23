@@ -68,7 +68,7 @@ namespace SudoBot.Commands
 
             foreach (var user in allUsers)
             {
-                await ctx.Channel.SendMessageAsync($"currChannel {currentChannel}, index {index}");
+                await ctx.Channel.SendMessageAsync($"currChannel {currentChannel}, index {index}, member {user.Id} {user.Username}");
                 try {
                     if (index < usersPerChannel)
                     {
