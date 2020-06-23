@@ -51,7 +51,11 @@ namespace SudoBot.Commands
 
             List<DiscordChannel> channels = new List<DiscordChannel>();
 
+            await ctx.RespondAsync("got message");
+
             var allUsers = await message.GetReactionsAsync(emoji, 999);
+
+            await ctx.RespondAsync("got reactions");
 
             await ctx.Channel.SendMessageAsync($"Sorting {allUsers.Count} members");
 
