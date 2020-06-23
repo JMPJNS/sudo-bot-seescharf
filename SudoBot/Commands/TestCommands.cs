@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -35,22 +36,37 @@ namespace SudoBot.Commands
         //     await ctx.Channel.SendMessageAsync("done");
         // }
 
-        [Command("divide-channels")]
+        [Command("dc")]
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         public async Task DivideChannels(CommandContext ctx)
         {
-            ulong group;
-            DiscordChannel messageChannel = ctx.Guild.GetChannel(710985729655701577);
             DiscordEmoji emoji = DiscordEmoji.FromName(ctx.Client, ":Tofu:");
-            DiscordMessage message = await messageChannel.GetMessageAsync(716321439728402543);
+            DiscordMessage message = await ctx.Channel.GetMessageAsync(725085826660434030);
             int usersPerChannel = 1;
             int currentChannel = 0;
             int index = 0;
+
+            List<DiscordChannel> channels = new List<DiscordChannel>();
             
-            foreach (var member in await message.GetReactionsAsync(emoji))
+            foreach (var user in await message.GetReactionsAsync(emoji))
             {
-                if (index % usersPerChannel == 0) currentChannel += 1;
-                
+                if (index < usersPerChannel) {
+                    if (index == 0) {
+                        var category = ctx.Guild.GetChannel(725088157414064169);
+                        var channel = await ctx.Guild.CreateTextChannelAsync($"Gruppe {currentChannel.ToString()}", category);
+                        channels.Add(channel);
+                    }
+                } else {
+                    index = 0;
+                    currentChannel += 1;
+                }
+
+                var member = await ctx.Guild.GetMemberAsync(user.Id);
+
+                await channels[currentChannel].AddOverwriteAsync(member, DSharpPlus.Permissions.SendMessages);
+                await channels[currentChannel].AddOverwriteAsync(member, DSharpPlus.Permissions.ReadMessageHistory);
+                await channels[currentChannel].AddOverwriteAsync(member, DSharpPlus.Permissions.AccessChannels);
+                index++;               
                 
             }
 
