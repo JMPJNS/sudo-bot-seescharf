@@ -50,7 +50,7 @@ namespace SudoBot
             //Commands
             var commandsConfig = new CommandsNextConfiguration
             {
-                StringPrefixes = new []{"$", "sudo "},
+                StringPrefixes = new []{"$"},
                 EnableMentionPrefix = true,
                 EnableDms = false
             };
