@@ -91,6 +91,8 @@ namespace SudoBot
             Globals.Client = e.Client;
             Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Bot Started", DateTime.Now);
 
+            Globals.LogChannel.SendMessageAsync("Bot Started");
+
             return Task.CompletedTask;
         }
 
