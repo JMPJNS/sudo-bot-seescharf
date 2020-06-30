@@ -80,6 +80,7 @@ namespace SudoBot
             Commands.RegisterCommands<TagCommands>();
             Commands.RegisterCommands<ParserCommands>();
                         
+                        
             // Start Bot
             await Client.ConnectAsync();
             await Task.Delay(-1);
