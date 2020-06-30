@@ -49,75 +49,42 @@ namespace SudoBot.Commands
             await ctx.RespondAsync("got message");
             int usersPerChannel = 100;
             int currentChannel = 0;
-            int index = 0;
-            var category = ctx.Guild.GetChannel(725097053335715890);
             await ctx.RespondAsync("got category");
 
-            List<DiscordChannel> channels = new List<DiscordChannel>();
+            List<DiscordRole> roles = new List<DiscordRole>();
+            roles.Add(ctx.Guild.GetRole(726747279746269284));
+            roles.Add(ctx.Guild.GetRole(726747591605223464));
+            roles.Add(ctx.Guild.GetRole(726748035123642449));
+            roles.Add(ctx.Guild.GetRole(726748109211697203));
+            roles.Add(ctx.Guild.GetRole(726748492214829107));
+            roles.Add(ctx.Guild.GetRole(726748658128912424));
 
 
             var allUsers = await message.GetReactionsAsync(emoji, 999);
+            int numChannels = (allUsers.Count / usersPerChannel) + 1;
 
             await ctx.RespondAsync("got reactions");
 
             await ctx.Channel.SendMessageAsync($"Sorting {allUsers.Count} members");
 
             var delayTime = 2;
-
-            await ctx.RespondAsync($"wird vorraussichtlich {(double)delayTime * allUsers.Count} sekunden dauern");
-
-            foreach (var user in allUsers)
-            {
-                await ctx.Channel.SendMessageAsync($"currChannel {currentChannel}, index {index}, member {user.Id} {user.Username}");
-                try {
-                    if (index < usersPerChannel)
-                    {
-                        if (index == 0)
-                        {
-                            try {
-                                var channel = await ctx.Guild.CreateTextChannelAsync($"Gruppe {currentChannel.ToString()}", category);
-                                channels.Add(channel);
-                                await Task.Delay(2000);
-                            } catch (Exception ecr) {
-                                await ctx.RespondAsync("No Channel Create Permission");
-                                return;
-                            }
-                            
-                        }
-                    }
-                    else
-                    {
-                        index = 0;
-                        currentChannel += 1;
-                    }
-
-                    try {
-                        var member = await ctx.Guild.GetMemberAsync(user.Id);
+            try {
+                for (int c = 0; c < numChannels; c++) {
+                    for (int i = 0; i < usersPerChannel ; i++) {
                         try {
-                            await channels[currentChannel].AddOverwriteAsync(member, DSharpPlus.Permissions.AccessChannels);
-                        } catch (Exception ec) {
-                            await ctx.Channel.SendMessageAsync($"Channel Not Found, {currentChannel}, All Channels");
-                            continue;
+                            var member = await ctx.Guild.GetMemberAsync(allUsers[(c+1)*i].Id);
+                            await member.GrantRoleAsync(roles[c]);
+                            await ctx.RespondAsync($"#{(c+1)*i} - Gruppe {c} - {allUsers[(c+1)*i].Id} - {allUsers[(c+1)*i].Username}");
+                        } catch (Exception e) {
+                            await ctx.RespondAsync($" #{(c+1)*i} - {allUsers[(c+1)*i].Id} - {e.Message}");
                         }
-                    } catch (Exception em) {
-                        await ctx.Channel.SendMessageAsync($"Member Not Found, {user.Id} {user.Username}");
-                        continue;
                     }
-
-                    index++;
-
-                } catch (Exception e) {
-                    await ctx.Channel.SendMessageAsync($"Index {index}");
-                    await ctx.Channel.SendMessageAsync($"CurrChannel {currentChannel}");
-                    await ctx.Channel.SendMessageAsync(e.Message);
-                    return;
-                }
-
+                }      
+            } catch (Exception e) {
+                await ctx.RespondAsync(e.Message);
             }
 
             await ctx.RespondAsync("done");
-            await ctx.Channel.SendMessageAsync($"Index {index}");
-            await ctx.Channel.SendMessageAsync($"CurrChannel {currentChannel}");
         }
 
         [Command("leave-guild")]
