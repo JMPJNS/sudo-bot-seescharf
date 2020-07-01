@@ -32,6 +32,13 @@ namespace SudoBot.Commands
             await ctx.Channel.SendMessageAsync("https://discord.gg/gHV2uhb");
         }
 
+        [Command("guild-count")]
+        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
+        [Description("How many guilds the bot is in")]
+        public async Task GuildCount(CommandContext ctx) {
+            await ctx.RespondAsync(ctx.Client.Guilds.Count.ToString());
+        }
+
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         [Description("Schreibe eine Nachricht als Bot user in den aktuellen Channel")]
         [Command("say")]
