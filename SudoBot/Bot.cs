@@ -80,7 +80,7 @@ namespace SudoBot
             Commands.RegisterCommands<TagCommands>();
             Commands.RegisterCommands<ParserCommands>();
                         
-                        
+
             // Start Bot
             await Client.ConnectAsync();
             await Task.Delay(-1);
@@ -92,7 +92,11 @@ namespace SudoBot
             Globals.Client = e.Client;
             Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Bot Started", DateTime.Now);
 
-            Globals.LogChannel.SendMessageAsync("Bot Started");
+            Task.Run(() =>
+                {
+                    Task.Delay(10000).GetAwaiter().GetResult();
+                    Globals.LogChannel.SendMessageAsync("Bot Started");
+                });
 
             return Task.CompletedTask;
         }
