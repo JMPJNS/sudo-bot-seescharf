@@ -51,10 +51,10 @@ namespace SudoBot.Commands
             DiscordEmoji emoji = DiscordEmoji.FromName(ctx.Client, ":raised_hand:");
 
             var role = ctx.Guild.GetRole(728199057817862196);
-            await ctx.RespondAsync("got Role");
+            await ctx.RespondAsync($"got Role ({role.Mention})");
 
             var allMembers = await ctx.Guild.GetAllMembersAsync();
-            await ctx.RespondAsync("got all members");
+            await ctx.RespondAsync($"got all members ({allMembers.Count()})");
 
             var verifiedMembers = allMembers.Where(user => user.Roles.Contains(role));
             await ctx.RespondAsync("got verified members");
