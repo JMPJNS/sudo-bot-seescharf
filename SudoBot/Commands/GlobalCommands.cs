@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -16,6 +17,26 @@ namespace SudoBot.Commands
         {
             await ctx.Channel.SendMessageAsync(
                 "https://discord.com/oauth2/authorize?client_id=705548602994458684&scope=bot&permissions=1544023122");
+        }
+
+        [Command("embed")]
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
+        [Description("Erstelle einen Embed")]
+        public async Task CreateEmbed(CommandContext ctx, String name, params String[] content)
+        {
+            int index = ctx.RawArgumentString.IndexOf(ctx.RawArguments[1], StringComparison.Ordinal);
+            string cleanArgs = ctx.RawArgumentString.Remove(0, index);
+
+            if (cleanArgs.EndsWith('"'))
+            {
+                cleanArgs = cleanArgs.Remove(cleanArgs.Length - 1);
+            }
+
+            var embed = new DiscordEmbedBuilder()
+                .WithTitle(name)
+                .WithDescription(cleanArgs);
+
+            await ctx.Channel.SendMessageAsync(embed:embed.Build());
         }
 
         [Command("vote")]
