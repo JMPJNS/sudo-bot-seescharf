@@ -36,50 +36,77 @@ namespace SudoBot.Commands
         //     await ctx.Channel.SendMessageAsync("done");
         // }
 
+        [Command("create-role")]
+        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
+        public async Task CreateRole(CommandContext ctx) {
+            var r = await ctx.Guild.CreateRoleAsync($"G", 0);
+            await ctx.RespondAsync("done");
+        }
+
         [Command("dc")]
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         public async Task DivideChannels(CommandContext ctx)
         {
             await ctx.RespondAsync("starting");
             DiscordEmoji emoji = DiscordEmoji.FromName(ctx.Client, ":raised_hand:");
-            await ctx.RespondAsync("got emoji");
-            DiscordChannel mChannel = ctx.Guild.GetChannel(707341293717553183);
-            await ctx.RespondAsync("got channel");
-            DiscordMessage message = await mChannel.GetMessageAsync(716658998153052240);
-            await ctx.RespondAsync("got message");
-            int usersPerChannel = 100;
-            int currentChannel = 0;
-            await ctx.RespondAsync("got category");
+
+            var role = ctx.Guild.GetRole(728199057817862196);
+            await ctx.RespondAsync("got Role");
+
+            var allMembers = await ctx.Guild.GetAllMembersAsync();
+            await ctx.RespondAsync("got all members");
+
+            var verifiedMembers = allMembers.Where(user => user.Roles.Contains(role));
+            await ctx.RespondAsync("got verified members");
 
             List<DiscordRole> roles = new List<DiscordRole>();
-            roles.Add(ctx.Guild.GetRole(726747279746269284));
-            roles.Add(ctx.Guild.GetRole(726747591605223464));
-            roles.Add(ctx.Guild.GetRole(726748035123642449));
-            roles.Add(ctx.Guild.GetRole(726748109211697203));
-            roles.Add(ctx.Guild.GetRole(726748492214829107));
-            roles.Add(ctx.Guild.GetRole(726748658128912424));
 
+            double maxPerRole = 100;
 
-            var allUsers = await message.GetReactionsAsync(emoji, 999);
-            int numChannels = (allUsers.Count / usersPerChannel) + 1;
+            int roleCount = (int)Math.Ceiling(verifiedMembers.Count() / maxPerRole);
 
-            await ctx.RespondAsync("got reactions");
-
-            await ctx.Channel.SendMessageAsync($"Sorting {allUsers.Count} members");
-
-            var delayTime = 2;
             try {
-                for (int c = 0; c < numChannels; c++) {
-                    for (int i = 0; i < usersPerChannel ; i++) {
-                        try {
-                            var member = await ctx.Guild.GetMemberAsync(allUsers[(c+1)*i].Id);
-                            await member.GrantRoleAsync(roles[c]);
-                            await ctx.RespondAsync($"#{(c+1)*i} - Gruppe {c} - {allUsers[(c+1)*i].Id} - {allUsers[(c+1)*i].Username}");
-                        } catch (Exception e) {
-                            await ctx.RespondAsync($" #{(c+1)*i} - {allUsers[(c+1)*i].Id} - {e.Message}");
-                        }
+                for (int i = 1; i<=roleCount; i++) {
+                    var foundRole = ctx.Guild.Roles.FirstOrDefault(x => x.Value.Name == $"G{i}");
+
+                    if (foundRole.Value != null) {
+                        roles.Add(foundRole.Value);
+                    } else {
+                        var newRole = await ctx.Guild.CreateRoleAsync($"G{i}", 0);
+                        roles.Add(newRole);
                     }
-                }      
+                }
+            } catch (Exception e) {
+                await ctx.RespondAsync(e.Message);
+                return;
+            } 
+
+            await ctx.Channel.SendMessageAsync($"sorting {verifiedMembers.Count()} members into {roleCount} roles");
+
+            try {
+                int currentRole = 0;
+                int index = 0;
+                foreach(var member in verifiedMembers) {
+                    try {
+                        var alreadyRoles = member.Roles.Intersect(roles).ToArray();
+                        foreach(var r in alreadyRoles) {
+                            await member.RevokeRoleAsync(r);
+                        }
+
+                        await member.GrantRoleAsync(roles[currentRole]);
+
+                        await ctx.RespondAsync($"[{member.Mention}-{member.Id}] Gruppe {currentRole + 1}, Index {index}");
+
+                        index++;
+                        if (index == maxPerRole) {
+                            index = 0;
+                            currentRole++;
+                        }
+                    } catch (Exception e) {
+                        await ctx.RespondAsync($"{member.Mention} {member.Id} {e.Message}");
+                    }
+                    
+                }
             } catch (Exception e) {
                 await ctx.RespondAsync(e.Message);
             }
