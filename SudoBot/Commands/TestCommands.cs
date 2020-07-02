@@ -50,7 +50,7 @@ namespace SudoBot.Commands
             await ctx.RespondAsync("starting");
             DiscordEmoji emoji = DiscordEmoji.FromName(ctx.Client, ":raised_hand:");
 
-            var role = ctx.Guild.GetRole(728199057817862196);
+            var role = ctx.Guild.GetRole(707343944228405339);
             await ctx.RespondAsync($"got Role ({role.Mention})");
 
             var allMembers = await ctx.Guild.GetAllMembersAsync();
