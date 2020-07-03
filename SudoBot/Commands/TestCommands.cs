@@ -59,6 +59,9 @@ namespace SudoBot.Commands
             var verifiedMembers = allMembers.Where(user => user.Roles.Contains(role));
             await ctx.RespondAsync("got verified members");
 
+            var category = ctx.Guild.GetChannel(725097053335715890);
+            await ctx.RespondAsync("got category");
+
             List<DiscordRole> roles = new List<DiscordRole>();
 
             double maxPerRole = 100;
@@ -67,20 +70,32 @@ namespace SudoBot.Commands
 
             try {
                 for (int i = 1; i<=roleCount; i++) {
-                    var foundRole = ctx.Guild.Roles.FirstOrDefault(x => x.Value.Name == $"G{i}");
+                    var name = $"Turnier Gruppe{i}";
+                    var foundRole = ctx.Guild.Roles.FirstOrDefault(x => x.Value.Name == name);
 
                     if (foundRole.Value != null) {
-                        roles.Add(foundRole.Value);
-                    } else {
-                        var newRole = await ctx.Guild.CreateRoleAsync($"G{i}", 0);
-                        roles.Add(newRole);
+                        await foundRole.Value.DeleteAsync();
                     }
+
+                    var newRole = await ctx.Guild.CreateRoleAsync(name, 0);
+
+                    var foundChannel = ctx.Guild.Channels.FirstOrDefault(x=> x.Value.Name == name);
+
+                    if (foundChannel.Value != null) {
+                        await foundChannel.Value.AddOverwriteAsync(newRole, DSharpPlus.Permissions.AccessChannels);
+                    } else {
+                        var channel = await ctx.Guild.CreateTextChannelAsync(name, category);
+                        await channel.AddOverwriteAsync(newRole, DSharpPlus.Permissions.AccessChannels);
+                    }
+
+                    roles.Add(newRole);
                 }
             } catch (Exception e) {
                 await ctx.RespondAsync(e.Message);
                 return;
             } 
 
+            await ctx.RespondAsync("Channel/Rollen Eingestellt");
             await ctx.Channel.SendMessageAsync($"sorting {verifiedMembers.Count()} members into {roleCount} roles");
 
             try {
