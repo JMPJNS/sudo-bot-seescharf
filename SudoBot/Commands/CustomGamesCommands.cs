@@ -135,7 +135,7 @@ namespace SudoBot.Commands
                 emoji = DiscordEmoji.FromName(ctx.Client, ":white_check_mark:");
             }
             
-            var joinedUsers = await message.GetReactionsAsync(emoji);
+            var joinedUsers = await message.GetReactionsAsync(emoji, 9999);
             
             IList<DiscordUser> sUsers = new List<DiscordUser>();
 
