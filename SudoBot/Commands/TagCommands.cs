@@ -51,6 +51,54 @@ namespace SudoBot.Commands
 
             await ctx.Channel.SendMessageAsync($"Tag `{name}` erstellt.");
         }
+
+        [Command("edit")]
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
+        [Description("Bearbeite einen Tag")]
+        public async Task EditTag(CommandContext ctx, String name, params String[] content)
+        {
+            var tz = TimeZoneInfo.FindSystemTimeZoneById("Europe/Vienna");
+
+            var foundTag = await Tag.GetTag(name);
+
+            if (foundTag == null)
+            {
+                await ctx.Channel.SendMessageAsync($"Der Tag `{name}` existiert nicht.");
+                return;
+            }
+            
+            int index = ctx.RawArgumentString.IndexOf(ctx.RawArguments[1], StringComparison.Ordinal);
+            string cleanArgs = ctx.RawArgumentString.Remove(0, index);
+
+            if (cleanArgs.EndsWith('"'))
+            {
+                cleanArgs = cleanArgs.Remove(cleanArgs.Length - 1);
+            }
+
+            foundTag.Content = cleanArgs;
+
+            await foundTag.UpdateTag();
+
+            await ctx.Channel.SendMessageAsync($"Tag `{name}` bearbeitet.");
+        }
+
+        [Command("delete")]
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
+        [Description("Lösche einen Tag")]
+        public async Task DeleteTag(CommandContext ctx, String name)
+        {
+            var foundTag = await Tag.GetTag(name);
+
+            if (foundTag == null)
+            {                
+                await ctx.Channel.SendMessageAsync($"Tag `{name}` existiert nicht");
+                return;
+            }
+
+            await foundTag.DeleteTag();
+
+            await ctx.Channel.SendMessageAsync($"Tag {name} gelöscht");
+        }
         
 
         [GroupCommand]

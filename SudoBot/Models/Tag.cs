@@ -33,6 +33,11 @@ namespace SudoBot.Models
             await Mongo.Instance.InsertTag(this);
         }
 
+        public async Task DeleteTag()
+        {
+            await Mongo.Instance.DeleteTag(this);
+        }
+
         public static async Task<List<Tag>> FindSimilarTags(String name, TagType type = TagType.Guild)
         {
             return await Mongo.Instance.FindSimilarTags(name, type);
