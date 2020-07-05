@@ -74,7 +74,7 @@ namespace SudoBot.Commands
             await guild.SetCustoms(sentMessage.Id, ctx.Channel.Id, joinEmoji.Id);
 
             await sentMessage.CreateReactionAsync(joinEmoji);
-            await ctx.Channel.SendMessageAsync("Starten mit `$customs start {anzahl}`");
+            await ctx.Channel.SendMessageAsync("Starten mit `$customs start {anzahl} {tickets (true/false)}`");
         }
 
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]

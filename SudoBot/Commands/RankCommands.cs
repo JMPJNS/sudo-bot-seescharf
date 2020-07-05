@@ -14,7 +14,7 @@ using SudoBot.Handlers;
 
 namespace SudoBot.Commands
 {
-    [Group("rank"), Aliases("r")]
+    [Group("rank"), Aliases("r", "ranking")]
     [Description("Leveling System")]
     public class RankCommands: BaseCommandModule
     {
@@ -233,7 +233,7 @@ namespace SudoBot.Commands
                 if (roles == null || roles.Count == 0)
                 {
                     await ctx.Channel.SendMessageAsync(
-                        "Es wurden noch keine Rollen festgelegt, siehe `$help ranking setRole`");
+                        "Es wurden noch keine Rollen festgelegt, siehe `$help rank set-role`");
                     return;
                 }
 
