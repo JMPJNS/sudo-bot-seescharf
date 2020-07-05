@@ -53,7 +53,7 @@ namespace SudoBot.Commands
             string memberString = "";
 
             foreach (var member in membersInRole) {
-                memberString+=$"{member.Mention}, {member.Id}\n";
+                memberString+=$"{member.Username}#{member.Discriminator.ToString()}, {member.Id}\n";
             }
 
             var ita = ctx.Client.GetInteractivity();
