@@ -6,15 +6,20 @@ using System.Security;
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
 using System.Threading;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus.Interactivity;
 using DSharpPlus.Entities;
 using Newtonsoft.Json.Linq;
 using SudoBot.Attributes;
 using SudoBot.Models;
 using SudoBot.Handlers;
+using System.Linq;
+using SudoBot.Database;
+using SudoBot.Specifics;
 
 namespace SudoBot.Commands
 {
@@ -35,6 +40,26 @@ namespace SudoBot.Commands
             await Task.Delay(1000);
             await sentMessage.DeleteAsync();
 
+        }
+
+        [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
+        [Description("Liste alle nutzer mit einer Rolle auf")]
+        [Command("list-users-in-role"), Aliases("luir")]
+        public async Task ListUsersInRole(CommandContext ctx, DiscordRole role) {
+            var allMembers = await ctx.Guild.GetAllMembersAsync();
+            var membersInRole = allMembers.Where(user => user.Roles.Contains(role));
+
+            string memberString = "";
+
+            foreach (var member in membersInRole) {
+                memberString+=$"{member.Mention}, {member.Id}\n";
+            }
+
+            var ita = ctx.Client.GetInteractivity();
+
+            var pages = ita.GeneratePagesInEmbed(memberString, SplitType.Line);
+
+            await ita.SendPaginatedMessageAsync(ctx.Channel, ctx.User, pages, timeoutoverride: TimeSpan.FromMinutes(5));
         }
 
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]

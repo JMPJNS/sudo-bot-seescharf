@@ -70,7 +70,7 @@ namespace SudoBot.Commands
 
             try {
                 for (int i = 1; i<=roleCount; i++) {
-                    var name = $"Turnier Gruppe{i}";
+                    var name = $"turnier-gruppe-{i}";
                     var foundRole = ctx.Guild.Roles.FirstOrDefault(x => x.Value.Name == name);
 
                     if (foundRole.Value != null) {
