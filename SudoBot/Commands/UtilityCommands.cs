@@ -59,8 +59,7 @@ namespace SudoBot.Commands
             var ita = ctx.Client.GetInteractivity();
 
             var embedBase = new DiscordEmbedBuilder()
-                .WithTitle(role.Mention)
-                .WithDescription($"Count: {membersInRole.Count()}");
+                .WithTitle(role.Name + "; Anzahl: " + membersInRole.Count().ToString());
 
             var pages = ita.GeneratePagesInEmbed(memberString, SplitType.Line, embedBase);
 
