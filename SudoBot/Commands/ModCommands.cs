@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -48,6 +50,25 @@ namespace SudoBot.Commands
                 }
                 
             }
+        }
+
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
+        [Description("Mehrere Nachrichten eines members löschen")]
+        [Command("purge")]
+        public async Task Purge(CommandContext ctx, DiscordMember member, int count) {
+            var allMessages = await ctx.Channel.GetMessagesBeforeAsync(ctx.Message.Id);
+            var filtered = allMessages.Where(message => message.Author.Id == member.Id).ToList();
+
+            if (filtered.Count() < count) count = filtered.Count();
+
+            var deleteMessages = new List<DiscordMessage>();
+
+            for (int i = 0; i < count; i++) {
+                deleteMessages.Add(filtered[i]);
+            }
+
+            await ctx.Channel.DeleteMessagesAsync(deleteMessages);
+            await ctx.Message.DeleteAsync();
         }
         
     }
