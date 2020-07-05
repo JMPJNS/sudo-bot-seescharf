@@ -28,7 +28,7 @@ namespace SudoBot.Commands
             await ctx.Channel.SendMessageAsync("Die Rolle wurde gesetzt");
         }
 
-        [CheckForPermissions(SudoPermission.Mod, GuildPermission.CustomGames)]
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         [Description("Entferne alle aus der Custom Games Rolle (4 Minuten Cooldown)")]
         [Command("end")]
         public async Task RemoveAllCustomsRole(CommandContext ctx)
