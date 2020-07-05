@@ -46,6 +46,7 @@ namespace SudoBot.Commands
         [Description("Liste alle nutzer mit einer Rolle auf")]
         [Command("list-users-in-role"), Aliases("luir")]
         public async Task ListUsersInRole(CommandContext ctx, DiscordRole role) {
+            await ctx.RespondAsync("Wird einige sekunden dauern!");
             var allMembers = await ctx.Guild.GetAllMembersAsync();
             var membersInRole = allMembers.Where(user => user.Roles.Contains(role));
 
@@ -57,7 +58,11 @@ namespace SudoBot.Commands
 
             var ita = ctx.Client.GetInteractivity();
 
-            var pages = ita.GeneratePagesInEmbed(memberString, SplitType.Line);
+            var embedBase = new DiscordEmbedBuilder()
+                .WithTitle(role.Mention)
+                .WithDescription($"Count: {membersInRole.Count()}");
+
+            var pages = ita.GeneratePagesInEmbed(memberString, SplitType.Line, embedBase);
 
             await ita.SendPaginatedMessageAsync(ctx.Channel, ctx.User, pages, timeoutoverride: TimeSpan.FromMinutes(5));
         }
