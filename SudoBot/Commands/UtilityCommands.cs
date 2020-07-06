@@ -23,7 +23,7 @@ using SudoBot.Specifics;
 
 namespace SudoBot.Commands
 {
-    [Group("utility"), Aliases("u")]
+    [Group("utility"), Aliases("u"), Description("Diverse Funktionen")]
     public class UtilityCommands : BaseCommandModule
     {
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
@@ -40,6 +40,26 @@ namespace SudoBot.Commands
             await Task.Delay(1000);
             await sentMessage.DeleteAsync();
 
+        }
+
+        [Command("embed")]
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
+        [Description("Erstelle einen Embed")]
+        public async Task CreateEmbed(CommandContext ctx, String name, params String[] content)
+        {
+            int index = ctx.RawArgumentString.IndexOf(ctx.RawArguments[1], StringComparison.Ordinal);
+            string cleanArgs = ctx.RawArgumentString.Remove(0, index);
+
+            if (cleanArgs.EndsWith('"'))
+            {
+                cleanArgs = cleanArgs.Remove(cleanArgs.Length - 1);
+            }
+
+            var embed = new DiscordEmbedBuilder()
+                .WithTitle(name)
+                .WithDescription(cleanArgs);
+
+            await ctx.Channel.SendMessageAsync(embed:embed.Build());
         }
 
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]

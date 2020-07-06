@@ -19,26 +19,6 @@ namespace SudoBot.Commands
                 "https://discord.com/oauth2/authorize?client_id=705548602994458684&scope=bot&permissions=1544023122");
         }
 
-        [Command("embed")]
-        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
-        [Description("Erstelle einen Embed")]
-        public async Task CreateEmbed(CommandContext ctx, String name, params String[] content)
-        {
-            int index = ctx.RawArgumentString.IndexOf(ctx.RawArguments[1], StringComparison.Ordinal);
-            string cleanArgs = ctx.RawArgumentString.Remove(0, index);
-
-            if (cleanArgs.EndsWith('"'))
-            {
-                cleanArgs = cleanArgs.Remove(cleanArgs.Length - 1);
-            }
-
-            var embed = new DiscordEmbedBuilder()
-                .WithTitle(name)
-                .WithDescription(cleanArgs);
-
-            await ctx.Channel.SendMessageAsync(embed:embed.Build());
-        }
-
         [Command("vote")]
         [Description("Den Bot auf top.gg voten")]
         public async Task Vote(CommandContext ctx)
@@ -60,15 +40,6 @@ namespace SudoBot.Commands
             await ctx.RespondAsync(ctx.Client.Guilds.Count.ToString());
         }
 
-        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
-        [Description("Schreibe eine Nachricht als Bot user in den aktuellen Channel")]
-        [Command("say")]
-        public async Task Say(CommandContext ctx, [Description("Die Nachricht")] params string[] words)
-        {
-            await ctx.Channel.SendMessageAsync(string.Join(" ", words));
-            await ctx.Message.DeleteAsync();
-        }
-
         [Description("Der Developer des Bots")]
         [Command("developer"), Aliases("dev")]
         public async Task Developer(CommandContext ctx, params string[] nix)
@@ -83,7 +54,7 @@ namespace SudoBot.Commands
         }
 
         [Description("Say in guild / channel")]
-        [Command("sg")]
+        [Command("sg"), Hidden()]
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         public async Task sayGlobal(CommandContext ctx, ulong guild, ulong channel,
             params string[] words)

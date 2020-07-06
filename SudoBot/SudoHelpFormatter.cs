@@ -40,25 +40,48 @@ namespace SudoBot
                 Eb.AddField("Aliases", string.Join(", ", command.Aliases.Select(Formatter.InlineCode)));
 
             IReadOnlyList<CommandOverload> overloads = command.Overloads;
-            if (overloads != null && overloads.Count > 0)
-            {
-                StringBuilder stringBuilder = new StringBuilder();
-                foreach (CommandOverload commandOverload in command.Overloads.OrderByDescending(x => x.Priority))
-                {
-                    stringBuilder.Append('`').Append(command.QualifiedName);
-                    foreach (CommandArgument commandArgument in (IEnumerable<CommandArgument>)commandOverload.Arguments)
-                        stringBuilder.Append(commandArgument.IsOptional || commandArgument.IsCatchAll ? " [" : " <").Append(commandArgument.Name).Append(commandArgument.IsCatchAll ? "..." : "").Append(commandArgument.IsOptional || commandArgument.IsCatchAll ? ']' : '>');
-                    stringBuilder.Append("`\n");
-                    foreach (CommandArgument commandArgument in (IEnumerable<CommandArgument>)commandOverload.Arguments)
-                        stringBuilder.Append('`').Append(commandArgument.Name).Append(" (").Append(this.CommandsNext.GetUserFriendlyTypeName(commandArgument.Type)).Append(")`: ").Append(commandArgument.Description ?? "Keine Beschreibung vorhanden.").Append('\n');
-                    stringBuilder.Append('\n');
-                }
-                Eb.AddField("Arguments", stringBuilder.ToString().Trim(), false);
-            }
-
+            
             if (!(command is CommandGroup))
             {
-                Eb.AddField("Ausführung", $"`${command.Parent.Name} {command.Name}`");
+                var ausführungsString = "";
+                foreach (CommandOverload commandOverload in command.Overloads.OrderByDescending(x => x.Priority))
+                {
+                    var smallArgumentString = "";
+
+                    foreach( CommandArgument argument in commandOverload.Arguments) {
+                        smallArgumentString += $" <{argument.Name}>";
+                    }
+
+                    if (command.Parent == null) {
+                        ausführungsString =  $"`${command.Name}{smallArgumentString}`";
+                    } else {
+                        ausführungsString = $"`${command.Parent.Name} {command.Name}{smallArgumentString}`";
+                    }
+                }
+                Eb.AddField("Ausführung",ausführungsString);
+            }
+
+            if (overloads != null && overloads.Count > 0)
+            {
+                // StringBuilder stringBuilder = new StringBuilder();
+                var argumentsString = "";
+                foreach (CommandOverload commandOverload in command.Overloads.OrderByDescending(x => x.Priority))
+                {
+                    // stringBuilder.Append('`').Append(command.QualifiedName);
+                    // foreach (CommandArgument commandArgument in (IEnumerable<CommandArgument>)commandOverload.Arguments)
+                    //     stringBuilder.Append(commandArgument.IsOptional || commandArgument.IsCatchAll ? " [" : " <").Append(commandArgument.Name).Append(commandArgument.IsCatchAll ? "..." : "").Append(commandArgument.IsOptional || commandArgument.IsCatchAll ? ']' : '>');
+                    // stringBuilder.Append("`\n");
+
+                    // foreach (CommandArgument commandArgument in (IEnumerable<CommandArgument>)commandOverload.Arguments)
+                    //     stringBuilder.Append('`').Append(commandArgument.Name).Append(" (").Append(this.CommandsNext.GetUserFriendlyTypeName(commandArgument.Type)).Append(")`: ").Append(commandArgument.Description ?? "Keine Beschreibung vorhanden.").Append('\n');
+                    // stringBuilder.Append('\n');
+
+                    foreach( CommandArgument argument in commandOverload.Arguments) {
+                        argumentsString += $"`{argument.Name} ({this.CommandsNext.GetUserFriendlyTypeName(argument.Type)})` {argument.Description ?? "Keine Beschreibung vorhanden."}\n";
+                    }
+                }
+
+                Eb.AddField("Arguments", argumentsString, false);
             }
             
             return (BaseHelpFormatter)this;
@@ -66,7 +89,14 @@ namespace SudoBot
 
         public override BaseHelpFormatter WithSubcommands(IEnumerable<Command> subcommands)
         {
-            Eb.AddField(this.Command != (Command) null ? "Subcommands" : "Commands", string.Join(", ", subcommands.Select(x => Formatter.InlineCode(x.Name))));
+
+            var commandsString = "";
+
+            foreach(var command in subcommands) {
+                commandsString += $"**{command.Name}{((command is CommandGroup) ? " [Gruppe]" : "")}**\n{command.Description}\n\n";
+            }
+
+            Eb.AddField(this.Command != (Command) null ? "Subcommands" : "Commands", commandsString);
 
             if (this.Command != null)
                 Eb.AddField("Ausführung", $"`${this.Command.Name} [Subcommand]`");

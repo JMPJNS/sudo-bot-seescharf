@@ -18,7 +18,7 @@ namespace SudoBot.Commands
 
         [Command("test")]
         [CheckForPermissions(SudoPermission.Any, GuildPermission.TestCommands)]
-        [Description("test")]
+        [Description("test"), Hidden()]
         public async Task Test(CommandContext ctx)
         {
             var user = ctx.Client.CurrentUser;
@@ -36,14 +36,14 @@ namespace SudoBot.Commands
         //     await ctx.Channel.SendMessageAsync("done");
         // }
 
-        [Command("create-role")]
+        [Command("create-role"), Hidden()]
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         public async Task CreateRole(CommandContext ctx) {
             var r = await ctx.Guild.CreateRoleAsync($"G", 0);
             await ctx.RespondAsync("done");
         }
 
-        [Command("dc")]
+        [Command("dc"), Hidden()]
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         public async Task DivideChannels(CommandContext ctx)
         {
@@ -129,7 +129,7 @@ namespace SudoBot.Commands
             await ctx.RespondAsync("done");
         }
 
-        [Command("leave-guild")]
+        [Command("leave-guild"), Description("eine guild verlassen")]
         [CheckForPermissions(SudoPermission.Me, GuildPermission.TestCommands)]
         public async Task LeaveGuild(CommandContext ctx, ulong guildId)
         {
@@ -148,7 +148,7 @@ namespace SudoBot.Commands
 
 
         [CheckForPermissions(SudoPermission.Admin, GuildPermission.TestCommands)]
-        [Command("e")]
+        [Command("e"), Hidden()]
         public async Task E(CommandContext ctx, DiscordChannel channel)
         {
 

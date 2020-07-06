@@ -42,7 +42,7 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         [Description("Erstelle ein Custom Game")]
         [Command("create")]
-        public async Task CreateCustoms(CommandContext ctx, [Description("Titel der Custom Games")]string title, [Description("Eine Beschreibung dazu")]string message, [Description("Das Emote mit dem Reagiert werden soll")]DiscordEmoji tempJoinEmoji)
+        public async Task CreateCustoms(CommandContext ctx, [Description("Titel der Custom Games")]string title, [Description("Eine Beschreibung dazu")]string message, [Description("Das Emote mit dem Reagiert werden soll")]DiscordEmoji emoji)
         {
             var guild = await Guild.GetGuild(ctx.Guild.Id);
 
@@ -55,7 +55,7 @@ namespace SudoBot.Commands
             DiscordEmoji joinEmoji;
             try
             {
-                joinEmoji = DiscordEmoji.FromName(ctx.Client, $":{tempJoinEmoji.Name}:");
+                joinEmoji = DiscordEmoji.FromName(ctx.Client, $":{emoji.Name}:");
             }
             catch (Exception e)
             {
