@@ -53,7 +53,7 @@ namespace SudoBot.Commands
         }
 
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
-        [Description("Mehrere Nachrichten eines members löschen")]
+        [Description("Mehrere Nachrichten eines members löschen.")]
         [Command("purge")]
         public async Task Purge(CommandContext ctx, DiscordMember member, int count) {
             var allMessages = await ctx.Channel.GetMessagesBeforeAsync(ctx.Message.Id);
