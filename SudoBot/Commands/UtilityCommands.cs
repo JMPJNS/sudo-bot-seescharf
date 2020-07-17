@@ -123,13 +123,15 @@ namespace SudoBot.Commands
         {
             // W. Europe Standard Time
             var tz = Environment.OSVersion.Platform == PlatformID.Win32NT ? TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time") : TimeZoneInfo.FindSystemTimeZoneById("Europe/Vienna");
-            time = TimeZoneInfo.ConvertTimeFromUtc(time, tz);
-            var thenTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tz);
+            
+            var convertedTime = TimeZoneInfo.ConvertTimeFromUtc(time, tz);
+            var thenTime = DateTime.UtcNow;
+            
             var ts = time - thenTime;
 
             if (format == "um" || format == "in")
             {
-                await ctx.Channel.SendMessageAsync($"Ich werde dich am {time.Day}.{time.Month}.{time.Year} um {time.ToString("h:mm:ss", DateTimeFormatInfo.InvariantInfo)} erinnern");
+                await ctx.Channel.SendMessageAsync($"Ich werde dich am {convertedTime.Day}.{convertedTime.Month}.{convertedTime.Year} um {convertedTime.ToString("hh:mm:ss", DateTimeFormatInfo.InvariantInfo)} erinnern");
                 
                 var sched = new Scheduled(ScheduledType.Reminder, message, time.ToUniversalTime(), ctx.Guild.Id, ctx.Channel.Id, ctx.User.Id, ctx.Message.Id);
 
