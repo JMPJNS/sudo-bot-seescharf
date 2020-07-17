@@ -18,8 +18,7 @@ namespace SudoBot.Commands
         [Description("Erstelle einen Tag")]
         public async Task CreateTag(CommandContext ctx, String name, params String[] content)
         {
-            var tz = TimeZoneInfo.FindSystemTimeZoneById("Europe/Vienna");
-
+            var tz = Environment.OSVersion.Platform == PlatformID.Win32NT ? TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time") : TimeZoneInfo.FindSystemTimeZoneById("Europe/Vienna");
             var foundTag = await Tag.GetTag(name);
 
             if (foundTag != null)
@@ -57,7 +56,7 @@ namespace SudoBot.Commands
         [Description("Bearbeite einen Tag")]
         public async Task EditTag(CommandContext ctx, String name, params String[] content)
         {
-            var tz = TimeZoneInfo.FindSystemTimeZoneById("Europe/Vienna");
+            var tz = Environment.OSVersion.Platform == PlatformID.Win32NT ? TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time") : TimeZoneInfo.FindSystemTimeZoneById("Europe/Vienna");
 
             var foundTag = await Tag.GetTag(name);
 

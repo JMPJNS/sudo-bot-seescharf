@@ -20,6 +20,7 @@ namespace SudoBot.Database
         private IMongoCollection<User> _users;
         private IMongoCollection<Tag> _tags;
         private IMongoCollection<Guild> _guilds;
+        private IMongoCollection<Scheduled> _scheduled;
         private IMongoCollection<ParserResult> _parserResults;
         private Mongo()
         {
@@ -32,11 +33,51 @@ namespace SudoBot.Database
                 _tags = _db.GetCollection<Tag>("Tags");
                 _guilds = _db.GetCollection<Guild>("Guilds");
                 _parserResults = _db.GetCollection<ParserResult>("ParserResults");
+                _scheduled = _db.GetCollection<Scheduled>("Scheduled");
+                
                 Console.WriteLine("Connected to Mongo");
             }
             catch (Exception e)
             {
                 Globals.Logger.LogMessage(LogLevel.Error, "SudoBot", $"Exception occured While connecting to Database: {e.GetType()}: {e.Message}", DateTime.Now);
+            }
+        }
+        
+        // Scheduled Stuff
+        
+        public async Task<Scheduled> GetScheduled(MongoDB.Bson.ObjectId scheduledId)
+        {
+            try
+            {
+                return await _scheduled.FindAsync(scheduled => scheduled._id == scheduledId).Result.FirstAsync();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+        
+        public async Task InsertScheduled(Scheduled scheduled)
+        {
+            await _scheduled.InsertOneAsync(scheduled);
+        }
+        
+        public async Task UpdateScheduled(Scheduled scheduled)
+        {
+            await _scheduled.ReplaceOneAsync(
+                s => scheduled._id == s._id,
+                scheduled);
+        }
+
+        public async Task<List<Scheduled>> GetDueScheduled()
+        {
+            try
+            {
+                return await _scheduled.FindAsync(scheduled => scheduled.Active && scheduled.ScheduledOn < DateTime.Now).Result.ToListAsync();
+            }
+            catch (Exception e)
+            {
+                return null;
             }
         }
         

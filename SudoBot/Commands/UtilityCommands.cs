@@ -107,30 +107,39 @@ namespace SudoBot.Commands
 
         [Command("reminder")]
         [Description("Eine Erinnerung zu einem Bestimmten Zeitpunkt Erstellen erstellen")]
-        public async Task Reminder(CommandContext ctx, [Description("um")] string format , [Description("Zeitpunkt {beispiel: 12:00}")] DateTime time, [Description("Nachricht")] string message)
+        public async Task Reminder(CommandContext ctx, [Description("um")] string format , [Description("Zeitpunkt {beispiel: 12:00}")] DateTime time, [Description("Nachricht"), RemainingText] string message)
         {
-            await this.ReminderCommand(ctx, format, time.ToUniversalTime(), message);
+            await ReminderCommand(ctx, format, time.ToUniversalTime(), message);
         }
         
         [Command("reminder")]
         [Description("Eine Erinnerung in x (s/m/h/d) erstellen")]
-        public async Task Reminder(CommandContext ctx, [Description("in")] string format, [Description("Zeitspanne {beispiel: 12m}")] TimeSpan timespan, [Description("Nachricht")] string message)
+        public async Task Reminder(CommandContext ctx, [Description("in")] string format, [Description("Zeitspanne {beispiel: 12m}")] TimeSpan timespan, [Description("Nachricht"), RemainingText] string message)
         {
-            await this.ReminderCommand(ctx, format, DateTime.UtcNow + timespan, message);
+            await ReminderCommand(ctx, format, DateTime.UtcNow + timespan, message);
         }
 
-        private async Task ReminderCommand(CommandContext ctx, string format, DateTime time, string message)
+        public static async Task ReminderCommand(CommandContext ctx, string format, DateTime time, string message)
         {
-            var tz = TimeZoneInfo.FindSystemTimeZoneById("Europe/Vienna");
+            // W. Europe Standard Time
+            var tz = Environment.OSVersion.Platform == PlatformID.Win32NT ? TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time") : TimeZoneInfo.FindSystemTimeZoneById("Europe/Vienna");
             time = TimeZoneInfo.ConvertTimeFromUtc(time, tz);
             var thenTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tz);
             var ts = time - thenTime;
 
             if (format == "um" || format == "in")
             {
-                await ctx.Channel.SendMessageAsync($"Ich werde dich um {time.ToString("h:mm:ss", DateTimeFormatInfo.InvariantInfo)} erinnern");
-                await Task.Delay(ts);
-                await ctx.Channel.SendMessageAsync($"{ctx.User.Mention} [{thenTime.ToString("h:mm:ss", DateTimeFormatInfo.InvariantInfo)}], {message}");
+                await ctx.Channel.SendMessageAsync($"Ich werde dich am {time.Day}.{time.Month}.{time.Year} um {time.ToString("h:mm:ss", DateTimeFormatInfo.InvariantInfo)} erinnern");
+                
+                var sched = new Scheduled(ScheduledType.Reminder, message, time, ctx.Guild.Id, ctx.Channel.Id, ctx.User.Id, ctx.Message.Id);
+
+                if (ts < TimeSpan.FromMinutes(10))
+                {
+                    await Task.Delay(ts);
+                    await Scheduled.RunSchedulerOnce();
+                }
+                
+                // await ctx.Channel.SendMessageAsync($"{ctx.User.Mention} [{thenTime.ToString("h:mm:ss", DateTimeFormatInfo.InvariantInfo)}], {message}");
             } else
             {
                 await ctx.Channel.SendMessageAsync("Falsch Verwendet! $reminder {um/in} {uhrzeit/zeitspanne} {nachricht}");

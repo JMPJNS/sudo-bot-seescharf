@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Exceptions;
@@ -25,6 +26,8 @@ namespace SudoBot
         
         private MessageHandler _messageHandler = new MessageHandler();
         private MemberUpdateHandler _memberUpdateHandler = new MemberUpdateHandler();
+
+        public static Timer MinuteScheduler;
 
         public async Task RunAsync()
         {
@@ -82,10 +85,17 @@ namespace SudoBot
             Commands.RegisterCommands<TagCommands>();
             Commands.RegisterCommands<ParserCommands>();
                         
-
+            MinuteScheduler = new Timer(60*1000);
+            MinuteScheduler.Elapsed += OnMinuteEvent;
+            
             // Start Bot
             await Client.ConnectAsync();
             await Task.Delay(-1);
+        }
+
+        private static void OnMinuteEvent(object source, ElapsedEventArgs e)
+        {
+            Scheduled.RunSchedulerOnce().GetAwaiter().GetResult();
         }
 
         private Task OnClientReady(ReadyEventArgs e)
@@ -97,6 +107,8 @@ namespace SudoBot
             Task.Run(() =>
                 {
                     Task.Delay(10000).GetAwaiter().GetResult();
+                    MinuteScheduler.Start();
+                    
                     e.Client.UpdateStatusAsync(new DiscordActivity("$guild", ActivityType.ListeningTo));
                     Globals.LogChannel.SendMessageAsync("Bot Started");
                 });

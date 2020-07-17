@@ -55,6 +55,20 @@ namespace SudoBot.Commands
             await ctx.Client.UpdateStatusAsync(new DiscordActivity(status, ActivityType.ListeningTo));
         }
         
+        [Command("remind")]
+        [Description("Eine Erinnerung zu einem Bestimmten Zeitpunkt Erstellen erstellen")]
+        public async Task Reminder(CommandContext ctx, [Description("um")] string format , [Description("Zeitpunkt {beispiel: 12:00}")] DateTime time, [Description("Nachricht"), RemainingText] string message)
+        {
+            await UtilityCommands.ReminderCommand(ctx, format, time.ToUniversalTime(), message);
+        }
+        
+        [Command("remind")]
+        [Description("Eine Erinnerung in x (s/m/h/d) erstellen")]
+        public async Task Reminder(CommandContext ctx, [Description("in")] string format, [Description("Zeitspanne {beispiel: 12m}")] TimeSpan timespan, [Description("Nachricht"), RemainingText] string message)
+        {
+            await UtilityCommands.ReminderCommand(ctx, format, DateTime.UtcNow + timespan, message);
+        }
+        
         [Command("eval"), Description("Evaluates a snippet of C# code, in context."), RequireOwner]
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         public async Task Eval(CommandContext ctx, [RemainingText, Description("Code to evaluate.")] string code)
