@@ -131,7 +131,7 @@ namespace SudoBot.Commands
             {
                 await ctx.Channel.SendMessageAsync($"Ich werde dich am {time.Day}.{time.Month}.{time.Year} um {time.ToString("h:mm:ss", DateTimeFormatInfo.InvariantInfo)} erinnern");
                 
-                var sched = new Scheduled(ScheduledType.Reminder, message, time, ctx.Guild.Id, ctx.Channel.Id, ctx.User.Id, ctx.Message.Id);
+                var sched = new Scheduled(ScheduledType.Reminder, message, time.ToUniversalTime(), ctx.Guild.Id, ctx.Channel.Id, ctx.User.Id, ctx.Message.Id);
 
                 if (ts < TimeSpan.FromMinutes(10))
                 {

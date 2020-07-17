@@ -117,11 +117,16 @@ namespace SudoBot.Models
                         var time = TimeZoneInfo.ConvertTimeFromUtc(stuff.InsertDate, tz);
 
                         // Prevent Escape to ping people
+                        if (stuff.Message == null)
+                            stuff.Message = "";
                         var message = stuff.Message.Replace("```", "'''");
                         var minutes = time.Minute < 10 ? $"0{time.Minute}" : time.Minute.ToString();
+                        var sendMessage = message != "" ? $" ```{message}```" : "";
+
+                        var messageLink = $"https://discord.com/channels/{stuff.GuildId}/{stuff.ChannelId}/{stuff.MessageId}";
                         
                         await channel.SendMessageAsync(
-                            $"{member.Mention} am `{time.Day}.{time.Month}.{time.Year} {time.Hour}:{minutes}` ```{message}```");
+                            $"{member.Mention} am `{time.Day}.{time.Month}.{time.Year} {time.Hour}:{minutes}` {messageLink}" +sendMessage);
                         stuff.Active = false;
                     }
                 }

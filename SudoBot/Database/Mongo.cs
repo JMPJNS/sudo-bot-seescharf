@@ -73,7 +73,7 @@ namespace SudoBot.Database
         {
             try
             {
-                return await _scheduled.FindAsync(scheduled => scheduled.Active && scheduled.ScheduledOn < DateTime.Now).Result.ToListAsync();
+                return await _scheduled.FindAsync(scheduled => scheduled.Active && scheduled.ScheduledOn < DateTime.UtcNow).Result.ToListAsync();
             }
             catch (Exception e)
             {
