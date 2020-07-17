@@ -63,7 +63,7 @@ namespace SudoBot.Commands
             await ctx.Channel.SendMessageAsync(embed: embed.Build());
         }
 
-        [Command("covid19")]
+        [Command("covid19"), Hidden]
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         public async Task Covid19(CommandContext ctx, string country)
         {
@@ -76,7 +76,7 @@ namespace SudoBot.Commands
                 StreamReader reader = new StreamReader(data);
                 var ninfo = await reader.ReadToEndAsync();
                 var json = JsonConvert.DeserializeObject<List<CovidData>>(ninfo);
-
+            
                 if (json == null)
                 {
                     await ctx.RespondAsync($"{country} nicht gefunden.");

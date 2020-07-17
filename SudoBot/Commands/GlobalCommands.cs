@@ -48,8 +48,15 @@ namespace SudoBot.Commands
             await ctx.RespondAsync(ctx.Client.Guilds.Count.ToString());
         }
 
+        [Command("set-status"), Description("Set Bot Status"), RequireOwner]
+        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
+        public async Task SetStatus(CommandContext ctx, string status)
+        {
+            await ctx.Client.UpdateStatusAsync(new DiscordActivity(status, ActivityType.ListeningTo));
+        }
+        
         [Command("eval"), Description("Evaluates a snippet of C# code, in context."), RequireOwner]
-        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any), Hidden]
+        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         public async Task Eval(CommandContext ctx, [RemainingText, Description("Code to evaluate.")] string code)
         {
             var cs1 = code.IndexOf("```") + 3;
