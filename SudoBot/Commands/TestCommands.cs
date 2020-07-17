@@ -21,6 +21,7 @@ namespace SudoBot.Commands
         [Description("test"), Hidden()]
         public async Task Test(CommandContext ctx)
         {
+            
             var user = ctx.Client.CurrentUser;
             var member = await ctx.Guild.GetMemberAsync(user.Id);
 

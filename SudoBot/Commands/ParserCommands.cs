@@ -67,7 +67,7 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         public async Task Covid19(CommandContext ctx, string country)
         {
-            var url = $"https://api.covid19api.com//live/country/{country}";
+            var url = $"https://api.covid19api.com/live/country/{country}";
             
             var request = await WebRequest.Create(url).GetResponseAsync();
 
@@ -76,7 +76,7 @@ namespace SudoBot.Commands
                 StreamReader reader = new StreamReader(data);
                 var ninfo = await reader.ReadToEndAsync();
                 var json = JsonConvert.DeserializeObject<List<CovidData>>(ninfo);
-                
+
                 if (json == null)
                 {
                     await ctx.RespondAsync($"{country} nicht gefunden.");
