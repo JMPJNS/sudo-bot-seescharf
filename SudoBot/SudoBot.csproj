@@ -12,9 +12,16 @@
       <PackageReference Include="DSharpPlus.Interactivity" Version="4.0.0-nightly-00697" />
       <PackageReference Include="Fizzler.Systems.HtmlAgilityPack" Version="1.2.1" />
       <PackageReference Include="HtmlAgilityPack" Version="1.11.24" />
+      <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.7.0-4.final" />
       <PackageReference Include="MongoDB.Driver" Version="2.10.4" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
       <PackageReference Include="ScrapySharp" Version="3.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\TODO.md">
+        <Link>TODO.md</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

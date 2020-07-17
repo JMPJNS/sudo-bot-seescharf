@@ -20,6 +20,7 @@ namespace SudoBot.Commands
     {
         [Command("hytale")]
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
+        [Cooldown(1, 20, CooldownBucketType.User)]
         public async Task ParseHytale(CommandContext ctx)
         {
             var hp = new HytaleParser();

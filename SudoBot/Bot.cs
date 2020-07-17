@@ -4,10 +4,12 @@ using System.Text;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
+using DSharpPlus.CommandsNext.Exceptions;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using DSharpPlus.Interactivity;
 using Newtonsoft.Json;
+using SudoBot.Attributes;
 using SudoBot.Commands;
 using SudoBot.Database;
 using SudoBot.Models;
@@ -136,6 +138,23 @@ namespace SudoBot
                 
                 help.ExecuteAsync(helpContext);
             }
+            
+            else if (e.Exception is ChecksFailedException)
+            {
+                var exception = (ChecksFailedException) e.Exception;
+                var failed = exception.FailedChecks;
+                foreach (var f in failed)
+                {
+                    if (f is CheckForPermissionsAttribute)
+                    {
+                        e.Context.RespondAsync("Keine Berechtigung diesen command zu verwenden!");
+                    }
+                    else
+                    {
+                        e.Context.RespondAsync($"Exception: ```{e.Exception.Message}``` Check: ```{f.TypeId}```Wenn dies ein unbekannter Fehler ist bitte auf den `$guild` Discord kommen und JMP#7777 kontaktieren."); 
+                    }
+                }
+            }
 
             else if (e.Exception.Message == "Could not find a suitable overload for the command.")
             {
@@ -150,7 +169,7 @@ namespace SudoBot
             }
 
             else {
-                e.Context.Channel.SendMessageAsync($"{e.Exception.Message}\n\nWenn dies ein unbekannter Fehler ist bitte auf den `$guild` Discord kommen und JMP#7777 kontaktieren.").GetAwaiter().GetResult();
+                e.Context.Channel.SendMessageAsync($"```{e.Exception.Message}```Wenn dies ein unbekannter Fehler ist bitte auf den `$guild` Discord kommen und JMP#7777 kontaktieren.").GetAwaiter().GetResult();
             }
 
             Task.Delay(2000).GetAwaiter().GetResult();
