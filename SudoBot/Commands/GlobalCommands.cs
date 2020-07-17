@@ -75,7 +75,7 @@ namespace SudoBot.Commands
             var globals = new EvaluationEnvironment(ctx);
             var sopts = ScriptOptions.Default
                 .WithImports("System", "System.Collections.Generic", "System.Diagnostics", "System.Linq", "System.Net.Http", "System.Net.Http.Headers", "System.Reflection", "System.Text", 
-                             "System.Threading.Tasks", "DSharpPlus", "DSharpPlus.CommandsNext", "DSharpPlus.Entities", "DSharpPlus.EventArgs", "DSharpPlus.Exceptions", "SudoBot.Models", "SudoBot.Database", "SudoBot.Parser")
+                             "System.Threading.Tasks", "Fizzler.Systems.HtmlAgilityPack", "HtmlAgilityPack", "DSharpPlus", "DSharpPlus.CommandsNext", "DSharpPlus.Entities", "DSharpPlus.EventArgs", "DSharpPlus.Exceptions", "SudoBot.Models", "SudoBot.Database", "SudoBot.Parser")
                 .WithReferences(AppDomain.CurrentDomain.GetAssemblies().Where(xa => !xa.IsDynamic && !string.IsNullOrWhiteSpace(xa.Location)));
             
             var sw1 = Stopwatch.StartNew();
