@@ -148,6 +148,9 @@ namespace SudoBot
                     if (f is CheckForPermissionsAttribute)
                     {
                         e.Context.RespondAsync("Keine Berechtigung diesen command zu verwenden!");
+                    } else if (f is DSharpPlus.CommandsNext.Attributes.RequireOwnerAttribute)
+                    {
+                        e.Context.RespondAsync("Nix Da!");
                     }
                     else
                     {
