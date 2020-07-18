@@ -95,7 +95,7 @@ namespace SudoBot.Parser
                     await currentMessage.DeleteAsync();
                 }
                 
-                await message.ModifyAsync($"Sending Video {splitCount * splitLength} seconds, split {curr} / {splitCount} {url}");
+                await message.ModifyAsync($"Sending Video {splitCount * splitLength} seconds, split {curr+1} / {splitCount} {url}");
                 
                 await Task.Delay(splitLength * 1000);
             }
