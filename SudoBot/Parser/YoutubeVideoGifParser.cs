@@ -152,6 +152,8 @@ namespace SudoBot.Parser
         private async Task<string> RunCommand(string cmd, int waitTime = 1000)
         {
             var escapedArgs = cmd.Replace("\"", "\\\"");
+            
+            Console.Write($"Executing Command: /bin/sh -c \"{escapedArgs}\"");
 
             bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
 
