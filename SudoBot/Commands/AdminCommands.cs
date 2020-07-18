@@ -46,7 +46,7 @@ namespace SudoBot.Commands
         }
         
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
-        [Command("execute-command"), Description("Execute Shell Command")]
+        [Command("execute-command"), Description("Execute Shell Command"), RequireOwner]
         [Aliases("exec")]
         public async Task ExecuteShellCommand(CommandContext ctx, [RemainingText]string command)
         {
