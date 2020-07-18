@@ -26,9 +26,10 @@ namespace SudoBot.Attributes
             var guildConfig = Guild.GetGuild(ctx.Guild.Id).GetAwaiter().GetResult();
             var user = User.GetOrCreateUser(ctx.Member).GetAwaiter().GetResult();
 
+            if (ctx.Member.Id == Globals.MyId) return Task.FromResult(true);
+            
             if (user.Permissions.Contains(UserPermissions.Blocked)) return Task.FromResult(false);
             
-            if (ctx.Member.Id == Globals.MyId) return Task.FromResult(true);
 
             if (guildConfig == null)
             {

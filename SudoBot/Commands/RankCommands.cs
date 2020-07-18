@@ -227,8 +227,6 @@ namespace SudoBot.Commands
         {
             try
             {
-
-
                 var guild = await Guild.GetGuild(ctx.Guild.Id);
                 var roles = guild.RankingRoles.OrderBy(x => x.Points).ToList();
 

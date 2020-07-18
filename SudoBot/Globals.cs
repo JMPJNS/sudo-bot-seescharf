@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.Entities;
 using SudoBot.Models;
+using SudoBot.Parser;
 
 namespace SudoBot
 {
@@ -13,8 +17,30 @@ namespace SudoBot
         public static DebugLogger Logger;
         public static DiscordClient Client;
         public static ulong MyId = 272809112851578881;
-        
+        public static string CdnKey;
         public static readonly List<Guild> GuildCache = new List<Guild>();
+
+        public static List<YoutubeVideoGifParser> YoutubeVideoGifParsers = new List<YoutubeVideoGifParser>();
+
+        public static async Task<string> UploadToCdn(string filename, string contentType, Stream file)
+        {
+            HttpContent content = new StreamContent(file);
+            content.Headers.Add("Content-Type", contentType);
+            var client = new HttpClient();
+            var formData = new MultipartFormDataContent();
+            formData.Add(content, filename, filename);
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri("https://cdn.jmp.blue"),
+                Method = HttpMethod.Post,
+                Content = formData
+            };
+            request.Headers.Add("x-api-key", CdnKey);
+
+            var response = await client.SendAsync(request);
+            var resUrl = await response.Content.ReadAsStringAsync();
+            return resUrl;
+        }
         
         public static DiscordChannel LogChannel
         {
