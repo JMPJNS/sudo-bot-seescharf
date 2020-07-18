@@ -64,6 +64,7 @@ namespace SudoBot
                 }
             };
             process.Start();
+            int tries = 0;
             string outputError = "";
             string output = "";
             while (!process.HasExited)
@@ -78,6 +79,11 @@ namespace SudoBot
                 
                 // Console.WriteLine($"Output: {current}, Error: {currentError}");
                 await Task.Delay(waitTime);
+                tries += 1;
+                if (tries > 60)
+                {
+                    return "command ran into timeout after 60 seconds";
+                }
             }
             
             
