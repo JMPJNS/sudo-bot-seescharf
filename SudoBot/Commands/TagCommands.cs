@@ -101,6 +101,7 @@ namespace SudoBot.Commands
         
 
         [GroupCommand]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         [Description("Finde einen Tag")]
         public async Task GetTag(CommandContext ctx, String name)
         {

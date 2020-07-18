@@ -100,7 +100,7 @@ namespace SudoBot.Models
             await Mongo.Instance.UpdateScheduled(this);
         }
 
-        public static async Task RunSchedulerOnce()
+        public static async Task RunSchedule()
         {
             var scheduled = await Mongo.Instance.GetDueScheduled();
             foreach (var stuff in scheduled)
@@ -128,6 +128,11 @@ namespace SudoBot.Models
                         await channel.SendMessageAsync(
                             $"{member.Mention} am `{time.Day}.{time.Month}.{time.Year} {time.Hour}:{minutes}` {messageLink}" +sendMessage);
                         stuff.Active = false;
+                    } 
+                    else if (stuff.Type == ScheduledType.GameUpdates)
+                    {
+                        var guild = await Globals.Client.GetGuildAsync(stuff.GuildId);
+                        var channel = guild.GetChannel(stuff.ChannelId);
                     }
                 }
                 catch (Exception e)

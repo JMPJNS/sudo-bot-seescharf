@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 using MongoDB.Bson;
@@ -23,6 +25,8 @@ namespace SudoBot.Models
         public ulong GuildId { private set; get; }
 
         public bool Blocked { private set; get; }
+        
+        public List<UserPermissions> Permissions { get; private set; }
         
         public DateTime LastUpdated { private set; get; }
 
@@ -53,6 +57,22 @@ namespace SudoBot.Models
 
         }
 
+        public async Task RemovePermission(UserPermissions perm)
+        {
+            Permissions.Remove(perm);
+            await SaveUser();
+        }
+
+        public async Task AddPermission(UserPermissions perm)
+        {
+            var found = Permissions.Contains(perm);
+
+            if (found) return;
+            
+            Permissions.Add(perm);
+            await SaveUser();
+        }
+        
         public async Task RemoveTicket()
         {
             TicketsRemaining--;
@@ -233,6 +253,8 @@ namespace SudoBot.Models
             {
                 user.UserName ??= member.Username;
                 user.Discriminator ??= member.Discriminator;
+                user.Permissions ??= new List<UserPermissions>();
+                
                 return user;
             }
 
@@ -272,6 +294,8 @@ namespace SudoBot.Models
             CountedMessages = countedMessages;
             SpecialPoints = specialPoints;
 
+            Permissions = new List<UserPermissions>();
+            
             LastUpdated = DateTime.UtcNow;
             TicketsRemaining = 1;
         }

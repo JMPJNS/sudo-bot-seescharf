@@ -2,6 +2,7 @@
 {
     public enum ScheduledType
     {
-        Reminder
+        Reminder,
+        GameUpdates
     }
 }

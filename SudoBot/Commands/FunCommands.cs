@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
+using SudoBot.Attributes;
 
 namespace SudoBot.Commands
 {
@@ -12,18 +13,21 @@ namespace SudoBot.Commands
     public class FunCommands : BaseCommandModule
     {
         [Command("add"), Description("Addiert 2 Zahlen"), Cooldown(5, 10, CooldownBucketType.User)]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         public async Task Add(CommandContext ctx, int uno, int due)
         {
             var message = await ctx.Channel.SendMessageAsync(uno.ToString() + "+" + due.ToString() + "=" + (uno+due).ToString());
         }
         
         [Command("subtract"), Description("Subtrahiert 2 Zahlen"), Cooldown(5, 10, CooldownBucketType.User)]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         public async Task Subtract(CommandContext ctx, int uno, int due)
         {
             var message = await ctx.Channel.SendMessageAsync(uno.ToString() + "-" + due.ToString() + "=" + (uno-due).ToString());
         }
 
         [Command("number"), Cooldown(3, 30, CooldownBucketType.Channel)]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         [Description("Gibt Information über eine Zahl")]
         public async Task Number(CommandContext ctx, int number)
         {
@@ -43,12 +47,14 @@ namespace SudoBot.Commands
         }
         
         [Command("multiply"), Description("Multipliziert 2 Zahlen"), Cooldown(5, 10, CooldownBucketType.User)]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         public async Task Multiply(CommandContext ctx, int uno, int due)
         {
             var message = await ctx.Channel.SendMessageAsync(uno.ToString() + "*" + due.ToString() + "=" + (uno*due).ToString());
         }
         
         [Command("divide"), Description("Dividiert 2 Zahlen"), Cooldown(5, 10, CooldownBucketType.User)]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         public async Task Divide(CommandContext ctx, int uno, int due)
         {
             var message = await ctx.Channel.SendMessageAsync(uno.ToString() + "/" + due.ToString() + "=" + ((float)uno/(float)due).ToString());

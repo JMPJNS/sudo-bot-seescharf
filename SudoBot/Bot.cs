@@ -28,6 +28,9 @@ namespace SudoBot
         private MemberUpdateHandler _memberUpdateHandler = new MemberUpdateHandler();
 
         public static Timer MinuteScheduler;
+        public static Timer HourScheduler;
+        public static Timer SixHourScheduler;
+        public static Timer DayScheduler;
 
         public async Task RunAsync()
         {
@@ -88,6 +91,15 @@ namespace SudoBot
             MinuteScheduler = new Timer(60*1000);
             MinuteScheduler.Elapsed += OnMinuteEvent;
             
+            HourScheduler = new Timer(60*60*1000);
+            HourScheduler.Elapsed += OnHourEvent;
+            
+            SixHourScheduler = new Timer(6*60*60*1000);
+            SixHourScheduler.Elapsed += OnSixHourEvent;
+            
+            DayScheduler = new Timer(24*60*60*1000);
+            DayScheduler.Elapsed += OnDayEvent;
+            
             // Start Bot
             await Client.ConnectAsync();
             await Task.Delay(-1);
@@ -95,7 +107,22 @@ namespace SudoBot
 
         private static void OnMinuteEvent(object source, ElapsedEventArgs e)
         {
-            Scheduled.RunSchedulerOnce().GetAwaiter().GetResult();
+            Scheduled.RunSchedule().GetAwaiter().GetResult();
+        }
+        
+        private static void OnHourEvent(object source, ElapsedEventArgs e)
+        {
+            Scheduled.RunSchedule().GetAwaiter().GetResult();
+        }
+        
+        private static void OnSixHourEvent(object source, ElapsedEventArgs e)
+        {
+            Scheduled.RunSchedule().GetAwaiter().GetResult();
+        }
+        
+        private static void OnDayEvent(object source, ElapsedEventArgs e)
+        {
+            Scheduled.RunSchedule().GetAwaiter().GetResult();
         }
 
         private Task OnClientReady(ReadyEventArgs e)

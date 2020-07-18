@@ -97,6 +97,7 @@ namespace SudoBot.Commands
         }
         
         [Command("ping")]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         [Description("Der Ping vom Bot zur Discord API")]
         public async Task Ping(CommandContext ctx)
         {
@@ -106,6 +107,7 @@ namespace SudoBot.Commands
         // Reminder Stuff
 
         [Command("reminder")]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         [Description("Eine Erinnerung zu einem Bestimmten Zeitpunkt Erstellen erstellen")]
         public async Task Reminder(CommandContext ctx, [Description("um")] string format , [Description("Zeitpunkt {beispiel: 12:00}")] DateTime time, [Description("Nachricht"), RemainingText] string message)
         {
@@ -113,6 +115,7 @@ namespace SudoBot.Commands
         }
         
         [Command("reminder")]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         [Description("Eine Erinnerung in x (s/m/h/d) erstellen")]
         public async Task Reminder(CommandContext ctx, [Description("in")] string format, [Description("Zeitspanne {beispiel: 12m}")] TimeSpan timespan, [Description("Nachricht"), RemainingText] string message)
         {
@@ -138,7 +141,7 @@ namespace SudoBot.Commands
                 if (ts < TimeSpan.FromMinutes(10))
                 {
                     await Task.Delay(ts);
-                    await Scheduled.RunSchedulerOnce();
+                    await Scheduled.RunSchedule();
                 }
                 
                 // await ctx.Channel.SendMessageAsync($"{ctx.User.Mention} [{thenTime.ToString("h:mm:ss", DateTimeFormatInfo.InvariantInfo)}], {message}");
@@ -150,6 +153,7 @@ namespace SudoBot.Commands
         }
 
         [Command("google")]
+        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         [Description("Suche etwas im Internet")]
         [Hidden]
         public async Task Google(CommandContext ctx, params String[] begriff)
@@ -173,6 +177,7 @@ namespace SudoBot.Commands
         
         // Info Commands
         [Command("member-info"), Aliases("userInfo")]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         [Description("Information über einen Member")]
         public async Task MemberInfo(CommandContext ctx, [Description("Der Member (optional)")]DiscordMember member = null)
         {

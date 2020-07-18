@@ -20,6 +20,7 @@ namespace SudoBot.Commands
     {
 
         [Command("invite")]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         [Description("Invite Link um den Bot einzuladen (kann jeder verwenden)")]
         public async Task Invite(CommandContext ctx)
         {
@@ -28,6 +29,7 @@ namespace SudoBot.Commands
         }
 
         [Command("vote")]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         [Description("Den Bot auf top.gg voten")]
         public async Task Vote(CommandContext ctx)
         {
@@ -35,6 +37,7 @@ namespace SudoBot.Commands
         }
 
         [Command("guild")]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         [Description("Invite link zum Sudo Discord")]
         public async Task Guild(CommandContext ctx)
         {
@@ -56,6 +59,7 @@ namespace SudoBot.Commands
         }
         
         [Command("remind")]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         [Description("Eine Erinnerung zu einem Bestimmten Zeitpunkt Erstellen erstellen")]
         public async Task Reminder(CommandContext ctx, [Description("um")] string format , [Description("Zeitpunkt {beispiel: 12:00}")] DateTime time, [Description("Nachricht"), RemainingText] string message)
         {
@@ -63,6 +67,7 @@ namespace SudoBot.Commands
         }
         
         [Command("remind")]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         [Description("Eine Erinnerung in x (s/m/h/d) erstellen")]
         public async Task Reminder(CommandContext ctx, [Description("in")] string format, [Description("Zeitspanne {beispiel: 12m}")] TimeSpan timespan, [Description("Nachricht"), RemainingText] string message)
         {
@@ -169,6 +174,7 @@ namespace SudoBot.Commands
         }
 
         [Description("Der Developer des Bots")]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         [Command("developer"), Aliases("dev")]
         public async Task Developer(CommandContext ctx, params string[] nix)
         {
@@ -182,6 +188,7 @@ namespace SudoBot.Commands
         }
 
         [Description("Say in guild / channel")]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         [Command("sg"), Hidden()]
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         public async Task sayGlobal(CommandContext ctx, ulong guild, ulong channel,

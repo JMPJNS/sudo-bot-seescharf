@@ -81,6 +81,7 @@ namespace SudoBot.Commands
         }
 
         [Command("leaderboard")]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         [Description("Das Globale Leaderboard anzeigen.")]
         public async Task Leaderboard(CommandContext ctx)
         {
@@ -91,6 +92,7 @@ namespace SudoBot.Commands
             await SendLeaderboard(ctx, lb, user);
         }
         [Command("leaderboard")]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         [Description("Das Leaderboard anzeigen.")]
         public async Task LeaderboardOther(CommandContext ctx, DiscordMember member = null)
         {
