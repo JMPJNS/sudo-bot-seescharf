@@ -9,6 +9,8 @@ using SudoBot.Parser;
 
 namespace SudoBot.Commands
 {
+    [Group("stream"), Aliases("s")]
+    [Description("Commands für Gif Streaming")]
     public class StreamCommands: BaseCommandModule
     {
         // get length with youtube-dl

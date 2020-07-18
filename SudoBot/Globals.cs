@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -40,6 +41,55 @@ namespace SudoBot
             var response = await client.SendAsync(request);
             var resUrl = await response.Content.ReadAsStringAsync();
             return resUrl;
+        }
+        
+        public static async Task<string> RunCommand(string cmd, int waitTime = 1000)
+        {
+            var escapedArgs = cmd.Replace("\"", "\\\"");
+            
+            Console.Write($"Executing Command: /bin/sh -c \"{escapedArgs}\"");
+
+            bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
+
+            var process = new Process()
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    FileName = isWindows ? "powershell.exe" : "/bin/sh",
+                    Arguments = isWindows ? $"\"{escapedArgs}\"" : $"-c \"{escapedArgs}\"",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = false
+                }
+            };
+            process.Start();
+            string outputError = "";
+            string output = "";
+            while (!process.HasExited)
+            {
+                // Console.WriteLine($"Delaying, Command: {cmd}");
+                
+                var currentError = await process.StandardError.ReadToEndAsync();
+                var current = await process.StandardOutput.ReadToEndAsync();
+                
+                output += current;
+                outputError += currentError;
+                
+                // Console.WriteLine($"Output: {current}, Error: {currentError}");
+                await Task.Delay(waitTime);
+            }
+            
+            
+            
+            output += await process.StandardOutput.ReadToEndAsync();
+            outputError += await process.StandardError.ReadToEndAsync();
+
+            if (output == "" && outputError != "")
+            {
+                return outputError;
+            }
+            return output;
         }
         
         public static DiscordChannel LogChannel

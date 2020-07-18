@@ -44,6 +44,15 @@ namespace SudoBot.Commands
             var perms = string.Join("\n", Enum.GetNames(typeof(GuildPermission)));
             await ctx.Channel.SendMessageAsync(perms);
         }
+        
+        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
+        [Command("execute-command"), Description("Execute Shell Command")]
+        [Aliases("exec")]
+        public async Task ExecuteShellCommand(CommandContext ctx, [RemainingText]string command)
+        {
+            var res = await Globals.RunCommand(command);
+            await ctx.RespondAsync(res);
+        }
 
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         [Command("block-user")]

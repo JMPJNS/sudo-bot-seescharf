@@ -21,7 +21,7 @@ namespace SudoBot.Parser
         {
             InitiatedBy = ctx.User.Id;
             video ??= "https://www.youtube.com/watch?v=07d2dXHYb94";
-            var res = await RunCommand($"youtube-dl --get-duration {video}");
+            var res = await Globals.RunCommand($"youtube-dl --get-duration {video}");
 
             await ctx.RespondAsync($"length: {res}");
 
@@ -121,7 +121,7 @@ namespace SudoBot.Parser
                 cmd +=
                     $"-vf \"fps=10,scale=320:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -loop 0 {filePath}";
 
-                var res = await RunCommand(cmd);
+                var res = await Globals.RunCommand(cmd);
                 
                 var file = File.Open(filePath, FileMode.Open);
 
@@ -147,55 +147,6 @@ namespace SudoBot.Parser
 
             Directory.CreateDirectory(path);
             return path;
-        }
-        
-        private async Task<string> RunCommand(string cmd, int waitTime = 1000)
-        {
-            var escapedArgs = cmd.Replace("\"", "\\\"");
-            
-            Console.Write($"Executing Command: /bin/sh -c \"{escapedArgs}\"");
-
-            bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
-
-            var process = new Process()
-            {
-                StartInfo = new ProcessStartInfo()
-                {
-                    FileName = isWindows ? "powershell.exe" : "/bin/sh",
-                    Arguments = isWindows ? $"\"{escapedArgs}\"" : $"-c \"{escapedArgs}\"",
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = false
-                }
-            };
-            process.Start();
-            string outputError = "";
-            string output = "";
-            while (!process.HasExited)
-            {
-                // Console.WriteLine($"Delaying, Command: {cmd}");
-                
-                var currentError = await process.StandardError.ReadToEndAsync();
-                var current = await process.StandardOutput.ReadToEndAsync();
-                
-                output += current;
-                outputError += currentError;
-                
-                // Console.WriteLine($"Output: {current}, Error: {currentError}");
-                await Task.Delay(waitTime);
-            }
-            
-            
-            
-            output += await process.StandardOutput.ReadToEndAsync();
-            outputError += await process.StandardError.ReadToEndAsync();
-
-            if (output == "" && outputError != "")
-            {
-                return outputError;
-            }
-            return output;
         }
     }
 }
