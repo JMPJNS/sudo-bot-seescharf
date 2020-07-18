@@ -23,6 +23,8 @@ namespace SudoBot.Parser
             video ??= "https://www.youtube.com/watch?v=07d2dXHYb94";
             var res = await RunCommand($"youtube-dl --get-duration {video}");
 
+            await ctx.RespondAsync($"length: {res}");
+
             var splitLength = 15;
 
             var times = res.Replace("\n", "").Trim().Split(":").Reverse().ToArray();
