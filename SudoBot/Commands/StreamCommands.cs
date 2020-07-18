@@ -40,6 +40,7 @@ namespace SudoBot.Commands
                 if (found != null)
                 {
                     found.Active = false;
+                    Globals.YoutubeVideoGifParsers.Remove(found);
                     await ctx.RespondAsync($"Stopped 1 streams");
                     return;
                 }
@@ -50,6 +51,7 @@ namespace SudoBot.Commands
                 foreach (var parser in Globals.YoutubeVideoGifParsers)
                 {
                     parser.Active = false;
+                    Globals.YoutubeVideoGifParsers.Remove(parser);
                     sCount++;
                 }
 
