@@ -63,10 +63,8 @@ namespace SudoBot.Commands
         [Description("Eine Erinnerung zu einem Bestimmten Zeitpunkt Erstellen erstellen")]
         public async Task Reminder(CommandContext ctx, [Description("um")] string format , [Description("Zeitpunkt {beispiel: 12:00}")] DateTime time, [Description("Nachricht"), RemainingText] string message)
         {
-            var dif = DateTime.UtcNow - DateTime.Now;
-            time = time.AddHours(dif.Hours);
-            
-            await UtilityCommands.ReminderCommand(ctx, format, time, message);
+            var timespan = time - DateTime.Now;
+            await UtilityCommands.ReminderCommand(ctx, format, DateTime.UtcNow + timespan, message);
         }
         
         [Command("remind")]
