@@ -134,6 +134,12 @@ namespace SudoBot.Commands
 
             if (format == "um" || format == "in")
             {
+                if (ts.TotalMilliseconds < 0)
+                {
+                    await ctx.RespondAsync("Zeitpunkt kann nicht in der Vergangenheit liegen");
+                    return;
+                }
+                
                 await ctx.Channel.SendMessageAsync($"Ich werde dich am {convertedTime.Day}.{convertedTime.Month}.{convertedTime.Year} um {convertedTime.ToString("hh:mm:ss", DateTimeFormatInfo.InvariantInfo)} erinnern, timezone: {tz.DisplayName}");
                 
                 var sched = new Scheduled(new List<ScheduledType> {ScheduledType.Reminder, ScheduledType.Minute}, message, time.ToUniversalTime(), ctx.Guild.Id, ctx.Channel.Id, ctx.User.Id, ctx.Message.Id);
