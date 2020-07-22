@@ -138,7 +138,7 @@ namespace SudoBot.Commands
                 
                 var sched = new Scheduled(new List<ScheduledType> {ScheduledType.Reminder, ScheduledType.Minute}, message, time.ToUniversalTime(), ctx.Guild.Id, ctx.Channel.Id, ctx.User.Id, ctx.Message.Id);
 
-                if (ts < TimeSpan.FromMinutes(0.05))
+                if (ts < TimeSpan.FromMinutes(10))
                 {
                     await Task.Delay(ts);
                     await Scheduled.RunSchedule(ScheduledType.Minute);
