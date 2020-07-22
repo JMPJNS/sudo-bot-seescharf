@@ -92,7 +92,9 @@ namespace SudoBot.Commands
         public async Task MakeBig(CommandContext ctx, [Description("Das Emoji zu vergrößern")]DiscordEmoji e)
         {
             var embed = new DiscordEmbedBuilder()
-                .WithImageUrl(e.Url);
+                .WithImageUrl(e.Url)
+                .WithTitle(e.Name)
+                .WithUrl(e.Url);
             await ctx.Channel.SendMessageAsync(embed: embed.Build());
         }
         

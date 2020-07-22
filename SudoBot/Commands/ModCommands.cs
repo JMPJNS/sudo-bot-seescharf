@@ -52,6 +52,8 @@ namespace SudoBot.Commands
             }
         }
 
+        //TODO blacklisted words, channel basiert
+        
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         [Description("Mehrere Nachrichten eines members löschen.")]
         [Command("purge")]
