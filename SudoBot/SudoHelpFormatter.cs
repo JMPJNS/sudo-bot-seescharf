@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
+using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.CommandsNext.Converters;
 using DSharpPlus.CommandsNext.Entities;
 using DSharpPlus.Entities;
@@ -37,7 +38,7 @@ namespace SudoBot
 
             IReadOnlyList<string> aliases = command.Aliases;
             if (aliases != null && aliases.Count > 0)
-                Eb.AddField("Aliases", string.Join(", ", command.Aliases.Select(Formatter.InlineCode)));
+                Eb.AddField("- Aliases", string.Join(", ", command.Aliases.Select(Formatter.InlineCode)));
 
             IReadOnlyList<CommandOverload> overloads = command.Overloads;
             
@@ -58,30 +59,63 @@ namespace SudoBot
                         ausführungsString = $"`${command.Parent.Name} {command.Name}{smallArgumentString}`";
                     }
                 }
-                Eb.AddField("Ausführung",ausführungsString);
+                Eb.AddField("- Ausführung",ausführungsString);
+            }
+
+            if (command.ExecutionChecks.Count > 0)
+            {
+                foreach (var check in command.ExecutionChecks)
+                {
+                    if (check is CooldownAttribute cd)
+                    {
+                        var reset = cd.Reset;
+                        string remaining = "";
+                        if (reset.Days > 0)
+                        {
+                            remaining += $"{reset.Days} Tage ";
+                        }
+                        if (reset.Hours > 0)
+                        {
+                            remaining += $"{reset.Hours} Stunden ";
+                        }
+                        if (reset.Minutes > 0)
+                        {
+                            remaining += $"{reset.Minutes} Minuten ";
+                        }
+                        if (reset.Seconds > 0)
+                        {
+                            remaining += $"{reset.Seconds} Sekunden ";
+                        }
+
+                        Eb.AddField("- Cooldown", remaining);
+                    }
+                }
             }
 
             if (overloads != null && overloads.Count > 0)
             {
                 // StringBuilder stringBuilder = new StringBuilder();
                 var argumentsString = "";
+                int counter = 1;
                 foreach (CommandOverload commandOverload in command.Overloads.OrderByDescending(x => x.Priority))
                 {
-                    // stringBuilder.Append('`').Append(command.QualifiedName);
-                    // foreach (CommandArgument commandArgument in (IEnumerable<CommandArgument>)commandOverload.Arguments)
-                    //     stringBuilder.Append(commandArgument.IsOptional || commandArgument.IsCatchAll ? " [" : " <").Append(commandArgument.Name).Append(commandArgument.IsCatchAll ? "..." : "").Append(commandArgument.IsOptional || commandArgument.IsCatchAll ? ']' : '>');
-                    // stringBuilder.Append("`\n");
-
-                    // foreach (CommandArgument commandArgument in (IEnumerable<CommandArgument>)commandOverload.Arguments)
-                    //     stringBuilder.Append('`').Append(commandArgument.Name).Append(" (").Append(this.CommandsNext.GetUserFriendlyTypeName(commandArgument.Type)).Append(")`: ").Append(commandArgument.Description ?? "Keine Beschreibung vorhanden.").Append('\n');
-                    // stringBuilder.Append('\n');
-
+                    if (command.Overloads.Count > 1 && counter == 1)
+                    {
+                        argumentsString += $"1. \n";
+                    }
+                    
+                    if (counter > 1)
+                    {
+                        argumentsString += $"\n{counter}. \n";
+                    }
                     foreach( CommandArgument argument in commandOverload.Arguments) {
                         argumentsString += $"`{argument.Name} ({this.CommandsNext.GetUserFriendlyTypeName(argument.Type)})` {argument.Description ?? "Keine Beschreibung vorhanden."}\n";
                     }
+
+                    counter++;
                 }
 
-                Eb.AddField("Arguments", argumentsString, false);
+                if (argumentsString.Length > 0) Eb.AddField("- Arguments", argumentsString, false);
             }
             
             return (BaseHelpFormatter)this;
@@ -93,13 +127,16 @@ namespace SudoBot
             var commandsString = "";
 
             foreach(var command in subcommands) {
-                commandsString += $"**{command.Name}{((command is CommandGroup) ? " [Gruppe]" : "")}**\n{command.Description}\n\n";
+                if (command.Description != null)
+                    commandsString += $"**{command.Name}{((command is CommandGroup) ? " [Gruppe]" : "")}**\n{command.Description}\n\n";
+                else
+                    commandsString += $"**{command.Name}{((command is CommandGroup) ? " [Gruppe]" : "")}**\n\n";
             }
 
-            Eb.AddField(this.Command != (Command) null ? "Subcommands" : "Commands", commandsString);
+            Eb.AddField(this.Command != (Command) null ? "- Subcommands" : "- Commands", commandsString);
 
             if (this.Command != null)
-                Eb.AddField("Ausführung", $"`${this.Command.Name} [Subcommand]`");
+                Eb.AddField("- Ausführung", $"`${this.Command.Name} [Subcommand]`");
             
             return this;
         }

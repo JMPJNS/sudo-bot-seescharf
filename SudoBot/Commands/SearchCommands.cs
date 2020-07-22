@@ -17,16 +17,50 @@ using SudoBot.Parser;
 namespace SudoBot.Commands
 {
     [Group("search"), Aliases("s")]
+    [Cooldown(1, 20, CooldownBucketType.User)]
     [Description("Commands zum Sachen im Internet Suchen")]
     public class SearchCommands: BaseCommandModule
     {
+        [GroupCommand]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
+        public async Task Search(CommandContext ctx, [RemainingText]string searchTerm)
+        {
+            // Edit Search Engine: https://cse.google.com/cse/setup/basic?cx=005934734475344700205%3Abkvzqh68i3s
+            var res = await MakeSearch("005934734475344700205:bkvzqh68i3s",
+                Environment.GetEnvironmentVariable("GOOGLE_API_KEY"), searchTerm);
+
+            if (res == null)
+            {
+                await ctx.Channel.SendMessageAsync("Keine Ergebnisse Gefunden");
+                return;
+            }
+            await SendResult(ctx, res);
+        }
+        
+        [Command("youtube")]
+        [Cooldown(1, 20, CooldownBucketType.User)]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
+        public async Task SearchYoutube(CommandContext ctx, [RemainingText]string searchTerm)
+        {
+            // Edit Search Engine: https://cse.google.com/cse/setup/basic?cx=005934734475344700205%3Abkvzqh68i3s
+            var res = await MakeSearch("005934734475344700205:kki-evoqkn0",
+                Environment.GetEnvironmentVariable("GOOGLE_API_KEY"), searchTerm);
+
+            if (res == null)
+            {
+                await Search(ctx, searchTerm);
+                return;
+            }
+            await SendResult(ctx, res);
+        }
+        
         // get length with youtube-dl
         // -ss = starting timestamp, -t = end timestamp
         // get short gif, play back, in the meantime get next gif...
         // execute command https://www.codeproject.com/Articles/25983/How-to-Execute-a-Command-in-C
         // ffmpeg -ss 30 -t 3 -i $(youtube-dl -f 18 --get-url https://www.youtube.com/watch?v=07d2dXHYb94) -segment_time 00:00:15 -vf "fps=10,scale=320:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 output%03d.gif
 
-        [Command("yt")]
+        [Command("youtube-stream"), Aliases("yts")]
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         public async Task YoutubeGifStream(CommandContext ctx, string url)
         {
@@ -36,82 +70,84 @@ namespace SudoBot.Commands
             await parser.ParseVideo(ctx, url);
             await ctx.RespondAsync("done");
         }
-
-        [GroupCommand]
+        
+        [Command("anilist")]
         [Cooldown(1, 20, CooldownBucketType.User)]
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
-        public async Task Search(CommandContext ctx, [RemainingText]string searchTerm)
+        public async Task SearchAnilist(CommandContext ctx, [RemainingText]string searchTerm)
         {
             // Edit Search Engine: https://cse.google.com/cse/setup/basic?cx=005934734475344700205%3Abkvzqh68i3s
-            var last = searchTerm.Last().ToString();
-            int resCount = 1;
-            try
+            var res = await MakeSearch("005934734475344700205:wjw658x0xpw",
+                Environment.GetEnvironmentVariable("GOOGLE_API_KEY"), searchTerm);
+
+            if (res == null)
             {
-                resCount = Convert.ToInt32(last);
-            }
-            catch (Exception e) { }
-
-            var trimmedTerm = searchTerm.Remove(searchTerm.Length - 1).Trim();
-
-            if (trimmedTerm == "hytale" || searchTerm == "hytale")
-            {
-                await ParseHytale(ctx);
-                resCount--;
-            }
-
-            var apiKey = Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
-            List<SearchResult> results = new List<SearchResult>();
-            var anilistRes = await MakeSearch("005934734475344700205:wjw658x0xpw", apiKey, searchTerm);
-            if (anilistRes != null) results.Add(anilistRes);
-
-
-            if (results.Count < resCount)
-            {
-                var urbanRes = await MakeSearch("005934734475344700205:bnbbnplwmik", apiKey, searchTerm);
-                if (urbanRes != null) results.Add(urbanRes);
-            }
-
-            // if (results.Count < resCount)
-            // {
-            //     var youtubeRes = await MakeSearch("005934734475344700205:kki-evoqkn0", apiKey, searchTerm);
-            //     if (youtubeRes != null) results.Add(youtubeRes);
-            // }
-            //
-            // if (results.Count < resCount)
-            // {
-            //     var wikiRes = await MakeSearch("005934734475344700205:o3fub-xeqjc", apiKey, searchTerm);
-            //     if (wikiRes != null) results.Add(wikiRes);
-            // }
-            //
-            // if (results.Count < resCount)
-            // {
-            //     var githubRes = await MakeSearch("005934734475344700205:vdr_xefxnpa", apiKey, searchTerm);
-            //     if (githubRes != null) results.Add(githubRes);
-            // }
-
-            if (results.Count < resCount)
-            {
-                var everythingRes = await MakeSearch("005934734475344700205:bkvzqh68i3s", apiKey, searchTerm);
-                if (everythingRes != null) results.Add(everythingRes);
-            }
-
-            if (resCount != 0 && results.Count == 0)
-            {
-                await ctx.Channel.SendMessageAsync("Keine Ergebnisse Gefunden");
+                await Search(ctx, searchTerm);
                 return;
             }
-
-            foreach (var res in results)
-            {
-                var embed = new DiscordEmbedBuilder();
-                embed.WithTitle(res.Title);
-                embed.WithUrl(res.Url);
-                if (res.ImageUrl != null) embed.WithThumbnailUrl(res.ImageUrl);
-                if (res.Snippet != null) embed.WithDescription(res.Snippet);
-                await ctx.Channel.SendMessageAsync(embed: embed.Build());
-            }
+            await SendResult(ctx, res);
         }
         
+        [Command("urban"), Aliases("urbandictionary")]
+        [Cooldown(1, 20, CooldownBucketType.User)]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
+        public async Task SearchUrban(CommandContext ctx, [RemainingText]string searchTerm)
+        {
+            // Edit Search Engine: https://cse.google.com/cse/setup/basic?cx=005934734475344700205%3Abkvzqh68i3s
+            var res = await MakeSearch("005934734475344700205:bnbbnplwmik",
+                Environment.GetEnvironmentVariable("GOOGLE_API_KEY"), searchTerm);
+
+            if (res == null)
+            {
+                await Search(ctx, searchTerm);
+                return;
+            }
+            await SendResult(ctx, res);
+        }
+        
+        [Command("wikipedia"), Aliases("wiki")]
+        [Cooldown(1, 20, CooldownBucketType.User)]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
+        public async Task SearchWiki(CommandContext ctx, [RemainingText]string searchTerm)
+        {
+            // Edit Search Engine: https://cse.google.com/cse/setup/basic?cx=005934734475344700205%3Abkvzqh68i3s
+            var res = await MakeSearch("005934734475344700205:o3fub-xeqjc",
+                Environment.GetEnvironmentVariable("GOOGLE_API_KEY"), searchTerm);
+
+            if (res == null)
+            {
+                await Search(ctx, searchTerm);
+                return;
+            }
+            await SendResult(ctx, res);
+        }
+        [Command("github"), Aliases("gh")]
+        [Cooldown(1, 20, CooldownBucketType.User)]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
+        public async Task SearchGithub(CommandContext ctx, [RemainingText]string searchTerm)
+        {
+            // Edit Search Engine: https://cse.google.com/cse/setup/basic?cx=005934734475344700205%3Abkvzqh68i3s
+            var res = await MakeSearch("005934734475344700205:vdr_xefxnpa",
+                Environment.GetEnvironmentVariable("GOOGLE_API_KEY"), searchTerm);
+
+            if (res == null)
+            {
+                await Search(ctx, searchTerm);
+                return;
+            }
+            await SendResult(ctx, res);
+        }
+        
+
+        private async Task SendResult(CommandContext ctx, SearchResult res)
+        {
+            var embed = new DiscordEmbedBuilder();
+            embed.WithTitle(res.Title);
+            embed.WithUrl(res.Url);
+            if (res.ImageUrl != null) embed.WithThumbnailUrl(res.ImageUrl);
+            if (res.Snippet != null) embed.WithDescription(res.Snippet);
+            await ctx.Channel.SendMessageAsync(embed: embed.Build());
+        }
         private async Task ParseHytale(CommandContext ctx)
         {
             var hp = new HytaleParser();
@@ -161,6 +197,13 @@ namespace SudoBot.Commands
             request.Close();
             
             return null;
+        }
+
+        private class SearchEngine
+        {
+            public string Name;
+            public string Id;
+            public List<String> InvokeKeywords;
         }
 
         private class SearchResult

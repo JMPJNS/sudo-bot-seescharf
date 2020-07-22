@@ -192,6 +192,33 @@ namespace SudoBot
                     } else if (f is DSharpPlus.CommandsNext.Attributes.RequireOwnerAttribute)
                     {
                         e.Context.RespondAsync("Nix Da!");
+                    } else if (f is DSharpPlus.CommandsNext.Attributes.CooldownAttribute)
+                    {
+                        var attr = (DSharpPlus.CommandsNext.Attributes.CooldownAttribute) f;
+                        var reset = attr.GetRemainingCooldown(e.Context);
+                        string remaining = "";
+                        if (reset.Days > 0)
+                        {
+                            remaining += $"{reset.Days} Tage ";
+                        }
+                        if (reset.Hours > 0)
+                        {
+                            remaining += $"{reset.Hours} Stunden ";
+                        }
+                        if (reset.Minutes > 0)
+                        {
+                            remaining += $"{reset.Minutes} Minuten ";
+                        }
+                        if (reset.Seconds > 0)
+                        {
+                            remaining += $"{reset.Seconds} Sekunden ";
+                        }
+
+                        var sent = e.Context.RespondAsync($"Zurzeit im Cooldown, bitte {remaining}warten").GetAwaiter().GetResult();
+                        Task.Delay(2000).GetAwaiter().GetResult();
+                        e.Context.Message.DeleteAsync();
+                        Task.Delay(1000).GetAwaiter().GetResult();
+                        sent.DeleteAsync();
                     }
                     else
                     {
