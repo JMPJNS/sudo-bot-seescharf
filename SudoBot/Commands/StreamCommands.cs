@@ -1,16 +1,22 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using DSharpPlus.Net;
+using Newtonsoft.Json;
 using SudoBot.Attributes;
 using SudoBot.Parser;
 
 namespace SudoBot.Commands
 {
-    [Group("stream"), Aliases("s")]
-    [Description("Commands für Gif Streaming")]
+    [Group("search"), Aliases("s")]
+    [Description("Commands zum Sachen im Internet Suchen")]
     public class StreamCommands: BaseCommandModule
     {
         // get length with youtube-dl
@@ -28,6 +34,35 @@ namespace SudoBot.Commands
             Globals.YoutubeVideoGifParsers.Add(parser);
             await parser.ParseVideo(ctx, url);
             await ctx.RespondAsync("done");
+        }
+
+        [GroupCommand]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
+        public async Task Search(CommandContext ctx, [RemainingText]string searchTerm)
+        {
+            // Edit Search Engine: https://cse.google.com/cse/setup/basic?cx=005934734475344700205%3Abkvzqh68i3s
+            var apiKey = Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
+            var anilistRes = await MakeSearch("005934734475344700205:wjw658x0xpw", apiKey, searchTerm);
+            
+            
+            var urbanRes = await MakeSearch("005934734475344700205:bnbbnplwmik", apiKey, searchTerm);
+            var wikipediaRes = await MakeSearch("005934734475344700205:o3fub-xeqjc", apiKey, searchTerm);
+            var githubRes = await MakeSearch("005934734475344700205:vdr_xefxnpa", apiKey, searchTerm);
+            var everythingRes = await MakeSearch("005934734475344700205:bkvzqh68i3s", apiKey, searchTerm);
+        }
+
+        private async Task<string> MakeSearch(string engine, string apiKey, string searchTerm)
+        {
+            var url = $"https://www.googleapis.com/customsearch/v1?key={apiKey}&cx={engine}&q={HttpUtility.UrlEncode(searchTerm)}";
+
+            return "test";
+        }
+
+        private class SearchResult
+        {
+            public string Title;
+            public string Url;
+            public string Image;
         }
 
         [Command("stop-yt")]

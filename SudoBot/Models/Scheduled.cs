@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DSharpPlus;
 using MongoDB.Bson;
@@ -39,8 +40,8 @@ namespace SudoBot.Models
             set { _messageId = value; SaveScheduled().GetAwaiter().GetResult();}
         }
         
-        private ScheduledType _type;
-        public ScheduledType Type
+        private List<ScheduledType> _type;
+        public List<ScheduledType> Type
         {
             get => _type;
             set { _type = value; SaveScheduled().GetAwaiter().GetResult();}
@@ -74,7 +75,7 @@ namespace SudoBot.Models
             set { _active = value; SaveScheduled().GetAwaiter().GetResult();}
         }
         
-        public Scheduled(ScheduledType type, string message, DateTime scheduledOn, ulong guildId = 0, ulong channelId = 0, ulong userId = 0, ulong messageId = 0)
+        public Scheduled(List<ScheduledType> type, string message, DateTime scheduledOn, ulong guildId = 0, ulong channelId = 0, ulong userId = 0, ulong messageId = 0)
         {
             _scheduledOn = scheduledOn;
             _message = message;
@@ -100,45 +101,76 @@ namespace SudoBot.Models
             await Mongo.Instance.UpdateScheduled(this);
         }
 
-        public static async Task RunSchedule()
+        public static async Task RunSchedule(ScheduledType t)
         {
             var scheduled = await Mongo.Instance.GetDueScheduled();
             foreach (var stuff in scheduled)
             {
-                try
+                if (stuff.Type.Contains(ScheduledType.Minute))
                 {
-                    if (stuff.Type == ScheduledType.Reminder)
-                    {
-                        var guild = await Globals.Client.GetGuildAsync(stuff.GuildId);
-                        var channel = guild.GetChannel(stuff.ChannelId);
-                        var member = await guild.GetMemberAsync(stuff.UserId);
-                        
-                        var tz = Environment.OSVersion.Platform == PlatformID.Win32NT ? TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time") : TimeZoneInfo.FindSystemTimeZoneById("Europe/Vienna");
-                        var time = TimeZoneInfo.ConvertTimeFromUtc(stuff.InsertDate, tz);
-
-                        // Prevent Escape to ping people
-                        if (stuff.Message == null)
-                            stuff.Message = "";
-                        var message = stuff.Message.Replace("```", "'''");
-                        var minutes = time.Minute < 10 ? $"0{time.Minute}" : time.Minute.ToString();
-                        var sendMessage = message != "" ? $" ```{message}```" : "";
-
-                        var messageLink = $"https://discord.com/channels/{stuff.GuildId}/{stuff.ChannelId}/{stuff.MessageId}";
-                        
-                        await channel.SendMessageAsync(
-                            $"{member.Mention} am `{time.Day}.{time.Month}.{time.Year} {time.Hour}:{minutes}` {messageLink}" +sendMessage);
-                        stuff.Active = false;
-                    } 
-                    else if (stuff.Type == ScheduledType.GameUpdates)
-                    {
-                        var guild = await Globals.Client.GetGuildAsync(stuff.GuildId);
-                        var channel = guild.GetChannel(stuff.ChannelId);
-                    }
-                }
-                catch (Exception e)
+                    if (t == ScheduledType.Minute)
+                        await MinuteScheduler(stuff);
+                } else if (stuff.Type.Contains(ScheduledType.Day))
                 {
-                    Globals.Logger.LogMessage(LogLevel.Error, "SudoBot", $"Error in Scheduler: {e.Message}", DateTime.Now);
+                    if (t == ScheduledType.Day)
+                        await DayScheduler(stuff);
+                } else if (stuff.Type.Contains(ScheduledType.Hour))
+                {
+                    if (t == ScheduledType.Hour)
+                        await HourScheduler(stuff);
+                } else if (stuff.Type.Contains(ScheduledType.SixHour))
+                {
+                    if (t == ScheduledType.SixHour)
+                        await SixHourScheduler(stuff);
                 }
+            }
+        }
+
+        private static async Task SixHourScheduler(Scheduled stuff)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static async Task HourScheduler(Scheduled stuff)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static async Task DayScheduler(Scheduled stuff)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static async Task MinuteScheduler(Scheduled stuff)
+        {
+            try
+            {
+                if (stuff.Type.Contains(ScheduledType.Reminder))
+                {
+                    var guild = await Globals.Client.GetGuildAsync(stuff.GuildId);
+                    var channel = guild.GetChannel(stuff.ChannelId);
+                    var member = await guild.GetMemberAsync(stuff.UserId);
+                        
+                    var tz = Environment.OSVersion.Platform == PlatformID.Win32NT ? TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time") : TimeZoneInfo.FindSystemTimeZoneById("Europe/Vienna");
+                    var time = TimeZoneInfo.ConvertTimeFromUtc(stuff.InsertDate, tz);
+
+                    // Prevent Escape to ping people
+                    if (stuff.Message == null)
+                        stuff.Message = "";
+                    var message = stuff.Message.Replace("```", "'''");
+                    var minutes = time.Minute < 10 ? $"0{time.Minute}" : time.Minute.ToString();
+                    var sendMessage = message != "" ? $" ```{message}```" : "";
+
+                    var messageLink = $"https://discord.com/channels/{stuff.GuildId}/{stuff.ChannelId}/{stuff.MessageId}";
+                        
+                    await channel.SendMessageAsync(
+                        $"{member.Mention} am `{time.Day}.{time.Month}.{time.Year} {time.Hour}:{minutes}` {messageLink}" +sendMessage);
+                    stuff.Active = false;
+                }
+            }
+            catch (Exception e)
+            {
+                Globals.Logger.LogMessage(LogLevel.Error, "SudoBot", $"Error in Scheduler: {e.Message}", DateTime.Now);
             }
         }
     }

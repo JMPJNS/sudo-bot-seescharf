@@ -134,14 +134,14 @@ namespace SudoBot.Commands
 
             if (format == "um" || format == "in")
             {
-                await ctx.Channel.SendMessageAsync($"Ich werde dich am {convertedTime.Day}.{convertedTime.Month}.{convertedTime.Year} um {convertedTime.ToString("hh:mm:ss", DateTimeFormatInfo.InvariantInfo)} erinnern");
+                await ctx.Channel.SendMessageAsync($"Ich werde dich am {convertedTime.Day}.{convertedTime.Month}.{convertedTime.Year} um {convertedTime.ToString("hh:mm:ss", DateTimeFormatInfo.InvariantInfo)} erinnern, timezone: {tz.DisplayName}");
                 
-                var sched = new Scheduled(ScheduledType.Reminder, message, time.ToUniversalTime(), ctx.Guild.Id, ctx.Channel.Id, ctx.User.Id, ctx.Message.Id);
+                var sched = new Scheduled(new List<ScheduledType> {ScheduledType.Reminder, ScheduledType.Minute}, message, time.ToUniversalTime(), ctx.Guild.Id, ctx.Channel.Id, ctx.User.Id, ctx.Message.Id);
 
-                if (ts < TimeSpan.FromMinutes(10))
+                if (ts < TimeSpan.FromMinutes(0.05))
                 {
                     await Task.Delay(ts);
-                    await Scheduled.RunSchedule();
+                    await Scheduled.RunSchedule(ScheduledType.Minute);
                 }
                 
                 // await ctx.Channel.SendMessageAsync($"{ctx.User.Mention} [{thenTime.ToString("h:mm:ss", DateTimeFormatInfo.InvariantInfo)}], {message}");

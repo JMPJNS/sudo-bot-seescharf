@@ -108,22 +108,22 @@ namespace SudoBot
 
         private static void OnMinuteEvent(object source, ElapsedEventArgs e)
         {
-            Scheduled.RunSchedule().GetAwaiter().GetResult();
+            Scheduled.RunSchedule(ScheduledType.Minute).GetAwaiter().GetResult();
         }
         
         private static void OnHourEvent(object source, ElapsedEventArgs e)
         {
-            Scheduled.RunSchedule().GetAwaiter().GetResult();
+            Scheduled.RunSchedule(ScheduledType.Hour).GetAwaiter().GetResult();
         }
         
         private static void OnSixHourEvent(object source, ElapsedEventArgs e)
         {
-            Scheduled.RunSchedule().GetAwaiter().GetResult();
+            Scheduled.RunSchedule(ScheduledType.SixHour).GetAwaiter().GetResult();
         }
         
         private static void OnDayEvent(object source, ElapsedEventArgs e)
         {
-            Scheduled.RunSchedule().GetAwaiter().GetResult();
+            Scheduled.RunSchedule(ScheduledType.Day).GetAwaiter().GetResult();
         }
 
         private Task OnClientReady(ReadyEventArgs e)

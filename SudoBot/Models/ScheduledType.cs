@@ -3,6 +3,10 @@
     public enum ScheduledType
     {
         Reminder,
-        GameUpdates
+        GameUpdates,
+        Minute,
+        Hour,
+        SixHour,
+        Day
     }
 }

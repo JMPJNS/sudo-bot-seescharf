@@ -22,6 +22,9 @@
       <Content Include="..\Dockerfile">
         <Link>Dockerfile</Link>
       </Content>
+      <Content Include="..\readme.md">
+        <Link>readme.md</Link>
+      </Content>
       <Content Include="..\TODO.md">
         <Link>TODO.md</Link>
       </Content>
