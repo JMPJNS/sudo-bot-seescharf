@@ -71,23 +71,23 @@ namespace SudoBot.Commands
                 if (urbanRes != null) results.Add(urbanRes);
             }
 
-            if (results.Count < resCount)
-            {
-                var youtubeRes = await MakeSearch("005934734475344700205:kki-evoqkn0", apiKey, searchTerm);
-                if (youtubeRes != null) results.Add(youtubeRes);
-            }
-            
-            if (results.Count < resCount)
-            {
-                var wikiRes = await MakeSearch("005934734475344700205:o3fub-xeqjc", apiKey, searchTerm);
-                if (wikiRes != null) results.Add(wikiRes);
-            }
-
-            if (results.Count < resCount)
-            {
-                var githubRes = await MakeSearch("005934734475344700205:vdr_xefxnpa", apiKey, searchTerm);
-                if (githubRes != null) results.Add(githubRes);
-            }
+            // if (results.Count < resCount)
+            // {
+            //     var youtubeRes = await MakeSearch("005934734475344700205:kki-evoqkn0", apiKey, searchTerm);
+            //     if (youtubeRes != null) results.Add(youtubeRes);
+            // }
+            //
+            // if (results.Count < resCount)
+            // {
+            //     var wikiRes = await MakeSearch("005934734475344700205:o3fub-xeqjc", apiKey, searchTerm);
+            //     if (wikiRes != null) results.Add(wikiRes);
+            // }
+            //
+            // if (results.Count < resCount)
+            // {
+            //     var githubRes = await MakeSearch("005934734475344700205:vdr_xefxnpa", apiKey, searchTerm);
+            //     if (githubRes != null) results.Add(githubRes);
+            // }
 
             if (results.Count < resCount)
             {
