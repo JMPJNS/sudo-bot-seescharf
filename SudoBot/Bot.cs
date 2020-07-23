@@ -88,6 +88,7 @@ namespace SudoBot
             Commands.RegisterCommands<TagCommands>();
             Commands.RegisterCommands<ParserCommands>();
             Commands.RegisterCommands<SearchCommands>();
+            Commands.RegisterCommands<ListCommands>();
                         
             MinuteScheduler = new Timer(60*1000);
             MinuteScheduler.Elapsed += OnMinuteEvent;
@@ -146,7 +147,7 @@ namespace SudoBot
 
         private Task OnCommandErrored(CommandErrorEventArgs e)
         {
-            if (e.Exception.Message == "Specified command was not found.")
+            if (e.Exception is CommandNotFoundException)
             {
                 var sentMessage = e.Context.Channel.SendMessageAsync($"Command nicht Gefunden").GetAwaiter().GetResult();
                 Task.Delay(2000).GetAwaiter().GetResult();
@@ -168,7 +169,7 @@ namespace SudoBot
                 e.Context.Channel.SendMessageAsync("Es ist ein fehler aufgetreten, allerdings konnte dieser nicht gemeldet werden da kein Error Log channel festgelegt wurde, bitte lege einen mit `$admin set-log-channel #channel` fest");
             }
             
-            else if (e.Exception.Message == "No matching subcommands were found, and this group is not executable.")
+            else if (e.Exception is InvalidOperationException)
             {
                 e.Context.Channel.SendMessageAsync("Dies ist eine Command Gruppe, bitte einen Subcommand Spezifizieren").GetAwaiter().GetResult();
                 var commandName = e.Command.Name;
@@ -227,7 +228,7 @@ namespace SudoBot
                 }
             }
 
-            else if (e.Exception.Message == "Could not find a suitable overload for the command.")
+            else if (e.Exception is ArgumentException)
             {
                 e.Context.Channel.SendMessageAsync("Invalide Argumente").GetAwaiter().GetResult();
                 var commandName = e.Command.Name;
@@ -237,6 +238,11 @@ namespace SudoBot
                     e.Context.Message.Content, e.Context.Prefix, help, $"{e.Command.QualifiedName}");
                 
                 help.ExecuteAsync(helpContext);
+            }
+            
+            else if (e.Exception is NotImplementedException)
+            {
+                e.Context.Channel.SendMessageAsync("Dieses Feature ist noch nicht Fertig!, wenn es dringlich ist `$guild` beitreten und JMP#7777 kontaktieren").GetAwaiter().GetResult();
             }
 
             else {

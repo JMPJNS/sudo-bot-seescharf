@@ -39,6 +39,9 @@ namespace SudoBot.Models
         
         public long Points { private set; get; }
         
+        public string LastList { private set; get; }
+        public string LastListItem { private set; get; }
+        
         public int TicketsRemaining { private set; get; }
 
         // Logic Starts Here
@@ -254,13 +257,25 @@ namespace SudoBot.Models
                 user.UserName ??= member.Username;
                 user.Discriminator ??= member.Discriminator;
                 user.Permissions ??= new List<UserPermissions>();
-                
+
                 return user;
             }
 
             user = GetFreshUser(member);
             await Mongo.Instance.InsertUser(user);
             return user;
+        }
+
+        public async Task SetLastList(string name)
+        {
+            LastList = name;
+            await SaveUser();
+        }
+        
+        public async Task SetLastListItem(string name)
+        {
+            LastListItem = name;
+            await SaveUser();
         }
         
         private static User GetFreshUser(DiscordMember member)

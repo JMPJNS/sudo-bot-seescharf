@@ -22,6 +22,7 @@ namespace SudoBot.Database
         private IMongoCollection<Guild> _guilds;
         private IMongoCollection<Scheduled> _scheduled;
         private IMongoCollection<ParserResult> _parserResults;
+        private IMongoCollection<SudoList> _lists;
         private Mongo()
         {
             try
@@ -34,6 +35,7 @@ namespace SudoBot.Database
                 _guilds = _db.GetCollection<Guild>("Guilds");
                 _parserResults = _db.GetCollection<ParserResult>("ParserResults");
                 _scheduled = _db.GetCollection<Scheduled>("Scheduled");
+                _lists = _db.GetCollection<SudoList>("Lists");
                 
                 Console.WriteLine("Connected to Mongo");
             }
@@ -79,6 +81,59 @@ namespace SudoBot.Database
             {
                 return null;
             }
+        }
+        
+        // List Stuff
+
+        public async Task<List<SudoList>> GetAllLists(ulong userId)
+        {
+            try
+            {
+                return await _lists.FindAsync(list => list.UserId == userId).Result.ToListAsync();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+        
+        public async Task<long> GetListCount(ulong userId)
+        {
+            try
+            {
+                return _lists.CountDocumentsAsync(list => list.UserId == userId).Result;
+            }
+            catch (Exception e)
+            {
+                return 0;
+            }
+        }
+        public async Task<SudoList> GetList(ulong userId, string listName)
+        {
+            try
+            {
+                return await _lists.FindAsync(list => userId == list.UserId && list.Name == listName).Result.FirstAsync();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+        
+        public async Task DeleteList(SudoList list)
+        {
+            await _tags.DeleteOneAsync(l => l.Id == list.Id);
+        }
+        public async Task InsertList(SudoList list)
+        {
+            await _lists.InsertOneAsync(list);
+        }
+        
+        public async Task UpdateList(SudoList list)
+        {
+            await _lists.ReplaceOneAsync(
+                l => list.Name == l.Name,
+                list);
         }
         
         // Guild Stuff
