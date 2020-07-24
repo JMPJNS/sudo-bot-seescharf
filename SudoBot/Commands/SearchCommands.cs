@@ -231,8 +231,15 @@ namespace SudoBot.Commands
         [Command("hytale")]
         [Cooldown(1, 20, CooldownBucketType.User)]
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
-        private async Task Hytale(CommandContext ctx)
+        private async Task Hytale(CommandContext ctx, [RemainingText]string searchTerm = null)
         {
+
+            if (searchTerm != null)
+            {
+                await Search(ctx, searchTerm);
+                return;
+            }
+            
             var hp = new HytaleParser();
             var res = await hp.ParseAsync(0, 1);
 
