@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using DSharpPlus.CommandsNext;
@@ -34,6 +35,13 @@ namespace SudoBot.Commands
                 await ctx.Channel.SendMessageAsync("Keine Ergebnisse Gefunden");
                 return;
             }
+
+            if (IsAnilistUrl(res.Url))
+            {
+                await GetAnilistScraping(ctx, res.Url, res);
+                return;
+            }
+            
             await SendResult(ctx, res);
         }
         
@@ -70,6 +78,70 @@ namespace SudoBot.Commands
             await parser.ParseVideo(ctx, url);
             await ctx.RespondAsync("done");
         }
+
+        private bool IsAnilistUrl(string url)
+        {
+            if (url.StartsWith("https://anilist.co")) return true;
+            return false;
+        }
+        private async Task GetAnilistScraping(CommandContext ctx, string url, SearchResult searchRes)
+        {
+            var pUrl = $"http://srv-captain--scrapj/parser/anilist/{url}";
+
+            var client = new HttpClient();
+            var req = await client.GetAsync(pUrl);
+            if (req.StatusCode != HttpStatusCode.OK)
+            {
+                await SendResult(ctx, searchRes);
+                return;
+            }
+
+            var res = await req.Content.ReadAsStringAsync();
+            var json = JObject.Parse(res);
+
+            if (json["Anime"] != null)
+            {
+                var title = json["Anime"]["Title"]?.ToObject<string>();
+                var description = json["Anime"]["Description"]?.ToObject<string>();
+                var thumbnailUrl = json["Anime"]["ThumbnailURL"]?.ToObject<string>();
+                var status = json["Anime"]["Status"]?.ToObject<string>();
+                var genres = json["Anime"]["Genres"]?.ToObject<List<string>>();
+                var episodeCount = json["Anime"]["EpisodeCount"]?.ToObject<int>();
+                
+                var embed = new DiscordEmbedBuilder();
+                embed.WithThumbnailUrl(thumbnailUrl);
+                embed.WithTitle(title);
+                embed.WithDescription(description != null ? description.Substring(0, 160) + "..." : "No Description");
+                embed.WithUrl(url);
+                embed.WithColor(DiscordColor.Aquamarine);
+
+                if (status != null)
+                {
+                    embed.AddField("Status", status);
+                }
+                
+                if (genres != null)
+                {
+                    var genreString = string.Join(", ", genres);
+                    embed.AddField("Genres", genreString);
+                }
+                
+                if (episodeCount != null)
+                {
+                    embed.AddField("Episoden", episodeCount.ToString());
+                }
+
+                await ctx.RespondAsync(embed: embed.Build());
+
+            } else if (json["Manga"] != null)
+            {
+                
+            }
+            else
+            {
+                await SendResult(ctx, searchRes);
+            }
+        }
         
         [Command("anilist")]
         [Cooldown(1, 20, CooldownBucketType.User)]
@@ -85,6 +157,13 @@ namespace SudoBot.Commands
                 await Search(ctx, searchTerm);
                 return;
             }
+            
+            if (IsAnilistUrl(res.Url))
+            {
+                await GetAnilistScraping(ctx, res.Url, res);
+                return;
+            }
+            
             await SendResult(ctx, res);
         }
         
