@@ -143,7 +143,7 @@ namespace SudoBot.Commands
             }
         }
         
-        [Command("anilist")]
+        [Command("anilist"), Aliases("anime")]
         [Cooldown(1, 20, CooldownBucketType.User)]
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         public async Task SearchAnilist(CommandContext ctx, [RemainingText]string searchTerm)
