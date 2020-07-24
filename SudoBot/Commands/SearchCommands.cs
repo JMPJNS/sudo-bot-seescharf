@@ -48,8 +48,14 @@ namespace SudoBot.Commands
         [Command("youtube")]
         [Cooldown(1, 20, CooldownBucketType.User)]
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
-        public async Task SearchYoutube(CommandContext ctx, [RemainingText]string searchTerm)
+        public async Task SearchYoutube(CommandContext ctx, [RemainingText]string searchTerm = null)
         {
+            if (searchTerm != null)
+            {
+                await Search(ctx, searchTerm);
+                return;
+            }
+            
             // Edit Search Engine: https://cse.google.com/cse/setup/basic?cx=005934734475344700205%3Abkvzqh68i3s
             var res = await MakeSearch("005934734475344700205:kki-evoqkn0",
                 Environment.GetEnvironmentVariable("GOOGLE_API_KEY"), searchTerm);
@@ -146,8 +152,14 @@ namespace SudoBot.Commands
         [Command("anilist"), Aliases("anime")]
         [Cooldown(1, 20, CooldownBucketType.User)]
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
-        public async Task SearchAnilist(CommandContext ctx, [RemainingText]string searchTerm)
+        public async Task SearchAnilist(CommandContext ctx, [RemainingText]string searchTerm = null)
         {
+            if (searchTerm != null)
+            {
+                await Search(ctx, searchTerm);
+                return;
+            }
+            
             // Edit Search Engine: https://cse.google.com/cse/setup/basic?cx=005934734475344700205%3Abkvzqh68i3s
             var res = await MakeSearch("005934734475344700205:wjw658x0xpw",
                 Environment.GetEnvironmentVariable("GOOGLE_API_KEY"), searchTerm);
@@ -170,8 +182,14 @@ namespace SudoBot.Commands
         [Command("urban"), Aliases("urbandictionary")]
         [Cooldown(1, 20, CooldownBucketType.User)]
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
-        public async Task SearchUrban(CommandContext ctx, [RemainingText]string searchTerm)
+        public async Task SearchUrban(CommandContext ctx, [RemainingText]string searchTerm = null)
         {
+            if (searchTerm != null)
+            {
+                await Search(ctx, searchTerm);
+                return;
+            }
+            
             // Edit Search Engine: https://cse.google.com/cse/setup/basic?cx=005934734475344700205%3Abkvzqh68i3s
             var res = await MakeSearch("005934734475344700205:bnbbnplwmik",
                 Environment.GetEnvironmentVariable("GOOGLE_API_KEY"), searchTerm);
@@ -187,8 +205,14 @@ namespace SudoBot.Commands
         [Command("wikipedia"), Aliases("wiki")]
         [Cooldown(1, 20, CooldownBucketType.User)]
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
-        public async Task SearchWiki(CommandContext ctx, [RemainingText]string searchTerm)
+        public async Task SearchWiki(CommandContext ctx, [RemainingText]string searchTerm = null)
         {
+            if (searchTerm != null)
+            {
+                await Search(ctx, searchTerm);
+                return;
+            }
+            
             // Edit Search Engine: https://cse.google.com/cse/setup/basic?cx=005934734475344700205%3Abkvzqh68i3s
             var res = await MakeSearch("005934734475344700205:o3fub-xeqjc",
                 Environment.GetEnvironmentVariable("GOOGLE_API_KEY"), searchTerm);
@@ -203,8 +227,14 @@ namespace SudoBot.Commands
         [Command("github"), Aliases("gh")]
         [Cooldown(1, 20, CooldownBucketType.User)]
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
-        public async Task SearchGithub(CommandContext ctx, [RemainingText]string searchTerm)
+        public async Task SearchGithub(CommandContext ctx, [RemainingText]string searchTerm = null)
         {
+            if (searchTerm != null)
+            {
+                await Search(ctx, searchTerm);
+                return;
+            }
+            
             // Edit Search Engine: https://cse.google.com/cse/setup/basic?cx=005934734475344700205%3Abkvzqh68i3s
             var res = await MakeSearch("005934734475344700205:vdr_xefxnpa",
                 Environment.GetEnvironmentVariable("GOOGLE_API_KEY"), searchTerm);
