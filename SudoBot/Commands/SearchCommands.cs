@@ -227,7 +227,11 @@ namespace SudoBot.Commands
             if (res.Snippet != null) embed.WithDescription(res.Snippet);
             await ctx.Channel.SendMessageAsync(embed: embed.Build());
         }
-        private async Task ParseHytale(CommandContext ctx)
+        
+        [Command("hytale")]
+        [Cooldown(1, 20, CooldownBucketType.User)]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
+        private async Task Hytale(CommandContext ctx)
         {
             var hp = new HytaleParser();
             var res = await hp.ParseAsync(0, 1);
