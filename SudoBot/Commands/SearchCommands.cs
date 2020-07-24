@@ -50,7 +50,7 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         public async Task SearchYoutube(CommandContext ctx, [RemainingText]string searchTerm = null)
         {
-            if (searchTerm != null)
+            if (searchTerm == null)
             {
                 await Search(ctx, searchTerm);
                 return;
@@ -154,7 +154,7 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         public async Task SearchAnilist(CommandContext ctx, [RemainingText]string searchTerm = null)
         {
-            if (searchTerm != null)
+            if (searchTerm == null)
             {
                 await Search(ctx, searchTerm);
                 return;
@@ -184,7 +184,7 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         public async Task SearchUrban(CommandContext ctx, [RemainingText]string searchTerm = null)
         {
-            if (searchTerm != null)
+            if (searchTerm == null)
             {
                 await Search(ctx, searchTerm);
                 return;
@@ -207,7 +207,7 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         public async Task SearchWiki(CommandContext ctx, [RemainingText]string searchTerm = null)
         {
-            if (searchTerm != null)
+            if (searchTerm == null)
             {
                 await Search(ctx, searchTerm);
                 return;
@@ -229,7 +229,7 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         public async Task SearchGithub(CommandContext ctx, [RemainingText]string searchTerm = null)
         {
-            if (searchTerm != null)
+            if (searchTerm == null)
             {
                 await Search(ctx, searchTerm);
                 return;
