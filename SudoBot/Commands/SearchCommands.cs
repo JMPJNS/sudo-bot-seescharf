@@ -90,7 +90,7 @@ namespace SudoBot.Commands
             if (url.StartsWith("https://anilist.co")) return true;
             return false;
         }
-        private async Task GetAnilistScraping(CommandContext ctx, string url, SearchResult searchRes)
+        private async Task GetAnilistScraping(CommandContext ctx, string url, SearchResult searchRes = null)
         {
             var pUrl = $"http://srv-captain--scrapj/parser/anilist/{url}";
 
@@ -98,7 +98,10 @@ namespace SudoBot.Commands
             var req = await client.GetAsync(pUrl);
             if (req.StatusCode != HttpStatusCode.OK)
             {
-                await SendResult(ctx, searchRes);
+                if (searchRes != null)
+                    await SendResult(ctx, searchRes);
+                else
+                    await ctx.RespondAsync("Nicht Gefunden");
                 return;
             }
 
@@ -154,6 +157,12 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         public async Task SearchAnilist(CommandContext ctx, [RemainingText]string searchTerm = null)
         {
+            if (IsAnilistUrl(searchTerm))
+            {
+                await GetAnilistScraping(ctx, searchTerm);
+                return;
+            }
+            
             if (searchTerm == null)
             {
                 await Search(ctx, searchTerm);
