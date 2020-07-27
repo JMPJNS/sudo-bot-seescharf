@@ -119,9 +119,9 @@ namespace SudoBot.Commands
             }
             else
             {
-                useBig = "0";
+                useBig = "_0";
             }
-            var url = $"http://wttr.in/{Uri.EscapeDataString(loc)}_{useBig}tqp_lang=de.png";
+            var url = $"http://wttr.in/{Uri.EscapeDataString(loc)}{useBig}_p_lang=de.png?m";
             var res = await Globals.HttpRequest(url);
             if (res == null)
             {
