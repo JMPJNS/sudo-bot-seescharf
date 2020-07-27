@@ -105,6 +105,33 @@ namespace SudoBot.Commands
         {
             var message = await ctx.Channel.SendMessageAsync($"{ctx.Client.Ping.ToString()}ms");
         }
+        
+        [Command("weather"), Aliases("bigWeather")]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
+        [Description("Wetter Anzeigen")]
+        public async Task Weather(CommandContext ctx, [RemainingText]string loc)
+        {
+            string useBig;
+            var cmd = ctx.Message.Content;
+            if (cmd.StartsWith("$u bigWeather"))
+            {
+                useBig = "";
+            }
+            else
+            {
+                useBig = "0";
+            }
+            var url = $"http://wttr.in/{Uri.EscapeDataString(loc)}_{useBig}tqp_lang=de.png";
+            var res = await Globals.HttpRequest(url);
+            if (res == null)
+            {
+                await ctx.RespondAsync("Nicht Gefunden");
+            }
+            else
+            {
+                await ctx.RespondAsync(url);
+            }
+        }
 
         // Reminder Stuff
 

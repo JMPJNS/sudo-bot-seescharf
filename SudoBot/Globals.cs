@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.Entities;
+using Newtonsoft.Json.Linq;
 using SudoBot.Models;
 using SudoBot.Parser;
 
@@ -41,6 +43,31 @@ namespace SudoBot
             var response = await client.SendAsync(request);
             var resUrl = await response.Content.ReadAsStringAsync();
             return resUrl;
+        }
+
+        public static async Task<JObject> HttpJsonRequest(string url)
+        {
+            var client = new HttpClient();
+            var req = await client.GetAsync(url);
+            if (req.StatusCode != HttpStatusCode.OK)
+            {
+                return null;
+            }
+
+            var res = await req.Content.ReadAsStringAsync();
+            return JObject.Parse(res);
+        }
+        
+        public static async Task<string> HttpRequest(string url)
+        {
+            var client = new HttpClient();
+            var req = await client.GetAsync(url);
+            if (req.StatusCode != HttpStatusCode.OK)
+            {
+                return null;
+            }
+
+            return await req.Content.ReadAsStringAsync();
         }
         
         public static async Task<string> RunCommand(string cmd, int waitTime = 1000)

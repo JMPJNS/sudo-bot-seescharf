@@ -94,9 +94,9 @@ namespace SudoBot.Commands
         {
             var pUrl = $"http://srv-captain--scrapj/parser/anilist/{url}";
 
-            var client = new HttpClient();
-            var req = await client.GetAsync(pUrl);
-            if (req.StatusCode != HttpStatusCode.OK)
+            var json = await Globals.HttpJsonRequest(pUrl);
+
+            if (json == null)
             {
                 if (searchRes != null)
                     await SendResult(ctx, searchRes);
@@ -104,9 +104,7 @@ namespace SudoBot.Commands
                     await ctx.RespondAsync("Nicht Gefunden");
                 return;
             }
-
-            var res = await req.Content.ReadAsStringAsync();
-            var json = JObject.Parse(res);
+            
 
             if (json["Anime"] != null)
             {
