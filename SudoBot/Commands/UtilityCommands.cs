@@ -111,26 +111,27 @@ namespace SudoBot.Commands
         [Description("Wetter Anzeigen")]
         public async Task Weather(CommandContext ctx, [RemainingText]string loc)
         {
-            string useBig;
             var cmd = ctx.Message.Content;
             if (cmd.StartsWith("$u bigWeather"))
             {
-                useBig = "";
-            }
-            else
-            {
-                useBig = "_0";
-            }
-            var url = $"http://wttr.in/{Uri.EscapeDataString(loc)}{useBig}_p_lang=de.png?m";
-            var res = await Globals.HttpRequest(url);
-            if (res == null)
-            {
-                await ctx.RespondAsync("Nicht Gefunden");
-            }
-            else
-            {
+                var url = $"http://v2d.wttr.in/{Uri.EscapeDataString(loc)}_p_lang=de.png?m";
+                var res = await Globals.HttpRequest(url);
                 await ctx.RespondAsync(url);
             }
+            else
+            {
+                var url2 = $"http://wttr.in/{Uri.EscapeDataString(loc)}_0_p_lang=de.png?m";
+                var res2 = await Globals.HttpRequest(url2);
+                if (res2 == null)
+                {
+                    await ctx.RespondAsync("Nicht Gefunden");
+                }
+                else
+                {
+                    await ctx.RespondAsync($"{url2}");
+                }
+            }
+            
         }
 
         // Reminder Stuff
