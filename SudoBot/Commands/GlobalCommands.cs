@@ -35,6 +35,14 @@ namespace SudoBot.Commands
         {
             await ctx.Channel.SendMessageAsync("https://top.gg/bot/705548602994458684");
         }
+        
+        [Command("source"), Aliases("code", "source-code")]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
+        [Description("Den Source Code vom Bot Anzeigen")]
+        public async Task Source(CommandContext ctx)
+        {
+            await ctx.Channel.SendMessageAsync("https://github.com/JMPJNS/sudo-bot-seescharf");
+        }
 
         [Command("guild")]
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
