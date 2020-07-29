@@ -51,6 +51,16 @@ namespace SudoBot.Commands
         {
             await ctx.Channel.SendMessageAsync("https://discord.gg/gHV2uhb");
         }
+        
+        [Command("enlarge")]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
+        [Description("Emote groß machen")]
+        public async Task Enlarge(CommandContext ctx, [Description("Das Emoji zu vergrößern")]DiscordEmoji e)
+        {
+            var args = ctx.RawArgumentString;
+            var cmd = ctx.CommandsNext.FindCommand("u make-big", out args);
+            await cmd.ExecuteAsync(ctx);
+        }
 
         [Command("guild-count")]
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]

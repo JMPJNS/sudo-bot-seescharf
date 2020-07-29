@@ -70,7 +70,7 @@ namespace SudoBot
             return await req.Content.ReadAsStringAsync();
         }
         
-        public static async Task<string> RunCommand(string cmd, int waitTime = 1000)
+        public static async Task<string> RunCommand(string cmd, int waitTime = 200)
         {
             var escapedArgs = cmd.Replace("\"", "\\\"");
             
