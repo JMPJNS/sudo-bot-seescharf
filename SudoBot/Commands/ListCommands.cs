@@ -85,7 +85,7 @@ namespace SudoBot.Commands
 
                 if (item is AnilistItem ai)
                 {
-                    embed.WithThumbnailUrl(ai.ImageUrl);
+                    embed.WithThumbnail(ai.ImageUrl);
                     embed.AddField($"{ai.TotalEpisodes} Episoden", $"{ai.WatchedEpisodes} Gesehen");
                     Uri uri;
                     try

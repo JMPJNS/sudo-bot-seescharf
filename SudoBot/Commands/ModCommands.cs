@@ -27,7 +27,7 @@ namespace SudoBot.Commands
                 await member.BanAsync();
                 var embed = new DiscordEmbedBuilder()
                     .WithColor(DiscordColor.Red)
-                    .WithThumbnailUrl(member.AvatarUrl)
+                    .WithThumbnail(member.AvatarUrl)
                     .WithDescription(member.Mention)
                     .AddField("Von", ctx.Member.Mention)
                     .WithTitle("Banned");

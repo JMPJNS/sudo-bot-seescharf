@@ -201,7 +201,7 @@ namespace SudoBot.Commands
             var me = await ctx.Client.GetUserAsync(Globals.MyId);
             var embed = new DiscordEmbedBuilder()
                 .WithColor(DiscordColor.Aquamarine)
-                .WithThumbnailUrl(me.AvatarUrl)
+                .WithThumbnail(me.AvatarUrl)
                 .WithTitle("Entwickler des Bots")
                 .WithDescription($"{me.Username}#{me.Discriminator}");
             await ctx.Channel.SendMessageAsync(embed: embed.Build());

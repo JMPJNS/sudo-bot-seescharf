@@ -257,7 +257,7 @@ namespace SudoBot.Commands
                 .AddField("Erstellt", member.CreationTimestamp.ToString())
                 .AddField("Rollen", roles.Length != 0 ? roles : "Keine")
                 .AddField("Tickets", user.TicketsRemaining.ToString())
-                .WithThumbnailUrl(member.AvatarUrl);
+                .WithThumbnail(member.AvatarUrl);
 
             await ctx.Channel.SendMessageAsync(embed: embed.Build());
         }

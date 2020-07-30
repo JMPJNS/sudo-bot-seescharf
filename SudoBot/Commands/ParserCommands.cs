@@ -28,7 +28,7 @@ namespace SudoBot.Commands
             var embed = new DiscordEmbedBuilder()
                 .WithColor(DiscordColor.IndianRed)
                 .WithTitle($"Youtube: {res.Name}")
-                .WithThumbnailUrl(res.ImgUrl)
+                .WithThumbnail(res.ImgUrl)
                 .WithDescription($"Subscriber: {res.SubCountString}")
                 .WithUrl(res.Url);
 

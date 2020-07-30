@@ -116,7 +116,7 @@ namespace SudoBot.Commands
                 var episodeCount = json["Anime"]["EpisodeCount"]?.ToObject<int>();
                 
                 var embed = new DiscordEmbedBuilder();
-                embed.WithThumbnailUrl(thumbnailUrl);
+                embed.WithThumbnail(thumbnailUrl);
                 embed.WithTitle(title);
                 embed.WithDescription(description != null ? description.Substring(0, 160) + "..." : "No Description");
                 embed.WithUrl(url);
@@ -260,7 +260,7 @@ namespace SudoBot.Commands
             var embed = new DiscordEmbedBuilder();
             embed.WithTitle(res.Title);
             embed.WithUrl(res.Url);
-            if (res.ImageUrl != null) embed.WithThumbnailUrl(res.ImageUrl);
+            if (res.ImageUrl != null) embed.WithThumbnail(res.ImageUrl);
             if (res.Snippet != null) embed.WithDescription(res.Snippet);
             await ctx.Channel.SendMessageAsync(embed: embed.Build());
         }

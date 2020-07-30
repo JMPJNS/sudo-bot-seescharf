@@ -261,7 +261,7 @@ namespace SudoBot
 
             var embed = new DiscordEmbedBuilder()
                 .WithColor(DiscordColor.Aquamarine)
-                .WithThumbnailUrl(e.Guild.IconUrl)
+                .WithThumbnail(e.Guild.IconUrl)
                 .WithTitle("Bot Joined")
                 .WithDescription(e.Guild.Name)
                 .AddField("ID", e.Guild.Id.ToString())
@@ -292,7 +292,7 @@ namespace SudoBot
 
             // var embed = new DiscordEmbedBuilder()
             //     .WithColor(DiscordColor.Aquamarine)
-            //     .WithThumbnailUrl(e.Guild.IconUrl)
+            //     .WithThumbnail(e.Guild.IconUrl)
             //     .WithTitle("Bot Logged In")
             //     .WithDescription(e.Guild.Name);
             //
