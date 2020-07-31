@@ -138,7 +138,7 @@ namespace SudoBot
                     Task.Delay(10000).GetAwaiter().GetResult();
                     MinuteScheduler.Start();
                     
-                    e.Client.UpdateStatusAsync(new DiscordActivity("$guild", ActivityType.ListeningTo));
+                    e.Client.UpdateStatusAsync(new DiscordActivity("$invite", ActivityType.ListeningTo));
                     Globals.LogChannel.SendMessageAsync("Bot Started");
                 });
 
