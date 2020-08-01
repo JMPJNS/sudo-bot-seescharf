@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -35,13 +36,6 @@ namespace SudoBot.Commands
                 await ctx.Channel.SendMessageAsync("Keine Ergebnisse Gefunden");
                 return;
             }
-
-            if (IsAnilistUrl(res.Url))
-            {
-                await GetAnilistScraping(ctx, res.Url, res);
-                return;
-            }
-            
             await SendResult(ctx, res);
         }
         
@@ -90,6 +84,13 @@ namespace SudoBot.Commands
             if (url.StartsWith("https://anilist.co")) return true;
             return false;
         }
+        
+        private bool IsBoxnovelUrl(string url)
+        {
+            if (url.StartsWith("https://boxnovel.com")) return true;
+            return false;
+        }
+        
         private async Task GetAnilistScraping(CommandContext ctx, string url, SearchResult searchRes = null)
         {
             var pUrl = $"http://srv-captain--scrapj/parser/anilist/{url}";
@@ -148,6 +149,92 @@ namespace SudoBot.Commands
             {
                 await SendResult(ctx, searchRes);
             }
+        }
+        
+        private class BoxnovelChapter
+        {
+            string Url;
+            string Name;
+            string ReleaseDateString;
+        }
+        
+        private async Task<string> GetBoxnovelScraping(CommandContext ctx, string url, SearchResult searchRes = null)
+        {
+            var pUrl = $"http://localhost/parser/boxnovel/{url}";
+
+            var json = await Globals.HttpJsonRequest(pUrl);
+
+            if (json == null)
+            {
+                return null;
+            }
+            
+
+            if (json["Overview"] != null)
+            {
+                var title = json["Overview"]["Title"]?.ToObject<string>();
+                var description = json["Overview"]["Description"]?.ToObject<string>();
+                var thumbnailUrl = json["Overview"]["ImageUrl"]?.ToObject<string>();
+                var status = json["Overview"]["Status"]?.ToObject<string>();
+                var genres = json["Overview"]["Genres"]?.ToObject<List<string>>();
+                var chapterCount = json["Overview"]["ChapterCount"]?.ToObject<int>();
+                var chapterList = json["Overview"]["ChapterList"]?.ToObject<List<BoxnovelChapter>>();
+                
+                var embed = new DiscordEmbedBuilder();
+                embed.WithThumbnail(thumbnailUrl);
+                embed.WithTitle(title);
+                embed.WithDescription(description != null ? description.Substring(0, 160) + "..." : "No Description");
+                embed.WithUrl(url);
+                embed.WithColor(DiscordColor.Aquamarine);
+
+                if (status != null)
+                {
+                    embed.AddField("Status", status);
+                }
+                
+                if (genres != null)
+                {
+                    var genreString = string.Join(", ", genres);
+                    embed.AddField("Genres", genreString);
+                }
+                
+                if (chapterCount != null)
+                {
+                    embed.AddField("Chapters", chapterCount.ToString());
+                }
+
+                await ctx.RespondAsync(embed: embed.Build());
+
+            } else if (json["Chapter"] != null)
+            {
+                
+            }
+            else
+            {
+                await SendResult(ctx, searchRes);
+            }
+
+            await ctx.Message.DeleteAsync();
+
+            return "not null";
+        }
+
+        [Command("boxnovel")]
+        [Cooldown(1, 20, CooldownBucketType.User)]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
+        public async Task SearchBoxnovel(CommandContext ctx, [RemainingText] string searchTerm = null)
+        {
+            if (IsBoxnovelUrl(searchTerm))
+            {
+                var res = await GetBoxnovelScraping(ctx, searchTerm);
+                if (res == null)
+                {
+                    await Search(ctx, searchTerm);
+                }
+                return;
+            }
+            
+            await Search(ctx, searchTerm);
         }
         
         [Command("anilist"), Aliases("anime")]
