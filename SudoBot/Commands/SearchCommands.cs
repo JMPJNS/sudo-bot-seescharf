@@ -160,7 +160,7 @@ namespace SudoBot.Commands
         
         private async Task<string> GetBoxnovelScraping(CommandContext ctx, string url, SearchResult searchRes = null)
         {
-            var pUrl = $"http://localhost/parser/boxnovel/{url}";
+            var pUrl = $"http://srv-captain--scrapj/parser/boxnovel/{url}";
 
             var json = await Globals.HttpJsonRequest(pUrl);
 
