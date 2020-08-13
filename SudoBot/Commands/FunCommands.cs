@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
@@ -44,6 +45,14 @@ namespace SudoBot.Commands
                 await ctx.Channel.SendMessageAsync(embed: embed.Build());
             }
             request.Close();
+        }
+        
+        [Command("random"), Description("Random zahl"), Cooldown(5, 10, CooldownBucketType.User)]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
+        public async Task R(CommandContext ctx, int minimum, int maximum)
+        {
+            Random rnd = new Random();
+            int month = rnd.Next(minimum, maximum+1);
         }
         
         [Command("multiply"), Description("Multipliziert 2 Zahlen"), Cooldown(5, 10, CooldownBucketType.User)]
