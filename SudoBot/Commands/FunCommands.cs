@@ -52,7 +52,8 @@ namespace SudoBot.Commands
         public async Task R(CommandContext ctx, int minimum, int maximum)
         {
             Random rnd = new Random();
-            int month = rnd.Next(minimum, maximum+1);
+            int random = rnd.Next(minimum, maximum+1);
+            await ctx.RespondAsync(random.ToString());
         }
         
         [Command("multiply"), Description("Multipliziert 2 Zahlen"), Cooldown(5, 10, CooldownBucketType.User)]
