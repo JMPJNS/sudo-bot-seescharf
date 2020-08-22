@@ -94,6 +94,21 @@ namespace SudoBot.Commands
             await UtilityCommands.ReminderCommand(ctx, format, DateTime.UtcNow + timespan, message);
         }
         
+        
+        // Copyright 2018 Emzi0767
+        //
+        // Licensed under the Apache License, Version 2.0 (the "License");
+        // you may not use this file except in compliance with the License.
+        //     You may obtain a copy of the License at
+        //
+        // http://www.apache.org/licenses/LICENSE-2.0
+        //
+        // Unless required by applicable law or agreed to in writing, software
+        //     distributed under the License is distributed on an "AS IS" BASIS,
+        // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        //     See the License for the specific language governing permissions and
+        // limitations under the License.
+        // Original: https://github.com/Emzi0767/Discord-Companion-Cube-Bot/commit/708111bd1e391aeb921931ec5e002c218bc3376a#diff-4b1bfdba524893a69046e4e9ac23e635
         [Command("eval"), Description("Evaluates a snippet of C# code, in context."), RequireOwner]
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         public async Task Eval(CommandContext ctx, [RemainingText, Description("Code to evaluate.")] string code)
