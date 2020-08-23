@@ -126,11 +126,11 @@ namespace SudoBot.Commands
             {
                 emoji = await ctx.Guild.GetEmojiAsync(guild.CustomsEmoji);
             }
-            catch
+            catch (Exception e)
             {
                 if (guild.CustomsEmoji != 0)
                 {
-                    await ctx.Channel.SendMessageAsync($"Es ist ein Fehler Aufgetreten, Emoji {guild.CustomsEmoji} exestiert nicht. Kontaktiere JMP#7777");
+                    await ctx.Channel.SendMessageAsync($"Es ist ein Fehler Aufgetreten ({e.Message}), Emoji {guild.CustomsEmoji} exestiert nicht. Kontaktiere JMP#7777");
                     return;
                 }
                 emoji = DiscordEmoji.FromName(ctx.Client, ":white_check_mark:");
