@@ -124,7 +124,7 @@ namespace SudoBot.Commands
             DiscordEmoji emoji;
             try
             {
-                emoji = await ctx.Guild.GetEmojiAsync(guild.CustomsEmoji);
+                emoji = DiscordEmoji.FromGuildEmote(ctx.Client, guild.CustomsEmoji);
             }
             catch (Exception e)
             {
