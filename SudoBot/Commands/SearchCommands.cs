@@ -18,7 +18,7 @@ using SudoBot.Parser;
 
 namespace SudoBot.Commands
 {
-    [Group("search"), Aliases("s")]
+    [Group("search"), Aliases("s", "lmgtfy")]
     [Cooldown(1, 20, CooldownBucketType.User)]
     [Description("Commands zum Sachen im Internet Suchen")]
     public class SearchCommands: BaseCommandModule
