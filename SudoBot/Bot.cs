@@ -89,7 +89,7 @@ namespace SudoBot
             Commands.RegisterCommands<ParserCommands>();
             Commands.RegisterCommands<SearchCommands>();
             Commands.RegisterCommands<ListCommands>();
-                        
+
             MinuteScheduler = new Timer(60*1000);
             MinuteScheduler.Elapsed += OnMinuteEvent;
             
@@ -130,16 +130,16 @@ namespace SudoBot
         private Task OnClientReady(ReadyEventArgs e)
         {
             Globals.Client = e.Client;
-            e.Client.Logger.Log(LogLevel.Information, "SudoBot", $"Bot Started", DateTime.Now);
+            e.Client.Logger.Log(LogLevel.Information,  $"Bot Started", DateTime.Now);
 
-            Task.Run(() =>
-                {
-                    Task.Delay(10000).GetAwaiter().GetResult();
-                    MinuteScheduler.Start();
-                    
-                    e.Client.UpdateStatusAsync(new DiscordActivity("$invite", ActivityType.ListeningTo));
-                    Globals.LogChannel.SendMessageAsync("Bot Started");
-                });
+            e.Client.UpdateStatusAsync(new DiscordActivity("$invite", ActivityType.ListeningTo));
+
+            // Task.Run(() =>
+            //     {
+            //         Task.Delay(10000).GetAwaiter().GetResult();
+            //         MinuteScheduler.Start();
+            //         
+            //     });
 
             return Task.CompletedTask;
         }
@@ -322,6 +322,12 @@ namespace SudoBot
                 }
             }
 
+            if (e.Guild.Id == 468835109844418575)
+            {
+                var c = Globals.LogChannel;
+                c.SendMessageAsync("Bot Started");
+            }
+            
             return Task.CompletedTask;
         }
 
