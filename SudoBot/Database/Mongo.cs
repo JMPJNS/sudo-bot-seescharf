@@ -38,7 +38,7 @@ namespace SudoBot.Database
                 _scheduled = _db.GetCollection<Scheduled>("Scheduled");
                 _lists = _db.GetCollection<SudoList>("Lists");
                 
-                Console.WriteLine("Connected to Mongo");
+                Globals.Client.Logger.LogInformation("Connected to Mongo");
             }
             catch (Exception e)
             {
