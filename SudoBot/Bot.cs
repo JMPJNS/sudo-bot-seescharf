@@ -9,6 +9,7 @@ using DSharpPlus.CommandsNext.Exceptions;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using DSharpPlus.Interactivity;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SudoBot.Attributes;
 using SudoBot.Commands;
@@ -41,8 +42,7 @@ namespace SudoBot
                 Token = Environment.GetEnvironmentVariable("BOTTOKEN"),
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
-                LogLevel = LogLevel.Debug,
-                UseInternalLogHandler = true
+                MinimumLogLevel = LogLevel.Debug
             };
 
             Client = new DiscordClient(config);
@@ -129,9 +129,9 @@ namespace SudoBot
 
         private Task OnClientReady(ReadyEventArgs e)
         {
-            Globals.Logger = e.Client.DebugLogger;
+            Globals.Logger = e.Client.Logger;
             Globals.Client = e.Client;
-            Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Bot Started", DateTime.Now);
+            Globals.Logger.Log(LogLevel.Information, "SudoBot", $"Bot Started", DateTime.Now);
 
             Task.Run(() =>
                 {
@@ -257,7 +257,7 @@ namespace SudoBot
 
         private Task OnGuildCreated(GuildCreateEventArgs e)
         {
-            Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Bot Joined: [{e.Guild.Id}] {e.Guild.Name}", DateTime.Now);
+            Globals.Logger.Log(LogLevel.Information,  $"Bot Joined: [{e.Guild.Id}] {e.Guild.Name}", DateTime.Now);
 
             var embed = new DiscordEmbedBuilder()
                 .WithColor(DiscordColor.Aquamarine)
@@ -288,7 +288,7 @@ namespace SudoBot
         
         private Task OnGuildAvailable(GuildCreateEventArgs e)
         {
-            Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Bot Logged in on: [{e.Guild.Id}] {e.Guild.Name}", DateTime.Now);
+            Globals.Logger.Log(LogLevel.Information,  $"Bot Logged in on: [{e.Guild.Id}] {e.Guild.Name}", DateTime.Now);
 
             // var embed = new DiscordEmbedBuilder()
             //     .WithColor(DiscordColor.Aquamarine)
@@ -328,21 +328,21 @@ namespace SudoBot
 
         private Task OnMemberUpdated(GuildMemberUpdateEventArgs e)
         {
-            Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Member Updated: [{e.Guild}] ({e.Member})", DateTime.Now);
+            Globals.Logger.Log(LogLevel.Information, $"Member Updated: [{e.Guild}] ({e.Member})", DateTime.Now);
             _memberUpdateHandler.HandleRoleChange(e).GetAwaiter().GetResult();
             return Task.CompletedTask;
         }
         
         private Task OnClientError(ClientErrorEventArgs e)
         {
-            Globals.Logger.LogMessage(LogLevel.Error, "SudoBot", $"Exception occured: {e.Exception.GetType()}: {e.Exception.Message}", DateTime.Now);
+            Globals.Logger.Log(LogLevel.Error,  $"Exception occured: {e.Exception.GetType()}: {e.Exception.Message}", DateTime.Now);
             
             return Task.CompletedTask;
         }
         
         private Task MessageCreated(MessageCreateEventArgs e)
         {
-            Globals.Logger.LogMessage(LogLevel.Info, "SudoBot", $"Message Created: [{e.Guild.Id} : {e.Channel.Id}] ({e.Author.Username}): {e.Message.Content}", DateTime.Now);
+            Globals.Logger.Log(LogLevel.Information,  $"Message Created: [{e.Guild.Id} : {e.Channel.Id}] ({e.Author.Username}): {e.Message.Content}", DateTime.Now);
             try
             {
                 _messageHandler.HandleMessage(e).GetAwaiter().GetResult();

@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.Entities;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using SudoBot.Models;
@@ -41,7 +42,7 @@ namespace SudoBot.Database
             }
             catch (Exception e)
             {
-                Globals.Logger.LogMessage(LogLevel.Error, "SudoBot", $"Exception occured While connecting to Database: {e.GetType()}: {e.Message}", DateTime.Now);
+                Globals.Logger.Log(LogLevel.Error,  $"Exception occured While connecting to Database: {e.GetType()}: {e.Message}", DateTime.Now);
             }
         }
         

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DSharpPlus;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using SudoBot.Database;
@@ -170,7 +171,7 @@ namespace SudoBot.Models
             }
             catch (Exception e)
             {
-                Globals.Logger.LogMessage(LogLevel.Error, "SudoBot", $"Error in Scheduler: {e.Message}", DateTime.Now);
+                Globals.Logger.Log(LogLevel.Error,  $"Error in Scheduler: {e.Message}", DateTime.Now);
             }
         }
     }

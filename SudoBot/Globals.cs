@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.Entities;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using SudoBot.Models;
 using SudoBot.Parser;
@@ -17,7 +18,7 @@ namespace SudoBot
     {
         public static readonly string[] ModRoles = {"SudoAdmin", "SudoMod", "Admins", "Mods", "✨ | Server-Techniker👑", "️✨│Senior Moderatoren", "🔧│Bot Developer✨", "✨│Helferleine", "✨│Moderatoren"};
         public static readonly string[] AdminRoles = {"SudoAdmin", "Admins", "✨ | Server-Techniker👑", "️✨│Senior Moderatoren", "🔧│Bot Developer✨"};
-        public static DebugLogger Logger;
+        public static ILogger Logger;
         public static DiscordClient Client;
         public static ulong MyId = 272809112851578881;
         public static string CdnKey;
