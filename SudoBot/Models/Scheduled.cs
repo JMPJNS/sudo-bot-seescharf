@@ -171,7 +171,7 @@ namespace SudoBot.Models
             }
             catch (Exception e)
             {
-                Globals.Logger.Log(LogLevel.Error,  $"Error in Scheduler: {e.Message}", DateTime.Now);
+                Globals.Client.Logger.Log(LogLevel.Error,  $"Error in Scheduler: {e.Message}", DateTime.Now);
             }
         }
     }

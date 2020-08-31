@@ -129,9 +129,8 @@ namespace SudoBot
 
         private Task OnClientReady(ReadyEventArgs e)
         {
-            Globals.Logger = e.Client.Logger;
             Globals.Client = e.Client;
-            Globals.Logger.Log(LogLevel.Information, "SudoBot", $"Bot Started", DateTime.Now);
+            e.Client.Logger.Log(LogLevel.Information, "SudoBot", $"Bot Started", DateTime.Now);
 
             Task.Run(() =>
                 {
@@ -257,7 +256,7 @@ namespace SudoBot
 
         private Task OnGuildCreated(GuildCreateEventArgs e)
         {
-            Globals.Logger.Log(LogLevel.Information,  $"Bot Joined: [{e.Guild.Id}] {e.Guild.Name}", DateTime.Now);
+            e.Client.Logger.Log(LogLevel.Information,  $"Bot Joined: [{e.Guild.Id}] {e.Guild.Name}", DateTime.Now);
 
             var embed = new DiscordEmbedBuilder()
                 .WithColor(DiscordColor.Aquamarine)
@@ -288,7 +287,7 @@ namespace SudoBot
         
         private Task OnGuildAvailable(GuildCreateEventArgs e)
         {
-            Globals.Logger.Log(LogLevel.Information,  $"Bot Logged in on: [{e.Guild.Id}] {e.Guild.Name}", DateTime.Now);
+            e.Client.Logger.Log(LogLevel.Information,  $"Bot Logged in on: [{e.Guild.Id}] {e.Guild.Name}", DateTime.Now);
 
             // var embed = new DiscordEmbedBuilder()
             //     .WithColor(DiscordColor.Aquamarine)
@@ -328,21 +327,21 @@ namespace SudoBot
 
         private Task OnMemberUpdated(GuildMemberUpdateEventArgs e)
         {
-            Globals.Logger.Log(LogLevel.Information, $"Member Updated: [{e.Guild}] ({e.Member})", DateTime.Now);
+            e.Client.Logger.Log(LogLevel.Information, $"Member Updated: [{e.Guild}] ({e.Member})", DateTime.Now);
             _memberUpdateHandler.HandleRoleChange(e).GetAwaiter().GetResult();
             return Task.CompletedTask;
         }
         
         private Task OnClientError(ClientErrorEventArgs e)
         {
-            Globals.Logger.Log(LogLevel.Error,  $"Exception occured: {e.Exception.GetType()}: {e.Exception.Message}", DateTime.Now);
+            e.Client.Logger.Log(LogLevel.Error,  $"Exception occured: {e.Exception.GetType()}: {e.Exception.Message}", DateTime.Now);
             
             return Task.CompletedTask;
         }
         
         private Task MessageCreated(MessageCreateEventArgs e)
         {
-            Globals.Logger.Log(LogLevel.Information,  $"Message Created: [{e.Guild.Id} : {e.Channel.Id}] ({e.Author.Username}): {e.Message.Content}", DateTime.Now);
+            e.Client.Logger.Log(LogLevel.Information,  $"Message Created: [{e.Guild.Id} : {e.Channel.Id}] ({e.Author.Username}): {e.Message.Content}", DateTime.Now);
             try
             {
                 _messageHandler.HandleMessage(e).GetAwaiter().GetResult();

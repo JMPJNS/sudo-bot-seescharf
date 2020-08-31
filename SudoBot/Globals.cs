@@ -18,7 +18,6 @@ namespace SudoBot
     {
         public static readonly string[] ModRoles = {"SudoAdmin", "SudoMod", "Admins", "Mods", "✨ | Server-Techniker👑", "️✨│Senior Moderatoren", "🔧│Bot Developer✨", "✨│Helferleine", "✨│Moderatoren"};
         public static readonly string[] AdminRoles = {"SudoAdmin", "Admins", "✨ | Server-Techniker👑", "️✨│Senior Moderatoren", "🔧│Bot Developer✨"};
-        public static ILogger Logger;
         public static DiscordClient Client;
         public static ulong MyId = 272809112851578881;
         public static string CdnKey;

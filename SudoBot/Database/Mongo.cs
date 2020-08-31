@@ -42,7 +42,7 @@ namespace SudoBot.Database
             }
             catch (Exception e)
             {
-                Globals.Logger.Log(LogLevel.Error,  $"Exception occured While connecting to Database: {e.GetType()}: {e.Message}", DateTime.Now);
+                Globals.Client.Logger.Log(LogLevel.Error,  $"Exception occured While connecting to Database: {e.GetType()}: {e.Message}", DateTime.Now);
             }
         }
         
