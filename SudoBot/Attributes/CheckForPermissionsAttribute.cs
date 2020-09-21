@@ -24,6 +24,7 @@ namespace SudoBot.Attributes
             if (ctx.Guild == null || ctx.Member == null) return Task.FromResult(false);
 
             var guildConfig = Guild.GetGuild(ctx.Guild.Id).GetAwaiter().GetResult();
+            
             var user = User.GetOrCreateUser(ctx.Member).GetAwaiter().GetResult();
 
             if (ctx.Member.Id == Globals.MyId) return Task.FromResult(true);

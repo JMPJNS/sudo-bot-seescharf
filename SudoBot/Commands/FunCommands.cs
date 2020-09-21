@@ -6,6 +6,7 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using SudoBot.Attributes;
+using SudoBot.Handlers;
 
 namespace SudoBot.Commands
 {
@@ -54,6 +55,12 @@ namespace SudoBot.Commands
             Random rnd = new Random();
             int random = rnd.Next(minimum, maximum+1);
             await ctx.RespondAsync(random.ToString());
+        }
+
+        [Command("subnet"), Description("Subnetmask und Broadcast Adresse zu einer IP Adresse und Prefix länge")]
+        public async Task Subnet(CommandContext ctx, string ip, int prefixLength)
+        {
+            SubnetCalculator.DoTheThing(ip, prefixLength, ctx);
         }
         
         [Command("multiply"), Description("Multipliziert 2 Zahlen"), Cooldown(5, 10, CooldownBucketType.User)]

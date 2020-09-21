@@ -54,7 +54,7 @@ namespace SudoBot.Commands
 
         //TODO blacklisted words, channel basiert
         [Command("clean"), Description("Die letzten X bot nachrichten löschen")]
-        public async Task Clean(CommandContext ctx, int count = 10) {
+        public async Task Clean(CommandContext ctx, int count = 5) {
             var botMember = await ctx.Guild.GetMemberAsync(ctx.Client.CurrentUser.Id);    
             await Purge(ctx, botMember, count);
         }
