@@ -22,7 +22,7 @@ namespace SudoBot.Handlers
 
             var actualPrefixLength = CalculateActualPrefix(prefixLength, subnetCount);
             var subnetMask = CalculateSubnetMask(actualPrefixLength);
-            var baseNetworkAdress = CalculateAdressBase(ip, actualPrefixLength);
+            var baseNetworkAdress = CalculateAdressBase(ip, prefixLength);
 
             var descEmbed = new DiscordEmbedBuilder();
 
