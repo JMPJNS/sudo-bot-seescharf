@@ -38,7 +38,7 @@ namespace SudoBot.Handlers
             for(int i = 0; i<subnetCount; i++) {
                 var subnetEmbed = new DiscordEmbedBuilder();
                 subnetEmbed.WithTitle("Subnet " + (i+1));
-                var currentBaseAdress = CalculateCurrentAdressBase(baseNetworkAdress, prefixLength, actualPrefixLength, i);
+                var currentBaseAdress = CalculateCurrentAdressBase(baseNetworkAdress, prefixLength, actualPrefixLength, i, subnetCount);
                 var broadcastAdress = CalculateBroadcastAdress(currentBaseAdress, actualPrefixLength);
                 var hostCount = CalcuateHostCount(actualPrefixLength);
                 var hostRange = $"{ConvertFromIntegerToIpAddress(currentBaseAdress+1)} - {ConvertFromIntegerToIpAddress(broadcastAdress-1)}";
@@ -58,17 +58,13 @@ namespace SudoBot.Handlers
             }
         }
 
-        static void PrintIP(UInt32 ip, string name = null) {
-            if (name != null) {
-                Console.WriteLine(name);
-            }
-            Console.WriteLine(Convert.ToString(ip, 2));
-            Console.WriteLine(ConvertFromIntegerToIpAddress(ip));
-            Console.WriteLine("---");
+        static UInt32 CalculateCurrentAdressBase(UInt32 ipBase, int prefixLength, int actualPrefixLength, int count, int subnetCount) {
+            var t = ipBase | (UInt32) ((UInt32) count << 32-prefixLength-binaryNumLength(subnetCount - 1));            
+            return t;
         }
 
-        static UInt32 CalculateCurrentAdressBase(UInt32 ipBase, int prefixLength, int actualPrefixLength, int count) {
-            return ipBase | (UInt32) (count << 32 - prefixLength - binaryNumLength(actualPrefixLength - prefixLength) - 1);            
+        static UInt32 RotateRight(UInt32 number, int bits) {
+            return (number >> bits) | (number << (31 - bits));
         }
 
         static UInt32 CalculateAdressBase(UInt32 ip, int prefix) {
@@ -106,12 +102,12 @@ namespace SudoBot.Handlers
         }
 
         static int binaryNumLength(int number) {
-            return (int) Math.Log2(number);
+            return Convert.ToString(number, 2).Length;
         }
 
         static UInt32 CalculateSubnetMask(int prefix)
         {
-            return Convert.ToUInt32( ~0u << (32 - prefix));
+            return Convert.ToUInt32( ~0u << (32 - prefix + 1));
         }
         
         static string CalculateSubnetMaskString(int prefix)
@@ -151,7 +147,7 @@ namespace SudoBot.Handlers
             return $"{ConvertFromIntegerToIpAddress(t.first)}...{ConvertFromIntegerToIpAddress(t.last)}";
         }
 
-        static string ConvertFromIntegerToIpAddress(uint ipAddress)
+        public static string ConvertFromIntegerToIpAddress(uint ipAddress)
         {
             byte[] bytes = BitConverter.GetBytes(ipAddress);
             if (BitConverter.IsLittleEndian)
