@@ -76,5 +76,55 @@ namespace SudoBot.Commands
         {
             var message = await ctx.Channel.SendMessageAsync(uno.ToString() + "/" + due.ToString() + "=" + ((float)uno/(float)due).ToString());
         }
+        
+        [Command("ggt"), Description("GGT von 2 Zahlen Finden"), Cooldown(5, 10, CooldownBucketType.User)]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
+        public async Task Ggt(CommandContext ctx, [Description("Erste Zahl")]int uno, [Description("Zweite Zahl")]int due)
+        {
+            var calc = new GgtKgvCalculator(uno, due);
+            await ctx.Channel.SendMessageAsync($"GGT: {calc.GetGgt()}");
+        }
+        
+        [Command("kgv"), Description("KGV von 2 Zahlen Finden"), Cooldown(5, 10, CooldownBucketType.User)]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
+        public async Task Kgv(CommandContext ctx, [Description("Erste Zahl")]int uno, [Description("Zweite Zahl")]int due)
+        {
+            var calc = new GgtKgvCalculator(uno, due);
+            await ctx.Channel.SendMessageAsync($"KGV: {calc.GetKgv()}");
+        }
+    }
+    
+    public class GgtKgvCalculator
+    {
+        private readonly int _num1;
+        private readonly int _num2;
+        
+        
+        public GgtKgvCalculator(int num1, int num2)
+        {
+            _num1 = num1;
+            _num2 = num2;
+        }
+
+        public int GetGgt()
+        {
+            int num = _num1;
+            int rest = _num2;
+
+            // Divide by rest until ggt is found
+            while (rest != 0)
+            {
+                int t = rest;
+                rest = num % rest;
+                num = t;
+            }
+            
+            return num;
+        }
+
+        public int GetKgv()
+        {
+            return (_num1 * _num2) / GetGgt();
+        }
     }
 }
