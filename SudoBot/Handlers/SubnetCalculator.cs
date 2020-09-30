@@ -43,12 +43,6 @@ namespace SudoBot.Handlers
                 var hostCount = CalcuateHostCount(actualPrefixLength);
                 var hostRange = $"{ConvertFromIntegerToIpAddress(currentBaseAdress+1)} - {ConvertFromIntegerToIpAddress(broadcastAdress-1)}";
 
-                // PrintIP(currentBaseAdress, "Network Address");
-                // PrintIP(broadcastAdress, "Broadcast Address");
-                // Console.WriteLine("Host Count: "+hostCount);
-                // Console.WriteLine("Host Range: "+hostRange);
-                // Console.WriteLine("\n-----\n\n");
-
                 subnetEmbed.AddField("Network Address", ConvertFromIntegerToIpAddress(currentBaseAdress));
                 subnetEmbed.AddField("Broadcast Address", ConvertFromIntegerToIpAddress(broadcastAdress));
                 subnetEmbed.AddField("Host Count", hostCount.ToString());

@@ -58,9 +58,9 @@ namespace SudoBot.Commands
         }
 
         [Command("subnet"), Description("Subnetmask und Broadcast Adresse zu einer IP Adresse und Prefix länge")]
-        public async Task Subnet(CommandContext ctx, [Description("Die IP Adressen")] string ip, [Description("Die Länge des Host Anteils")] int prefixLength)
+        public async Task Subnet(CommandContext ctx, [Description("Die IP Adresse (Format Beispiel: 192.168.8.30/24)")] string ip, [Description("Die Anzahl der Subnets")] int subnetCount)
         {
-            SubnetCalculator.DoTheThing(ip, prefixLength, ctx);
+            SubnetCalculator.DoTheThing(ip, subnetCount, ctx);
         }
         
         [Command("multiply"), Description("Multipliziert 2 Zahlen"), Cooldown(5, 10, CooldownBucketType.User)]
