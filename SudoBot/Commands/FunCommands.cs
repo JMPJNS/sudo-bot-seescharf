@@ -102,6 +102,11 @@ namespace SudoBot.Commands
         
         public GgtKgvCalculator(int num1, int num2)
         {
+            if (num1 >= 100000 || num2 >= 100000)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+            
             _num1 = num1;
             _num2 = num2;
         }
