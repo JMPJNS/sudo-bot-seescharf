@@ -58,7 +58,7 @@ namespace SudoBot.Commands
         }
 
         [Command("subnet"), Description("Subnetmask und Broadcast Adresse zu einer IP Adresse und Prefix länge")]
-        public async Task Subnet(CommandContext ctx, string ip, int prefixLength)
+        public async Task Subnet(CommandContext ctx, [Description("Die IP Adressen")] string ip, [Description("Die Länge des Host Anteils")] int prefixLength)
         {
             SubnetCalculator.DoTheThing(ip, prefixLength, ctx);
         }
