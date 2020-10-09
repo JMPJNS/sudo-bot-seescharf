@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
@@ -19,8 +20,13 @@ namespace SudoBot.Handlers
             {
                 await user.UpdateUser(member);
             }
-            
-            await user.AddCountedMessages(args.Message);
+
+            var ignoredChannels = new List<ulong>() { 279942475152359425, 709596534768926761 };
+
+            if (!ignoredChannels.Contains(args.Message.Channel.Id))
+            {
+                await user.AddCountedMessages(args.Message);
+            }
 
         }
     }
