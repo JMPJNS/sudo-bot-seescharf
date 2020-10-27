@@ -11,8 +11,8 @@ namespace SudoBot.Commands
     [Description("Apec Stuff")]
     public class ApecCommands: BaseCommandModule
     {
-        private ulong _guildId = 679605280119586866;
-        private ulong _channelId = 770456182736420874;
+        private ulong _guildId = 468835109844418575;
+        private ulong _channelId = 710985729655701577;
         private string _charset = "0123456789ABCDEF";
 
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
@@ -43,7 +43,7 @@ namespace SudoBot.Commands
 
             if (color.Length < 6)
             {
-                color.PadLeft(6, 'F');
+                color = color.PadLeft(6, 'F');
             }
             
             var embed = new DiscordEmbedBuilder()
