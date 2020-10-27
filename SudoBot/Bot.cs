@@ -89,6 +89,7 @@ namespace SudoBot
             Commands.RegisterCommands<ParserCommands>();
             Commands.RegisterCommands<SearchCommands>();
             Commands.RegisterCommands<ListCommands>();
+            Commands.RegisterCommands<ApecCommands>();
 
             MinuteScheduler = new Timer(60*1000);
             MinuteScheduler.Elapsed += OnMinuteEvent;
