@@ -18,14 +18,14 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         [Description("Setze die Custom Games Rolle")]
         [Command("termin")]
-        public async Task AddTermin(CommandContext ctx, string name, string datum, string fach, string link)
+        public async Task AddTermin(CommandContext ctx, string name, string datum, string link)
         {
             var guild = await ctx.Client.GetGuildAsync(_guildId);
             var channel = guild.GetChannel(_channelId);
 
             var color = "";
 
-            foreach (var x in fach.ToUpper())
+            foreach (var x in name.ToUpper())
             {
                 if (_charset.Contains(x))
                 {
@@ -49,7 +49,6 @@ namespace SudoBot.Commands
             var embed = new DiscordEmbedBuilder()
                 .WithColor(new DiscordColor(color));
 
-            embed.AddField("Fach", fach);
             embed.AddField("Name", name);
             embed.AddField("Datum", datum);
             embed.AddField("Link", link);
