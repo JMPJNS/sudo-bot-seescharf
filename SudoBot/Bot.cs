@@ -53,6 +53,7 @@ namespace SudoBot
             
             Client.ClientErrored += OnClientError;
             Client.MessageCreated += MessageCreated;
+            Client.GuildDeleted += OnGuildDeleted;
 
             Client.GuildMemberUpdated += OnMemberUpdated;
 
@@ -107,6 +108,23 @@ namespace SudoBot
             // Start Bot
             await Client.ConnectAsync();
             await Task.Delay(-1);
+        }
+
+        private Task OnGuildDeleted(DiscordClient sender, GuildDeleteEventArgs e)
+        {
+            sender.Logger.Log(LogLevel.Information,  $"Bot Left: [{e.Guild.Id}] {e.Guild.Name}", DateTime.Now);
+
+            var embed = new DiscordEmbedBuilder()
+                .WithColor(DiscordColor.Red)
+                .WithThumbnail(e.Guild.IconUrl)
+                .WithTitle("Bot Left")
+                .WithDescription(e.Guild.Name)
+                .AddField("ID", e.Guild.Id.ToString())
+                .AddField("User Count", e.Guild.MemberCount.ToString());
+            
+            Globals.LogChannel.SendMessageAsync(embed: embed.Build());
+            
+            return Task.CompletedTask;
         }
 
         private static void OnMinuteEvent(object source, ElapsedEventArgs e)
@@ -286,14 +304,6 @@ namespace SudoBot
         {
             sender.Logger.Log(LogLevel.Information,  $"Bot Logged in on: [{e.Guild.Id}] {e.Guild.Name}", DateTime.Now);
 
-            // var embed = new DiscordEmbedBuilder()
-            //     .WithColor(DiscordColor.Aquamarine)
-            //     .WithThumbnail(e.Guild.IconUrl)
-            //     .WithTitle("Bot Logged In")
-            //     .WithDescription(e.Guild.Name);
-            //
-            // Globals.LogChannel.SendMessageAsync(embed: embed.Build());
-            
             var guild = Guild.GetGuild(e.Guild.Id).GetAwaiter().GetResult();
             if (guild == null)
             {
