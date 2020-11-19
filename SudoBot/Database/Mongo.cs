@@ -37,6 +37,22 @@ namespace SudoBot.Database
                 _parserResults = _db.GetCollection<ParserResult>("ParserResults");
                 _scheduled = _db.GetCollection<Scheduled>("Scheduled");
                 _lists = _db.GetCollection<SudoList>("Lists");
+
+                try
+                {
+                    Globals.Client.Logger.LogInformation("Connecting to Mongo");
+                    Globals.Client.Logger.LogInformation("me: " + _users.FindAsync(user => user.UserId == Globals.MyId)
+                        .Result.First().UserName);
+                }
+                catch (Exception e)
+                {
+                    if (!(e is InvalidOperationException))
+                    {
+                        Globals.Client.Logger.LogCritical("Error occured while connecting to mongo");
+                        Globals.Client.Logger.LogCritical(e.Message);
+                        return;
+                    }
+                }
                 
                 Globals.Client.Logger.LogInformation("Connected to Mongo");
             }

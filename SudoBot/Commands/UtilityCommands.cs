@@ -18,6 +18,8 @@ using SudoBot.Attributes;
 using SudoBot.Models;
 using SudoBot.Handlers;
 using System.Linq;
+using DSharpPlus.Interactivity.Enums;
+using DSharpPlus.Interactivity.Extensions;
 using SudoBot.Database;
 using SudoBot.Specifics;
 

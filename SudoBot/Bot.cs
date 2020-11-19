@@ -9,6 +9,7 @@ using DSharpPlus.CommandsNext.Exceptions;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using DSharpPlus.Interactivity;
+using DSharpPlus.Interactivity.Extensions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SudoBot.Attributes;
@@ -128,24 +129,19 @@ namespace SudoBot
             Scheduled.RunSchedule(ScheduledType.Day).GetAwaiter().GetResult();
         }
 
-        private Task OnClientReady(ReadyEventArgs e)
+        private Task OnClientReady(DiscordClient sender, ReadyEventArgs e)
         {
-            Globals.Client = e.Client;
-            e.Client.Logger.Log(LogLevel.Information,  $"Bot Started", DateTime.Now);
+            Globals.Client = sender;
+            sender.Logger.Log(LogLevel.Information,  $"Bot Started", DateTime.Now);
 
-            e.Client.UpdateStatusAsync(new DiscordActivity("$invite", ActivityType.ListeningTo));
-
-            // Task.Run(() =>
-            //     {
-            //         Task.Delay(10000).GetAwaiter().GetResult();
-            //         MinuteScheduler.Start();
-            //         
-            //     });
-
+            sender.UpdateStatusAsync(new DiscordActivity("$no", ActivityType.ListeningTo));
+            
+            
+            
             return Task.CompletedTask;
         }
 
-        private Task OnCommandErrored(CommandErrorEventArgs e)
+        private Task OnCommandErrored(CommandsNextExtension sender, CommandErrorEventArgs e)
         {
             if (e.Exception is CommandNotFoundException)
             {
@@ -255,9 +251,9 @@ namespace SudoBot
             return Task.CompletedTask;
             }
 
-        private Task OnGuildCreated(GuildCreateEventArgs e)
+        private Task OnGuildCreated(DiscordClient sender, GuildCreateEventArgs e)
         {
-            e.Client.Logger.Log(LogLevel.Information,  $"Bot Joined: [{e.Guild.Id}] {e.Guild.Name}", DateTime.Now);
+            sender.Logger.Log(LogLevel.Information,  $"Bot Joined: [{e.Guild.Id}] {e.Guild.Name}", DateTime.Now);
 
             var embed = new DiscordEmbedBuilder()
                 .WithColor(DiscordColor.Aquamarine)
@@ -286,9 +282,9 @@ namespace SudoBot
             return Task.CompletedTask;
         }
         
-        private Task OnGuildAvailable(GuildCreateEventArgs e)
+        private Task OnGuildAvailable(DiscordClient sender, GuildCreateEventArgs e)
         {
-            e.Client.Logger.Log(LogLevel.Information,  $"Bot Logged in on: [{e.Guild.Id}] {e.Guild.Name}", DateTime.Now);
+            sender.Logger.Log(LogLevel.Information,  $"Bot Logged in on: [{e.Guild.Id}] {e.Guild.Name}", DateTime.Now);
 
             // var embed = new DiscordEmbedBuilder()
             //     .WithColor(DiscordColor.Aquamarine)
@@ -332,23 +328,23 @@ namespace SudoBot
             return Task.CompletedTask;
         }
 
-        private Task OnMemberUpdated(GuildMemberUpdateEventArgs e)
+        private Task OnMemberUpdated(DiscordClient sender, GuildMemberUpdateEventArgs e)
         {
-            e.Client.Logger.Log(LogLevel.Information, $"Member Updated: [{e.Guild}] ({e.Member})", DateTime.Now);
+            sender.Logger.Log(LogLevel.Information, $"Member Updated: [{e.Guild}] ({e.Member})", DateTime.Now);
             _memberUpdateHandler.HandleRoleChange(e).GetAwaiter().GetResult();
             return Task.CompletedTask;
         }
         
-        private Task OnClientError(ClientErrorEventArgs e)
+        private Task OnClientError(DiscordClient sender, ClientErrorEventArgs e)
         {
-            e.Client.Logger.Log(LogLevel.Error,  $"Exception occured: {e.Exception.GetType()}: {e.Exception.Message}", DateTime.Now);
+            sender.Logger.Log(LogLevel.Error,  $"Exception occured: {e.Exception.GetType()}: {e.Exception.Message}", DateTime.Now);
             
             return Task.CompletedTask;
         }
         
-        private Task MessageCreated(MessageCreateEventArgs e)
+        private Task MessageCreated(DiscordClient sender, MessageCreateEventArgs e)
         {
-            e.Client.Logger.Log(LogLevel.Information,  $"Message Created: [{e.Guild.Id} : {e.Channel.Id}] ({e.Author.Username}): {e.Message.Content}", DateTime.Now);
+            sender.Logger.Log(LogLevel.Information,  $"Message Created: [{e.Guild.Id} : {e.Channel.Id}] ({e.Author.Username}): {e.Message.Content}", DateTime.Now);
             try
             {
                 _messageHandler.HandleMessage(e).GetAwaiter().GetResult();
