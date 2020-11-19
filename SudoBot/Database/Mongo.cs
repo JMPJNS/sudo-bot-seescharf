@@ -246,6 +246,11 @@ namespace SudoBot.Database
                 return null;
             }
         }
+        
+        public async Task<long> GetUserCount()
+        {
+            return await _users.CountDocumentsAsync(x => true);
+        }
 
         public async Task<List<User>> GetLeaderboard(int position, ulong guildId)
         {

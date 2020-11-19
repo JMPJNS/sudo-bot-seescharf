@@ -12,6 +12,7 @@ using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.Extensions.DependencyInjection;
 using SudoBot.Attributes;
+using SudoBot.Database;
 using SudoBot.Models;
 
 namespace SudoBot.Commands
@@ -67,6 +68,13 @@ namespace SudoBot.Commands
         [Description("How many guilds the bot is in")]
         public async Task GuildCount(CommandContext ctx) {
             await ctx.RespondAsync(ctx.Client.Guilds.Count.ToString());
+        }
+        
+        [Command("user-count")]
+        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
+        [Description("How many users the bot has")]
+        public async Task UserCount(CommandContext ctx) {
+            await ctx.RespondAsync((await Mongo.Instance.GetUserCount()).ToString());
         }
 
         [Command("set-status"), Description("Set Bot Status"), RequireOwner]
