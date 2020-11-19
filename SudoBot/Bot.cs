@@ -152,7 +152,7 @@ namespace SudoBot
             Globals.Client = sender;
             sender.Logger.Log(LogLevel.Information,  $"Bot Started", DateTime.Now);
 
-            sender.UpdateStatusAsync(new DiscordActivity("$no", ActivityType.ListeningTo));
+            sender.UpdateStatusAsync(new DiscordActivity("$invite", ActivityType.ListeningTo));
             
             
             
