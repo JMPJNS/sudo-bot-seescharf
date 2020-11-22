@@ -15,7 +15,7 @@ namespace SudoBot.Commands
     public class FunCommands : BaseCommandModule
     {
         [Command("crabrave"), Description("Add Text to Crab Rave")]
-        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
+        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         public async Task CrabRave(CommandContext ctx, [RemainingText] string text)
         {
             var path = GetPathName();
