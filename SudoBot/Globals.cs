@@ -57,7 +57,7 @@ namespace SudoBot
             var res = await req.Content.ReadAsStringAsync();
             return JObject.Parse(res);
         }
-        
+
         public static async Task<string> HttpRequest(string url)
         {
             var client = new HttpClient();

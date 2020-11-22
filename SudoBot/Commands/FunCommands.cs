@@ -14,6 +14,33 @@ namespace SudoBot.Commands
     [Description("Commands für Random Fun Stuff")]
     public class FunCommands : BaseCommandModule
     {
+        [Command("crabrave"), Description("Add Text to Crab Rave")]
+        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
+        public async Task CrabRave(CommandContext ctx, [RemainingText] string text)
+        {
+            var path = GetPathName();
+
+            var cmd = $"ffmpeg -i /drive/jonas/files/crab.mkv -vf \"drawtext=text='{text}': fontsize=36: fontcolor=white: shadowcolor=black: shadowx=2: shadowy=2: x=(w-text_w)/2: y=(h-text_h)/2\" -y -c:a copy {path}output.mp4";
+            
+            var res = await Globals.RunCommand(cmd);
+            await ctx.RespondWithFileAsync($"{path}output.mp4");
+            
+            string GetPathName()
+            {
+                var tempPath = Path.GetTempPath();
+                bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
+                var path = tempPath + (isWindows ? "crabRave\\" : "crabRave/");
+
+                if (Directory.Exists(path))
+                {
+                    return path;
+                }
+
+                Directory.CreateDirectory(path);
+                return path;
+            }
+        }
+        
         [Command("add"), Description("Addiert 2 Zahlen"), Cooldown(5, 10, CooldownBucketType.User)]
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         public async Task Add(CommandContext ctx, int uno, int due)
