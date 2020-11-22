@@ -16,8 +16,6 @@ RUN dotnet publish -c Release -o out
 # Run
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 as run-env
 
-RUN mkdir /files
-
 # Install Deps
 RUN apt-get update -y && apt-get install ffmpeg youtube-dl -y
 

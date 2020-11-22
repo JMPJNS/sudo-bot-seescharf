@@ -20,7 +20,7 @@ namespace SudoBot.Commands
         {
             var path = GetPathName();
 
-            var cmd = $"ffmpeg -i /drive/jonas/files/crab.mkv -vf \"drawtext=text='{text}': fontsize=36: fontcolor=white: shadowcolor=black: shadowx=2: shadowy=2: x=(w-text_w)/2: y=(h-text_h)/2\" -y -c:a copy {path}output.mp4";
+            var cmd = $"ffmpeg -i /drive/jonas/files/crab.mkv -vf \"drawtext=text='{text}': fontsize=36: fontcolor=white: shadowcolor=black: shadowx=2: shadowy=2: x=(w-text_w)/2: y=(h-text_h)/2\" -y {path}output.mp4";
             
             var res = await Globals.RunCommand(cmd);
             await ctx.RespondWithFileAsync($"{path}output.mp4");
