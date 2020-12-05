@@ -160,11 +160,20 @@ namespace SudoBot.Commands
                 return;
             }
             
+            var url = conn.CurrentState.CurrentTrack.Uri.ToString();
+            var queryString = url.Substring(url.IndexOf('?')).Split('#')[0];
+            var parameters = System.Web.HttpUtility.ParseQueryString(queryString);
+
             var embed = new DiscordEmbedBuilder()
                 .WithColor(DiscordColor.MidnightBlue)
                 .WithTitle(conn.CurrentState.CurrentTrack.Title)
                 .AddField("Pos", conn.CurrentState.PlaybackPosition.TotalSeconds.ToString())
                 .AddField("Len", conn.CurrentState.CurrentTrack.Length.TotalSeconds.ToString());
+            
+            if (url.Contains("youtube") && parameters.Get("v") != null)
+            {
+                embed.WithThumbnail($"http://img.youtube.com/vi/{parameters.Get("v")}/0.jpg");
+            }
 
             await ctx.RespondAsync(embed: embed.Build());
         }
