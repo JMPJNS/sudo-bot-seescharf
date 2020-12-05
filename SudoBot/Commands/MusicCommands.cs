@@ -27,8 +27,15 @@ namespace SudoBot.Commands
     public class MusicCommands : BaseCommandModule
     {
         [Command, CheckForPermissions(SudoPermission.Mod, GuildPermission.Music)]
-        public async Task Join(CommandContext ctx, DiscordChannel channel)
+        public async Task Join(CommandContext ctx)
         {
+            if (ctx.Member.VoiceState == null || ctx.Member.VoiceState.Channel == null)
+            {
+                await ctx.RespondAsync("You are not in a voice channel.");
+                return;
+            }
+            
+            var channel = ctx.Member.VoiceState.Channel;
             var lava = ctx.Client.GetLavalink();
             if (!lava.ConnectedNodes.Any())
             {
@@ -49,8 +56,15 @@ namespace SudoBot.Commands
         }
 
         [Command, CheckForPermissions(SudoPermission.Mod, GuildPermission.Music)]
-        public async Task Leave(CommandContext ctx, DiscordChannel channel)
+        public async Task Leave(CommandContext ctx)
         {
+            if (ctx.Member.VoiceState == null || ctx.Member.VoiceState.Channel == null)
+            {
+                await ctx.RespondAsync("You are not in a voice channel.");
+                return;
+            }
+            
+            var channel = ctx.Member.VoiceState.Channel;
             var lava = ctx.Client.GetLavalink();
             if (!lava.ConnectedNodes.Any())
             {
