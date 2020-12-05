@@ -96,14 +96,9 @@ namespace SudoBot.Commands
         {
             var conn = await GetConnection(ctx);
 
-            if (conn.CurrentState.CurrentTrack == null)
-            {
-                await ctx.RespondAsync("There are no tracks loaded.");
-                return;
-            }
-
             await conn.DisconnectAsync();
         }
+        
 
         [Command, CheckForPermissions(SudoPermission.Any, GuildPermission.Music)]
         public async Task Pause(CommandContext ctx)
