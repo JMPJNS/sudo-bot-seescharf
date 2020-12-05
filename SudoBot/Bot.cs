@@ -9,6 +9,8 @@ using DSharpPlus.CommandsNext.Exceptions;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using DSharpPlus.Interactivity;
+using DSharpPlus.Net;
+using DSharpPlus.Lavalink;
 using DSharpPlus.Interactivity.Extensions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -78,6 +80,21 @@ namespace SudoBot
 
             Interactivity = Client.UseInteractivity(interactivityConfig);
             
+            var lavalinkEndpoint = new ConnectionEndpoint
+            {
+                Hostname = "163.172.148.235",
+                Port = 2334
+            };
+            
+            var lavalinkConfig = new LavalinkConfiguration
+            {
+                Password = Environment.GetEnvironmentVariable("LAVALINK"),
+                RestEndpoint = lavalinkEndpoint,
+                SocketEndpoint = lavalinkEndpoint
+            };
+            
+            var lavalink = Client.UseLavalink();
+            
             Commands.RegisterCommands<FunCommands>();
             Commands.RegisterCommands<UtilityCommands>();
             Commands.RegisterCommands<RankCommands>();
@@ -92,6 +109,7 @@ namespace SudoBot
             Commands.RegisterCommands<SearchCommands>();
             Commands.RegisterCommands<ListCommands>();
             Commands.RegisterCommands<ApecCommands>();
+            Commands.RegisterCommands<MusicCommands>();
 
             MinuteScheduler = new Timer(60*1000);
             MinuteScheduler.Elapsed += OnMinuteEvent;
@@ -107,6 +125,7 @@ namespace SudoBot
             
             // Start Bot
             await Client.ConnectAsync();
+            await lavalink.ConnectAsync(lavalinkConfig);
             await Task.Delay(-1);
         }
 

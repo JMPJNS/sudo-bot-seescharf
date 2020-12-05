@@ -7,9 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="DSharpPlus" Version="4.0.0-nightly-00726" />
-      <PackageReference Include="DSharpPlus.CommandsNext" Version="4.0.0-nightly-00726" />
-      <PackageReference Include="DSharpPlus.Interactivity" Version="4.0.0-nightly-00726" />
+      <PackageReference Include="DSharpPlus" Version="4.0.0-rc1" />
+      <PackageReference Include="DSharpPlus.CommandsNext" Version="4.0.0-rc1" />
+      <PackageReference Include="DSharpPlus.Interactivity" Version="4.0.0-rc1" />
+      <PackageReference Include="DSharpPlus.Lavalink" Version="4.0.0-rc1" />
       <PackageReference Include="Fizzler.Systems.HtmlAgilityPack" Version="1.2.1" />
       <PackageReference Include="HtmlAgilityPack" Version="1.11.24" />
       <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.7.0" />

@@ -7,6 +7,7 @@ namespace SudoBot
         All,
         CustomGames,
         Ranking,
-        TestCommands
+        TestCommands,
+        Music
     }
 }
