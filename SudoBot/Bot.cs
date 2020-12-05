@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -276,6 +277,11 @@ namespace SudoBot
             else if (e.Exception is NotImplementedException)
             {
                 e.Context.Channel.SendMessageAsync("Dieses Feature ist noch nicht Fertig!, wenn es dringlich ist `$guild` beitreten und JMP#7777 kontaktieren").GetAwaiter().GetResult();
+            }
+            
+            else if (e.Exception is ExternalException)
+            {
+                e.Context.Channel.SendMessageAsync(e.Exception.Message).GetAwaiter().GetResult();
             }
 
             else {

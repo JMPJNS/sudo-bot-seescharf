@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
@@ -14,92 +15,42 @@ namespace SudoBot.Commands
     [Description("Music Bot Stuff")]
     public class MusicCommands : BaseCommandModule
     {
-        [Command, CheckForPermissions(SudoPermission.Mod, GuildPermission.Music)]
-        public async Task Join(CommandContext ctx)
+
+        private async Task<LavalinkGuildConnection> GetConnection(CommandContext ctx)
         {
             if (ctx.Member.VoiceState == null || ctx.Member.VoiceState.Channel == null)
             {
-                await ctx.RespondAsync("You are not in a voice channel.");
-                return;
+                throw new ExternalException("You are not connected to a Voice Channel");
             }
             
             var channel = ctx.Member.VoiceState.Channel;
             var lava = ctx.Client.GetLavalink();
-            if (!lava.ConnectedNodes.Any())
-            {
-                await ctx.RespondAsync("The Lavalink connection is not established");
-                return;
-            }
-
             var node = lava.ConnectedNodes.Values.First();
-
-            if (channel.Type != ChannelType.Voice)
+            if (node.IsConnected)
             {
-                await ctx.RespondAsync("Not a valid voice channel.");
-                return;
+                var conn = node.GetGuildConnection(ctx.Guild);
+                if (conn != null)
+                {
+                    return conn;
+                }
             }
 
             await node.ConnectAsync(channel);
-            await ctx.RespondAsync($"Joined {channel.Name}!");
+            var connection = node.GetGuildConnection(ctx.Guild);
+            if (connection == null)
+            {
+                throw new Exception("Lavalink is not Connected, contact JMP");
+            }
+
+            return connection;
         }
 
-        [Command, CheckForPermissions(SudoPermission.Mod, GuildPermission.Music)]
-        public async Task Leave(CommandContext ctx)
-        {
-            if (ctx.Member.VoiceState == null || ctx.Member.VoiceState.Channel == null)
-            {
-                await ctx.RespondAsync("You are not in a voice channel.");
-                return;
-            }
-            
-            var channel = ctx.Member.VoiceState.Channel;
-            var lava = ctx.Client.GetLavalink();
-            if (!lava.ConnectedNodes.Any())
-            {
-                await ctx.RespondAsync("The Lavalink connection is not established");
-                return;
-            }
-
-            var node = lava.ConnectedNodes.Values.First();
-
-            if (channel.Type != ChannelType.Voice)
-            {
-                await ctx.RespondAsync("Not a valid voice channel.");
-                return;
-            }
-
-            var conn = node.GetGuildConnection(channel.Guild);
-
-            if (conn == null)
-            {
-                await ctx.RespondAsync("Lavalink is not connected.");
-                return;
-            }
-
-            await conn.DisconnectAsync();
-            await ctx.RespondAsync($"Left {channel.Name}!");
-        }
-        
         [Command, CheckForPermissions(SudoPermission.Any, GuildPermission.Music)]
         public async Task Play(CommandContext ctx, [RemainingText] string search)
         {
-            if (ctx.Member.VoiceState == null || ctx.Member.VoiceState.Channel == null)
-            {
-                await ctx.RespondAsync("You are not in a voice channel.");
-                return;
-            }
+            var conn = await GetConnection(ctx);
 
-            var lava = ctx.Client.GetLavalink();
-            var node = lava.ConnectedNodes.Values.First();
-            var conn = node.GetGuildConnection(ctx.Member.VoiceState.Guild);
-
-            if (conn == null)
-            {
-                await ctx.RespondAsync("Lavalink is not connected.");
-                return;
-            }
-
-            var loadResult = await node.Rest.GetTracksAsync(search);
+            var loadResult = await conn.Node.Rest.GetTracksAsync(search);
 
             if (loadResult.LoadResultType == LavalinkLoadResultType.LoadFailed 
                 || loadResult.LoadResultType == LavalinkLoadResultType.NoMatches)
@@ -139,25 +90,25 @@ namespace SudoBot.Commands
 
             await ctx.RespondAsync($"Now playing {tracks[num].Title}!");
         }
+        
+        [Command, CheckForPermissions(SudoPermission.Any, GuildPermission.Music)]
+        public async Task Stop(CommandContext ctx)
+        {
+            var conn = await GetConnection(ctx);
+
+            if (conn.CurrentState.CurrentTrack == null)
+            {
+                await ctx.RespondAsync("There are no tracks loaded.");
+                return;
+            }
+
+            await conn.DisconnectAsync();
+        }
 
         [Command, CheckForPermissions(SudoPermission.Any, GuildPermission.Music)]
         public async Task Pause(CommandContext ctx)
         {
-            if (ctx.Member.VoiceState == null || ctx.Member.VoiceState.Channel == null)
-            {
-                await ctx.RespondAsync("You are not in a voice channel.");
-                return;
-            }
-
-            var lava = ctx.Client.GetLavalink();
-            var node = lava.ConnectedNodes.Values.First();
-            var conn = node.GetGuildConnection(ctx.Member.VoiceState.Guild);
-
-            if (conn == null)
-            {
-                await ctx.RespondAsync("Lavalink is not connected.");
-                return;
-            }
+            var conn = await GetConnection(ctx);
 
             if (conn.CurrentState.CurrentTrack == null)
             {
@@ -166,26 +117,13 @@ namespace SudoBot.Commands
             }
 
             await conn.PauseAsync();
+            // conn.DisconnectAsync();
         }
 
         [Command, CheckForPermissions(SudoPermission.Any, GuildPermission.Music)]
         public async Task Info(CommandContext ctx)
         {
-            if (ctx.Member.VoiceState == null || ctx.Member.VoiceState.Channel == null)
-            {
-                await ctx.RespondAsync("You are not in a voice channel.");
-                return;
-            }
-
-            var lava = ctx.Client.GetLavalink();
-            var node = lava.ConnectedNodes.Values.First();
-            var conn = node.GetGuildConnection(ctx.Member.VoiceState.Guild);
-
-            if (conn == null)
-            {
-                await ctx.RespondAsync("Lavalink is not connected.");
-                return;
-            }
+            var conn = await GetConnection(ctx);
             
             var url = conn.CurrentState.CurrentTrack.Uri.ToString();
             var queryString = url.Substring(url.IndexOf('?')).Split('#')[0];
