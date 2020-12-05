@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
+using DSharpPlus.Interactivity.Extensions;
 using DSharpPlus.Lavalink;
 using SudoBot.Attributes;
 namespace SudoBot.Commands
@@ -105,14 +107,39 @@ namespace SudoBot.Commands
                 await ctx.RespondAsync($"Track search failed for {search}.");
                 return;
             }
+            
+            var tracks = loadResult.Tracks.Take(5).ToArray();
+            
+            var embed = new DiscordEmbedBuilder()
+                .WithColor(DiscordColor.CornflowerBlue)
+                .WithTitle($"Found {tracks.Length}")
+                .WithFooter(search)
+                .WithDescription("Respond with number to play");
 
-            var track = loadResult.Tracks.First();
+            for (var i = 0; i < tracks.Count(); i++)
+            {
+                embed.AddField((i + 1).ToString(), $"[{tracks[i].Title}]({tracks[i].Uri})");
+            }
 
-            await conn.PlayAsync(track);
+            await ctx.RespondAsync(embed: embed.Build());
+            
+            var ita = ctx.Client.GetInteractivity();
 
-            await ctx.RespondAsync($"Now playing {track.Title}!");
+            var m = await ita.WaitForMessageAsync(x => x.Author == ctx.Message.Author, TimeSpan.FromSeconds(30));
+            
+            var num = Int32.Parse(m.Result.Content) - 1;
+
+            if (num > tracks.Length)
+            {
+                await ctx.RespondAsync("Invalid Track Number");
+                return;
+            }
+
+            await conn.PlayAsync(tracks[num]);
+
+            await ctx.RespondAsync($"Now playing {tracks[num].Title}!");
         }
-        
+
         [Command, CheckForPermissions(SudoPermission.Any, GuildPermission.Music)]
         public async Task Pause(CommandContext ctx)
         {
