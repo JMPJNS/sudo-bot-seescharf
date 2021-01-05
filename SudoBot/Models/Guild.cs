@@ -31,6 +31,8 @@ namespace SudoBot.Models
         public int RankingTimeMultiplier { get; private set; }
         public int RankingMultiplier { get; private set; }
         public string RankingPointName { get; private set; }
+        
+        public List<ReactionRole> ReactionRoles { get; private set; }
 
         public List<GuildPermission> Permissions { get; set; }
 
@@ -39,6 +41,7 @@ namespace SudoBot.Models
             GuildId = guildId;
             
             RankingRoles = new List<RankingRole>();
+            ReactionRoles = new List<ReactionRole>();
             Permissions = new List<GuildPermission>();
             RankingTimeMultiplier = 10;
             RankingMultiplier = 1;
@@ -51,7 +54,22 @@ namespace SudoBot.Models
             public ulong Role;
             public int Points;
         }
-        
+
+        public class ReactionRole
+        {
+            public ulong MessageId;
+            public ulong ChannelId;
+            public ulong EmojiId;
+            public ulong RoleId;
+
+            public ReactionRole(ulong messageId, ulong channelId, ulong emojiId, ulong roleId)
+            {
+                MessageId = messageId;
+                ChannelId = channelId;
+                EmojiId = emojiId;
+                RoleId = roleId;
+            }
+        }
         
         public async Task SaveGuild()
         {
@@ -63,6 +81,22 @@ namespace SudoBot.Models
         public async Task GivePermission(GuildPermission perm)
         {
             Permissions.Add(perm);
+            await SaveGuild();
+        }
+
+        public async Task AddReactionRole(ReactionRole role)
+        {
+            ReactionRoles ??= new List<ReactionRole>();
+            ReactionRoles.Add(role);
+            await SaveGuild();
+        }
+        
+        public async Task RemoveReactionRole(ReactionRole role)
+        {
+            if (ReactionRoles == null) return;
+            
+            var r = ReactionRoles.FirstOrDefault(x => x == role);
+            ReactionRoles.Remove(r);
             await SaveGuild();
         }
 

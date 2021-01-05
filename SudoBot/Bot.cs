@@ -30,6 +30,7 @@ namespace SudoBot
         public InteractivityExtension Interactivity { get; private set; }
         
         private MessageHandler _messageHandler = new MessageHandler();
+        private ReactionRolesHandler _reactionRolesHandler = new ReactionRolesHandler();
         private MemberUpdateHandler _memberUpdateHandler = new MemberUpdateHandler();
 
         public static Timer MinuteScheduler;
@@ -56,6 +57,8 @@ namespace SudoBot
             
             Client.ClientErrored += OnClientError;
             Client.MessageCreated += MessageCreated;
+            Client.MessageReactionAdded += OnMessageReactionAdded;
+            Client.MessageReactionRemoved += OnMessageReactionRemoved;
             Client.GuildDeleted += OnGuildDeleted;
 
             Client.GuildMemberUpdated += OnMemberUpdated;
@@ -111,6 +114,7 @@ namespace SudoBot
             Commands.RegisterCommands<ListCommands>();
             Commands.RegisterCommands<ApecCommands>();
             Commands.RegisterCommands<MusicCommands>();
+            Commands.RegisterCommands<ReactionRoleCommands>();
 
             MinuteScheduler = new Timer(60*1000);
             MinuteScheduler.Elapsed += OnMinuteEvent;
@@ -373,6 +377,34 @@ namespace SudoBot
         private Task OnClientError(DiscordClient sender, ClientErrorEventArgs e)
         {
             sender.Logger.Log(LogLevel.Error,  $"Exception occured: {e.Exception.GetType()}: {e.Exception.Message}", DateTime.Now);
+            
+            return Task.CompletedTask;
+        }
+
+        private Task OnMessageReactionAdded(DiscordClient client, MessageReactionAddEventArgs args)
+        {
+            try
+            {
+                _reactionRolesHandler.HandleReactionAdded(args).GetAwaiter().GetResult();
+            }
+            catch (Exception e)
+            {
+                client.Logger.Log(LogLevel.Error, $"Reaction Added: [{args.Guild}: {args.Channel}] {e.Message}");
+            }
+            
+            return Task.CompletedTask;
+        }
+        
+        private Task OnMessageReactionRemoved(DiscordClient client, MessageReactionRemoveEventArgs args)
+        {
+            try
+            {
+                _reactionRolesHandler.HandleReactionRemoved(args).GetAwaiter().GetResult();
+            }
+            catch (Exception e)
+            {
+                client.Logger.Log(LogLevel.Error, $"Reaction Removed: [{args.Guild}: {args.Channel}] {e.Message}");
+            }
             
             return Task.CompletedTask;
         }
