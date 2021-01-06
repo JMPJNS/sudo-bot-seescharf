@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -49,6 +50,33 @@ namespace SudoBot.Commands
                     await ctx.Channel.SendMessageAsync($"{e.Message}, wenn dies ein Unschlüssiger Fehler ist, JMP#7777 kontaktieren");
                 }
                 
+            }
+        }
+
+        [Command]
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
+        public async Task CreateRole(CommandContext ctx, string name)
+        {
+            var role = await ctx.Guild.CreateRoleAsync(name);
+            if (role == null)
+            {
+                throw new Exception("Role Creation Failed");
+            }
+        }
+        
+        [Command]
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
+        public async Task CreateChannel(CommandContext ctx, string name, DiscordChannel parent = null)
+        {
+            if (parent != null && parent.IsCategory == false)
+            {
+                throw new Exception("Parent must be a category");
+            }
+            var channel = await ctx.Guild.CreateChannelAsync(name, ChannelType.Text, parent);
+            
+            if (channel == null)
+            {
+                throw new Exception("Channel Creation Failed");
             }
         }
 
