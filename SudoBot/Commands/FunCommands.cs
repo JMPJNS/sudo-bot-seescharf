@@ -40,6 +40,12 @@ namespace SudoBot.Commands
                 return path;
             }
         }
+
+        [Command, Description("Get a Random AI Generated Cat Image")]
+        public async Task Cat(CommandContext ctx)
+        {
+            await ctx.RespondAsync($"https://thiscatdoesnotexist.com/?{Globals.RandomString(5)}");
+        }
         
         [Command("add"), Description("Addiert 2 Zahlen"), Cooldown(5, 10, CooldownBucketType.User)]
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -57,7 +58,15 @@ namespace SudoBot
             var res = await req.Content.ReadAsStringAsync();
             return JObject.Parse(res);
         }
-
+        
+        private static Random random = new Random();
+        public static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+        
         public static async Task<string> HttpRequest(string url)
         {
             var client = new HttpClient();
