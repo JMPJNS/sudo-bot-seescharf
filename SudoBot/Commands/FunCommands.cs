@@ -41,7 +41,7 @@ namespace SudoBot.Commands
             }
         }
 
-        [Command, Description("Get a Random AI Generated Cat Image")]
+        [Command, Aliases("schmuser"), Description("Get a Random AI Generated Cat Image")]
         public async Task Cat(CommandContext ctx)
         {
             await ctx.RespondAsync($"https://thiscatdoesnotexist.com/?{Globals.RandomString(5)}");

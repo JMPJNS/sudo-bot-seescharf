@@ -209,14 +209,14 @@ namespace SudoBot
             
             else if (e.Exception is InvalidOperationException)
             {
-                e.Context.Channel.SendMessageAsync("Dies ist eine Command Gruppe, bitte einen Subcommand Spezifizieren").GetAwaiter().GetResult();
                 var commandName = e.Command.Name;
-                var help = e.Context.CommandsNext.FindCommand("help", out commandName);
-
-                var helpContext = e.Context.CommandsNext.CreateFakeContext(e.Context.User, e.Context.Channel,
-                    e.Context.Message.Content, e.Context.Prefix, help, e.Command.Name);
                 
-                help.ExecuteAsync(helpContext);
+                e.Context.Channel.SendMessageAsync($"Invalide Ausführung: {e.Context.Message.Content} \n(`$help {e.Command.Name}`)").GetAwaiter().GetResult();
+                //
+                // var helpContext = e.Context.CommandsNext.CreateFakeContext(e.Context.User, e.Context.Channel,
+                //     e.Context.Message.Content, e.Context.Prefix, help, e.Command.Name);
+                //
+                // help.ExecuteAsync(helpContext);
             }
             
             else if (e.Exception is ChecksFailedException)
@@ -268,7 +268,7 @@ namespace SudoBot
 
             else if (e.Exception is ArgumentException)
             {
-                e.Context.Channel.SendMessageAsync("Invalide Argumente").GetAwaiter().GetResult();
+                e.Context.Channel.SendMessageAsync($"Invalide Argumente: {e.Context.Message.Content}").GetAwaiter().GetResult();
                 var commandName = e.Command.Name;
                 var help = e.Context.CommandsNext.FindCommand("help", out commandName);
 
