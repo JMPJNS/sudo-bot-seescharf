@@ -1,3 +1,7 @@
+# Invite
+
+https://discord.com/oauth2/authorize?client_id=705548602994458684&scope=bot&permissions=1544023122
+
 A discord leveling, custom games, and other utilities bot for german guilds.
 
 pls don't host this bot yourself, you can use it as reference for creating your own(probably shuoldn't i got no clue about c#), 
