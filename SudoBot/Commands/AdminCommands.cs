@@ -34,14 +34,6 @@ namespace SudoBot.Commands
             }
         }
 
-        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
-        [Command]
-        public async Task RemoveColorRoles(CommandContext ctx)
-        {
-            await ctx.RespondAsync("removing");
-            await StanFunctions.RemoveAllColorRoles(ctx);
-        }
-        
         // Mute
         // // Alle Rollen weg nehmen, und 639522863023521822 geben, bei unmuted wieder rollen geben
         

@@ -24,6 +24,14 @@ namespace SudoBot.Commands
         public async Task Test(CommandContext ctx)
         {
         }
+        
+        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
+        [Command]
+        public async Task RemoveColorRoles(CommandContext ctx)
+        {
+            await ctx.RespondAsync("removing");
+            await StanFunctions.RemoveAllColorRoles(ctx);
+        }
 
         // [Command("RemoveAllNotVerified")]
         // [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
