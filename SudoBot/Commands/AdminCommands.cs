@@ -35,6 +35,7 @@ namespace SudoBot.Commands
         }
 
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
+        [Command]
         public async Task RemoveColorRoles(CommandContext ctx)
         {
             await ctx.RespondAsync("removing");
