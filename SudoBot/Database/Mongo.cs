@@ -295,6 +295,11 @@ namespace SudoBot.Database
             if (user.Points == 0) user.CalculatePoints();
             return await _users.CountDocumentsAsync(u => u.GuildId == user.GuildId && u.Points > user.Points);
         }
+
+        public async Task<List<User>> GetGuildUsers(ulong guildId)
+        {
+            return await _users.FindAsync(user => user.GuildId == guildId).Result.ToListAsync();
+        }
         
         // Custom Game Stuff
         public async Task<List<User>> GetUsersWithoutTicket(ulong guildId)

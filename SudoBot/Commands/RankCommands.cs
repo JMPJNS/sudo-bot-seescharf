@@ -28,7 +28,7 @@ namespace SudoBot.Commands
             var user = await User.GetOrCreateUser(member);
             var guild = await Guild.GetGuild(user.GuildId);
 
-            if (guild.CommandChannel != 0 && guild.CommandChannel != ctx.Channel.Id)
+            if (member.Id != Globals.MyId && guild.CommandChannel != 0 && guild.CommandChannel != ctx.Channel.Id)
             {
                 var channel = ctx.Guild.GetChannel(guild.CommandChannel);
                 var sentMessage = await ctx.Channel.SendMessageAsync($"In diesem Channel nicht erlaubt, bitte in {channel.Mention} verwenden!");
@@ -78,6 +78,29 @@ namespace SudoBot.Commands
                     "`$r list` um alle Ränge anzuzeigen.");
             
             await ctx.Channel.SendMessageAsync(embed:embed.Build());
+        }
+
+        [Command("rank-all")]
+        [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
+        public async Task RankAll(CommandContext ctx)
+        {
+            var users = await Mongo.Instance.GetGuildUsers(ctx.Guild.Id);
+
+            await ctx.RespondAsync("Die Rollen werden neu berechnet");
+
+            int i = 0;
+            
+            foreach (var user in users)
+            {
+                var res = await user.UpdateRankRoles();
+                if (res)
+                {
+                    i++;
+                    await ctx.RespondAsync($"Updated {user.UserId}");
+                }
+            }
+
+            await ctx.RespondAsync($"Done, {i} user angepasst");
         }
 
         [Command("leaderboard")]
