@@ -6,6 +6,7 @@ using DSharpPlus.Entities;
 using SudoBot.Attributes;
 using SudoBot.Database;
 using SudoBot.Models;
+using SudoBot.Specifics;
 
 namespace SudoBot.Commands
 {
@@ -31,6 +32,13 @@ namespace SudoBot.Commands
                 await guildConfig.GivePermission(perm);
                 await ctx.Channel.SendMessageAsync("Die Rechte wurden Vergeben!");
             }
+        }
+
+        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
+        public async Task RemoveColorRoles(CommandContext ctx)
+        {
+            await ctx.RespondAsync("removing");
+            await StanFunctions.RemoveAllColorRoles(ctx);
         }
         
         // Mute
