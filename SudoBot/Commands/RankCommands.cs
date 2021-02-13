@@ -261,7 +261,7 @@ namespace SudoBot.Commands
                     foreach (var r in currRoles)
                     {
                         var drole = ctx.Guild.GetRole(r.Role);
-                        embed.AddField(drole.Name, $"{r.Points.ToString()} {guild.RankingPointName ?? "XP"}", true);
+                        embed.AddField($"{r.Points.ToString()} {guild.RankingPointName ?? "XP"}", drole.Mention, true);
                     }
                     embeds.Add(embed);
                 }
