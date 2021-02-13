@@ -64,6 +64,25 @@ namespace SudoBot.Commands
             }
         }
         
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
+        [Cooldown(1, 240, CooldownBucketType.Guild)]
+        [Description("Entferne alle aus der Angegebenen Rolle")]
+        [Command("remove-all-from-role")]
+        public async Task RemoveAllFromRole(CommandContext ctx, DiscordRole role)
+        {
+            await ctx.Channel.SendMessageAsync($"Die Rolle {role.Mention} wird von allen entfernt. Wird ein paar Sekunden dauern.");
+            
+            var allMembers = await ctx.Guild.GetAllMembersAsync();
+            var roleMembers = allMembers.Where(user => user.Roles.Contains(role));
+            
+            foreach (DiscordMember member in roleMembers)
+            {
+                await member.RevokeRoleAsync(role);
+            }
+
+            await ctx.RespondAsync($"Die Rolle {role.Mention} wurde von allen entfernt.");
+        }
+        
         [Command]
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
         public async Task CreateChannel(CommandContext ctx, string name, DiscordChannel parent = null)
