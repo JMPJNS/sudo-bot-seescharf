@@ -92,12 +92,20 @@ namespace SudoBot.Commands
             
             foreach (var user in users)
             {
-                var res = await user.UpdateRankRoles();
-                if (res)
+                try
                 {
-                    i++;
-                    await ctx.RespondAsync($"Updated {user.UserId}");
+                    var res = await user.UpdateRankRoles();
+                    if (res)
+                    {
+                        i++;
+                        await ctx.RespondAsync($"Updated {user.UserId}");
+                    }
                 }
+                catch (Exception e)
+                {
+                    await ctx.RespondAsync($"Error: {e.Message}, [{user.UserId}]");
+                }
+                
             }
 
             await ctx.RespondAsync($"Done, {i} user angepasst");

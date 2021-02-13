@@ -179,7 +179,7 @@ namespace SudoBot.Models
             
             var dGuild = await Globals.Client.GetGuildAsync(GuildId);
             var member = await dGuild.GetMemberAsync(UserId);
-            
+
             var xp = CalculatePoints();
 
             bool rvalue = false;
