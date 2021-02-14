@@ -58,6 +58,8 @@ namespace SudoBot.Specifics
                 new List<bool>{true, true, true}, 1, false, false, true),
             new HungerGamesLine("Nach mehrerem Gemunkel und Angst in der Gruppe mit (...), (...), (...) machte einer den ersten Zug und am Ende blieb nur noch (...) übrig.",
                 new List<bool>{true, true, true, false}, 1, false, false, true),
+            new HungerGamesLine("(...) verschluckt sich an einem Schlürfsaft.", new List<bool>{true}),
+            new HungerGamesLine("(...) hat so gutes Bogen Aim, dass er (...) mit einem Pfeil durchbohrt.", new List<bool>{false, true}),
         };
         
         public List<HungerGamesPlayer> PlayersAlive = new List<HungerGamesPlayer>();
@@ -239,6 +241,8 @@ namespace SudoBot.Specifics
     {
         public String Name;
         public ulong Id;
+        
+        // Add items here, and just return false early from handle step to skip things that need items if nobody has any
     }
     
 
