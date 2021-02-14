@@ -8,6 +8,7 @@ using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using SudoBot.Attributes;
 using SudoBot.Handlers;
+using SudoBot.Models;
 using SudoBot.Specifics;
 
 namespace SudoBot.Commands
@@ -130,31 +131,28 @@ namespace SudoBot.Commands
 
         [Command("hunger-games"), Description("Starte eine Hunger games Session")]
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.HungerGames)]
-        public async Task HungerGames(CommandContext ctx, [Description("Wie lange bis zum start")] int minutes = 0)
+        public async Task HungerGames(CommandContext ctx, [Description("Wie lange bis zum start")] int minutes = 5, 
+            [Description("Wie viele Leute maximal mitspielen dürfen")] int maxPlayers = 512, 
+            [Description("Ob spieler die zu wenig sind, durch bots ersetzt werden sollen")] Boolean useBots = false)
         {
-            for(int x = 0; x < 100; x++)
-            {
-                var players = new List<String>();
-                for (int i = 1; i <= 16; i++)
-                {
-                    players.Add($"Player_{i}");
-                }
-                var hg = new HungerGames(players);
-
-                var done = false;
+            var emoji = DiscordEmoji.FromUnicode("🏟");
             
-                while (!done)
-                {
-                    try
-                    {
-                        done = await hg.RunCycle(ctx);
-                    }
-                    catch (Exception e)
-                    {
-                        done = true;
-                        await ctx.RespondAsync($"Error: {e.Message}");
-                    }
-                }
+            var em = new DiscordEmbedBuilder()
+                .WithTitle("Hunger Games")
+                .WithImageUrl("https://media.vanityfair.com/photos/5e9f30a3bca9ee00084f4d4e/master/pass/shutterstock_editorial_5885659aw.jpg")
+                .WithColor(DiscordColor.Goldenrod)
+                .WithDescription($"Reagiere mit {emoji} zum beitreten");
+            
+            var m = await ctx.RespondAsync(embed: em.Build());
+
+            await m.CreateReactionAsync(emoji);
+            
+            var sched = new Scheduled(new List<ScheduledType> {ScheduledType.HungerGames, ScheduledType.Minute}, $"{maxPlayers}:{useBots}", DateTime.Now.AddMinutes(minutes), ctx.Guild.Id, ctx.Channel.Id, ctx.User.Id, m.Id);
+
+            if (minutes < 10)
+            {
+                await Task.Delay(TimeSpan.FromMinutes(minutes));
+                await Scheduled.RunSchedule(ScheduledType.Minute);
             }
         }
     }

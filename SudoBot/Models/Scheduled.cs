@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DSharpPlus;
+using DSharpPlus.Entities;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using SudoBot.Database;
+using SudoBot.Specifics;
 
 namespace SudoBot.Models
 {
@@ -146,6 +149,7 @@ namespace SudoBot.Models
         {
             try
             {
+                // Reminders
                 if (stuff.Type.Contains(ScheduledType.Reminder))
                 {
                     var guild = await Globals.Client.GetGuildAsync(stuff.GuildId);
@@ -167,6 +171,86 @@ namespace SudoBot.Models
                     await channel.SendMessageAsync(
                         $"{member.Mention} am `{time.Day}.{time.Month}.{time.Year} {time.Hour}:{minutes}` {messageLink}" +sendMessage);
                     stuff.Active = false;
+                }
+                
+                // HungerGames
+                if (stuff.Type.Contains(ScheduledType.HungerGames))
+                {
+                    var guild = await Globals.Client.GetGuildAsync(stuff.GuildId);
+                    var channel = guild.GetChannel(stuff.ChannelId);
+                    var message = await channel.GetMessageAsync(stuff.MessageId);
+
+                    var emoji = DiscordEmoji.FromUnicode("🏟");
+                    var joinedUsers = await message.GetReactionsAsync(emoji, 9999);
+
+                    int maxPlayers = 512;
+                    Boolean useBots = false;
+                    
+                    try
+                    {
+                        maxPlayers = Int32.Parse(stuff.Message.Split(":")[0]);
+
+                        var b = stuff.Message.Split(":")[1];
+                        if (b == "True") useBots = true;
+
+                    }catch (Exception _)
+                    {
+                        // ignored
+                    }
+
+
+                    var names = new List<HungerGamesPlayer>();
+                    foreach (var user in joinedUsers)
+                    {
+                        if (names.Count >= maxPlayers) break;
+                        
+                        var member = await guild.GetMemberAsync(user.Id);
+                        if (names.Any(x => x.Name == member.DisplayName))
+                        {
+                            var p = new HungerGamesPlayer();
+                            p.Name = member.DisplayName + Globals.RandomString(2);
+                            p.Id = member.Id;
+                            
+                            names.Add(p);
+                        }
+                        else
+                        {
+                            var p = new HungerGamesPlayer();
+                            p.Name = member.DisplayName;
+                            p.Id = member.Id;
+                            
+                            names.Add(p);
+                        }
+                    }
+
+                    if (useBots)
+                    {
+                        var c = maxPlayers - names.Count;
+                        for (int i = 1; i <= maxPlayers; i++)
+                        {
+                            var p = new HungerGamesPlayer();
+                            p.Name = $"Bot{i}";
+                            p.Id = 0;
+                            
+                            names.Add(p);
+                        }
+                    }
+                    
+                    var hg = new HungerGames(names);
+                    try
+                    {
+                        while (!await hg.RunCycle(channel))
+                        {
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        await channel.SendMessageAsync($"Error: {e.Message}");
+                    }
+                    finally
+                    {
+                        stuff.Active = false;   
+                    }
                 }
             }
             catch (Exception e)

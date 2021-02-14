@@ -7,6 +7,7 @@
         Minute,
         Hour,
         SixHour,
-        Day
+        Day,
+        HungerGames
     }
 }

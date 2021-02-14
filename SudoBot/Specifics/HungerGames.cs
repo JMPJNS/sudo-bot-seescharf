@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
+using DSharpPlus.Entities;
 
 namespace SudoBot.Specifics
 {
@@ -59,22 +60,43 @@ namespace SudoBot.Specifics
                 new List<bool>{true, true, true, false}, 1, false, false, true),
         };
         
-        public List<String> PlayersAlive = new List<string>();
+        public List<HungerGamesPlayer> PlayersAlive = new List<HungerGamesPlayer>();
         
-        public List<List<String>> Squads = new List<List<string>>();
+        public List<List<HungerGamesPlayer>> Squads = new List<List<HungerGamesPlayer>>();
 
         // Returns if game is over
-        public async Task<Boolean> RunCycle(CommandContext ctx)
+        public async Task<Boolean> RunCycle(DiscordChannel channel)
         {
             if (PlayersAlive.Count <= 0)
             {
-                await ctx.RespondAsync($"Keiner hat gewonnen!");
+                await channel.SendMessageAsync($"Keiner hat gewonnen!");
                 return true;
             }
 
             if (PlayersAlive.Count == 1)
             {
-                await ctx.RespondAsync($"{PlayersAlive.FirstOrDefault()} hat gewonnen!");
+                var winner = PlayersAlive.FirstOrDefault();
+
+                DiscordMember p = null;
+
+                try
+                {
+                    p = await channel.Guild.GetMemberAsync(winner.Id);
+                }
+                catch (Exception e)
+                {
+                    //ignore
+                }
+
+                if (p != null)
+                {
+                    await channel.SendMessageAsync($"**{p.Mention}** hat gewonnen!");
+                }
+                else
+                {
+                    await channel.SendMessageAsync($"**{winner.Name}** hat gewonnen!");
+                }
+
                 return true;
             }
 
@@ -126,18 +148,9 @@ namespace SudoBot.Specifics
                     return false;
                 }
             }
-
-            try
-            {
-                var filled = await ExecuteRolled(rolled);
-                // await ctx.RespondAsync(filled);
-                Console.WriteLine(filled);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("error");
-                return true;
-            }
+            
+            var filled = await ExecuteRolled(rolled);
+            await channel.SendMessageAsync(filled);
             
             return false;
         }
@@ -147,7 +160,7 @@ namespace SudoBot.Specifics
             var grabCount = line.Dies.Count;
             if (line.NameTwice) grabCount--;
 
-            List<string> chosen;
+            List<HungerGamesPlayer> chosen;
 
             var shuffeled = PlayersAlive.OrderBy(n => Guid.NewGuid()).ToList();
 
@@ -169,7 +182,7 @@ namespace SudoBot.Specifics
                 chosen.Add(repeat);
             }
 
-            List<String> dies = new List<string>();
+            List<HungerGamesPlayer> dies = new List<HungerGamesPlayer>();
 
             for (int i = 0; i < chosen.Count; i++)
             {
@@ -202,24 +215,30 @@ namespace SudoBot.Specifics
             return filled;
         }
         
-        private String FillNames(String line, List<String> names)
+        private String FillNames(String line, List<HungerGamesPlayer> players)
         {
             var regex = new Regex(Regex.Escape("(...)"));
 
-            foreach (var name in names)
+            foreach (var player in players)
             {
-                line = regex.Replace(line, name, 1);
+                line = regex.Replace(line, $"**{player.Name}**", 1);
             }
             
             return line;
         }
 
         private Random _rng;
-        public HungerGames(List<String> names)
+        public HungerGames(List<HungerGamesPlayer> players)
         {
             _rng = new Random();
-            PlayersAlive = names;
+            PlayersAlive = players;
         }
+    }
+
+    public class HungerGamesPlayer
+    {
+        public String Name;
+        public ulong Id;
     }
     
 
