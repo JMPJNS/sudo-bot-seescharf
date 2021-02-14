@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using SudoBot.Attributes;
 using SudoBot.Handlers;
+using SudoBot.Specifics;
 
 namespace SudoBot.Commands
 {
@@ -126,12 +128,34 @@ namespace SudoBot.Commands
             await ctx.Channel.SendMessageAsync($"KGV: {calc.GetKgv()}");
         }
 
-        [Command("hunger-games"), Description("Starte eine Hunger games Session"),
-         Cooldown(1, 30, CooldownBucketType.Guild)]
+        [Command("hunger-games"), Description("Starte eine Hunger games Session")]
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.HungerGames)]
-        public async Task HungerGames(CommandContext ctx, [Description("Wie lange bis zum start")] int minutes)
+        public async Task HungerGames(CommandContext ctx, [Description("Wie lange bis zum start")] int minutes = 0)
         {
+            for(int x = 0; x < 100; x++)
+            {
+                var players = new List<String>();
+                for (int i = 1; i <= 16; i++)
+                {
+                    players.Add($"Player_{i}");
+                }
+                var hg = new HungerGames(players);
+
+                var done = false;
             
+                while (!done)
+                {
+                    try
+                    {
+                        done = await hg.RunCycle(ctx);
+                    }
+                    catch (Exception e)
+                    {
+                        done = true;
+                        await ctx.RespondAsync($"Error: {e.Message}");
+                    }
+                }
+            }
         }
     }
     
