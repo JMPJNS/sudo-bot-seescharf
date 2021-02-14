@@ -125,6 +125,14 @@ namespace SudoBot.Commands
             var calc = new GgtKgvCalculator(uno, due);
             await ctx.Channel.SendMessageAsync($"KGV: {calc.GetKgv()}");
         }
+
+        [Command("hunger-games"), Description("Starte eine Hunger games Session"),
+         Cooldown(1, 30, CooldownBucketType.Guild)]
+        [CheckForPermissions(SudoPermission.Mod, GuildPermission.HungerGames)]
+        public async Task HungerGames(CommandContext ctx, [Description("Wie lange bis zum start")] int minutes)
+        {
+            
+        }
     }
     
     public class GgtKgvCalculator

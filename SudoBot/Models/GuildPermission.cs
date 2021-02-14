@@ -8,6 +8,7 @@ namespace SudoBot
         CustomGames,
         Ranking,
         TestCommands,
-        Music
+        Music,
+        HungerGames
     }
 }
