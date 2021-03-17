@@ -54,7 +54,7 @@ namespace SudoBot.Attributes
                 // Roles Check
                 case SudoPermission.Any:
                     return Task.FromResult(true);
-                case SudoPermission.Me when ctx.Member.Id == Globals.MyId:
+                case SudoPermission.Me when ctx.Member.Id == Globals.MyId || ctx.Member.Id == Globals.JuliansId:
                     return Task.FromResult(true);
                 case SudoPermission.Admin when ctx.Member.Roles.Any(x => Globals.AdminRoles.Any(y => y == x.Name)) || (ctx.Member.PermissionsIn(ctx.Channel) & Permissions.Administrator) != 0:
                     return Task.FromResult(true);
