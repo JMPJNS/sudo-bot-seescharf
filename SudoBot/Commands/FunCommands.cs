@@ -21,6 +21,9 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         public async Task CrabRave(CommandContext ctx, [RemainingText] string text)
         {
+            text = text.Replace("\"", "");
+            text = text.Replace("\\", "");
+            text = text.Replace("'", "");
             var path = GetPathName();
 
             var cmd = $"ffmpeg -i /drive/jonas/files/crab.mkv -vf \"drawtext=text='{text}': fontsize=36: fontcolor=white: shadowcolor=black: shadowx=2: shadowy=2: x=(w-text_w)/2: y=(h-text_h)/2\" -y {path}output.mp4";
