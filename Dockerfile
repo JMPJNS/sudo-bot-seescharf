@@ -18,7 +18,7 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 as run-env
 WORKDIR /app
 
 # Install Deps
-RUN apt-get update -y && apt-get install ffmpeg youtube-dl -y
+RUN apt-get update -y && apt-get install ffmpeg youtube-dl python3-distutils python3-apt -y
 
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 RUN python3 get-pip.py
