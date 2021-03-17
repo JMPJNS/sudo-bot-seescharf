@@ -231,7 +231,6 @@ namespace SudoBot.Commands
         }
 
         [Description("Say in guild / channel")]
-        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         [Command("sg"), Hidden()]
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         public async Task sayGlobal(CommandContext ctx, ulong guild, ulong channel,

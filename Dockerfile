@@ -21,7 +21,7 @@ WORKDIR /app
 RUN apt-get update -y && apt-get install ffmpeg youtube-dl -y
 
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-RUN python get-pip.py
+RUN python3 get-pip.py
 RUN pip install --upgrade youtube_dl
 
 
