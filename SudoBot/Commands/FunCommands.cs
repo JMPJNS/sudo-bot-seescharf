@@ -142,7 +142,6 @@ namespace SudoBot.Commands
             
             var em = new DiscordEmbedBuilder()
                 .WithTitle("Hunger Games")
-                .WithImageUrl("https://media.vanityfair.com/photos/5e9f30a3bca9ee00084f4d4e/master/pass/shutterstock_editorial_5885659aw.jpg")
                 .WithColor(DiscordColor.Goldenrod)
                 .WithDescription($"Reagiere mit {emoji} zum beitreten");
             
@@ -156,6 +155,39 @@ namespace SudoBot.Commands
             {
                 await Task.Delay(TimeSpan.FromMinutes(minutes));
                 await Scheduled.RunSchedule(ScheduledType.Minute);
+            }
+        }
+
+        [Command("sim-hg"), Description("Simulate Hunger-Games")]
+        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
+        public async Task SimHungerGames(CommandContext ctx, int count, int playerCount = 16, bool debug = true)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                await ctx.Channel.SendMessageAsync($"Starting Game {i}");
+                var names = new List<HungerGamesPlayer>();
+
+                for (int j = 1; j <= playerCount; j++)
+                {
+                    var p = new HungerGamesPlayer();
+                    p.Name = $"Bot{j}";
+                    p.Id = 0;
+
+                    names.Add(p);
+                }
+
+                var hg = new HungerGames(names);
+                try
+                {
+                    while (!await hg.RunCycle(ctx.Channel, debug))
+                    {
+                    }
+                    await ctx.Channel.SendMessageAsync($"Winner: {hg.WinnerName}");
+                }
+                catch (Exception e)
+                {
+                    await ctx.Channel.SendMessageAsync($"Error: {e.Message}");
+                }
             }
         }
     }

@@ -39,7 +39,7 @@ namespace SudoBot.Specifics
             new HungerGamesLine("(...) fällt von einem Baum, kann sich allerdings an einem Ast wieder auffangen.",
                 new List<bool>{false}),
             new HungerGamesLine("(...) schlafwandelt und stürzt dabei eine Klippe runter. Damit hat nicht mal ein Mathematiker gerechnet.",
-                new List<bool>{true}),
+                new List<bool>{true}, dayState: HungerGamesDayState.Night),
             new HungerGamesLine("(...) erkundet die Arena.",
                 new List<bool>{false}),
             new HungerGamesLine("(...) und (...) feuern gleichzeitig Schüsse aufeinander ab und töten sich gegenseitig.",
@@ -66,8 +66,17 @@ namespace SudoBot.Specifics
         
         public List<List<HungerGamesPlayer>> Squads = new List<List<HungerGamesPlayer>>();
 
-        // Returns if game is over
-        public async Task<Boolean> RunCycle(DiscordChannel channel)
+        private int _day = 1;
+        private int _night = 0;
+        private bool _isDay = true;
+
+        private bool _firstRun = true;
+
+        public DiscordMember Winner;
+        public string WinnerName;
+
+        // Returns true if game is over
+        public async Task<Boolean> RunCycle(DiscordChannel channel, bool debug = false)
         {
             if (PlayersAlive.Count <= 0)
             {
@@ -78,6 +87,13 @@ namespace SudoBot.Specifics
             if (PlayersAlive.Count == 1)
             {
                 var winner = PlayersAlive.FirstOrDefault();
+
+                if (debug)
+                {
+                    Console.WriteLine($"**{winner.Name}** hat gewonnen!");
+                    WinnerName = winner.Name;
+                    return true;
+                }
 
                 DiscordMember p = null;
 
@@ -92,54 +108,96 @@ namespace SudoBot.Specifics
 
                 if (p != null)
                 {
+                    Winner = p;
+                    WinnerName = p.DisplayName;
                     await channel.SendMessageAsync($"**{p.Mention}** hat gewonnen!");
                 }
                 else
                 {
                     await channel.SendMessageAsync($"**{winner.Name}** hat gewonnen!");
+                    WinnerName = winner.Name;
                 }
 
                 return true;
             }
+            
+            // Change DayState randomly
+
+            if (_firstRun)
+            {
+                var emb = new DiscordEmbedBuilder();
+                emb.Title = "Der 1 Tag hat begonnen.";
+                if (!debug) await channel.SendMessageAsync(embed: emb.Build());
+                else Console.WriteLine(emb.Title);
+                _firstRun = false;
+            }
+            
+            if (_rng.Next(0, 8) == 7)
+            {
+                var emb = new DiscordEmbedBuilder();
+                if (_isDay)
+                {
+                    _night += 1;
+                    emb.Title = $"Die {_night} Nacht hat angebrochen.";
+                }
+                else
+                {
+                    _day += 1;
+                    emb.Title = $"Der {_day} Tag hat begonnen.";
+                }
+                _isDay = !_isDay;
+                if (!debug) await channel.SendMessageAsync(embed: emb.Build());
+                else Console.WriteLine(emb.Title);
+            }
+            
+            // Do the Magic
 
             HungerGamesLine rolled;
-
+            List<HungerGamesLine> rollable;
             if (PlayersAlive.Count <= 4)
             {
                 if (Squads.Count >= 1)
                 {
-                    var rollable = Lines.Where(x => x.KillsSquad == true).ToList();
-                    rolled = rollable[_rng.Next(0, rollable.Count)];
+                    rollable = Lines.Where(x => x.KillsSquad == true).ToList();
                 }
                 else
                 {
-                    var rollable = Lines.Where(x => x.Dies.Count(y => y) <= 1 && x.KillsSquad == false && x.MakesSqud == false).ToList();
-                    rolled = rollable[_rng.Next(0, rollable.Count)];
+                    rollable = Lines.Where(x => x.Dies.Count(y => y) <= 1 && x.KillsSquad == false && x.MakesSqud == false).ToList();
                 }
             }
             else
             {
                 if (Squads.Count >= 2)
                 {
-                    var rollable = Lines.Where(x => x.KillsSquad == true).ToList();
-                    rolled = rollable[_rng.Next(0, rollable.Count)];
+                    rollable = Lines.Where(x => x.KillsSquad == true).ToList();
                 }
                 else if (Squads.Count == 0)
                 {
-                    var rollable = Lines.Where(x => x.KillsSquad == false).ToList();
-                    rolled = rollable[_rng.Next(0, rollable.Count)];
+                    rollable = Lines.Where(x => x.KillsSquad == false).ToList();
                 }
                 else
                 {
-                    rolled = Lines[_rng.Next(0, Lines.Count)];
+                    rollable = Lines;
                 }
             }
 
             if (PlayersAlive.Count == 2)
             {
-                var rollable = Lines.Where(x => x.Dies.Count <= (x.NameTwice ? 3 : 2)).ToList();
-                rolled = rollable[_rng.Next(0, rollable.Count)];
+                rollable = Lines.Where(x => x.Dies.Count <= (x.NameTwice ? 3 : 2)).ToList();
             }
+
+            if (_isDay)
+            {
+                rollable = rollable.Where(x =>
+                    x.DayState == HungerGamesDayState.Both || x.DayState == HungerGamesDayState.Day).ToList();
+            }
+            else
+            {
+                rollable = rollable.Where(x =>
+                    x.DayState == HungerGamesDayState.Both || x.DayState == HungerGamesDayState.Night).ToList();
+            }
+            
+            rolled = rollable[_rng.Next(0, rollable.Count)];
 
             if (rolled.Rarity > 1)
             {
@@ -152,7 +210,8 @@ namespace SudoBot.Specifics
             }
             
             var filled = await ExecuteRolled(rolled);
-            await channel.SendMessageAsync(filled);
+            if (!debug) await channel.SendMessageAsync(filled);
+            else Console.WriteLine(filled);
             
             return false;
         }
@@ -244,7 +303,13 @@ namespace SudoBot.Specifics
         
         // Add items here, and just return false early from handle step to skip things that need items if nobody has any
     }
-    
+
+    public enum HungerGamesDayState
+    {
+        Day,
+        Night,
+        Both
+    }
 
     public class HungerGamesLine
     {
@@ -260,8 +325,10 @@ namespace SudoBot.Specifics
         public Boolean MakesSqud;
         // true if the line kills its squad, if no squad exists, line gets rerolled
         public Boolean KillsSquad;
+        // says if the line is spoken at day / night or both
+        public HungerGamesDayState DayState;
 
-        public HungerGamesLine(String line, List<Boolean> dies, int rarity = 1, Boolean nameTwice = false, Boolean makesSquad = false, Boolean killsSquad = false)
+        public HungerGamesLine(String line, List<Boolean> dies, int rarity = 1, Boolean nameTwice = false, Boolean makesSquad = false, Boolean killsSquad = false, HungerGamesDayState dayState = HungerGamesDayState.Both)
         {
             Line = line;
             Dies = dies;
@@ -269,6 +336,7 @@ namespace SudoBot.Specifics
             NameTwice = nameTwice;
             MakesSqud = makesSquad;
             KillsSquad = killsSquad;
+            DayState = dayState;
         }
     }
 }

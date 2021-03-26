@@ -241,6 +241,13 @@ namespace SudoBot.Models
                     {
                         while (!await hg.RunCycle(channel))
                         {
+                            // Wait for 30 seconds between cycles
+                            await Task.Delay(30 * 1000);
+                        }
+
+                        if (hg.Winner != null)
+                        {
+                            // Give Winner XP
                         }
                     }
                     catch (Exception e)
