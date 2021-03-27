@@ -33,7 +33,7 @@ namespace SudoBot.Commands
                 var imgStream = new MemoryStream(img);
 
                 var fileUrl = await Globals.UploadToCdn($"{ctx.Message.Id.ToString()}{fileExtension}", mimeType, imgStream);
-                await ctx.Channel.SendMessageAsync(fileUrl);
+                await ctx.Channel.SendMessageAsync("Url: " + fileUrl);
             }
             catch (Exception e)
             {
