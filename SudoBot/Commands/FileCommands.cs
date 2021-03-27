@@ -40,6 +40,39 @@ namespace SudoBot.Commands
                 await ctx.Channel.SendMessageAsync("Fehler!, Eine Bild muss mitgesendet werden");
             }
         }
+
+        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any), Description("Download Youtube Video"),
+         Command("youtube-dl")]
+        public async Task YoutubeDl(CommandContext ctx, String url, Boolean audioOnly = false, int start = 0, int length = 0)
+        {
+            var extension = audioOnly ? ".m4a" : ".mp4";
+            
+            var fileName = ctx.Message.Id.ToString() + extension;
+            var filePath = Path.GetTempPath() + fileName;
+            var format = audioOnly ? "bestaudio[ext=m4a]" : "bestvideo[ext=mp4]";
+
+            String cmd;
+            
+            if (start != 0 || length != 0)
+            {
+                cmd =
+                    $"ffmpeg -y -ss {start} -t {length} -i $(youtube-dl -f '{format}' --get-url {url}) {filePath}";
+            }
+            else
+            {
+                cmd = $"ffmpeg -i $(youtube-dl -f '{format}' --get-url {url}) {filePath}";
+            }
+            
+            var res = await Globals.RunCommand(cmd);
+                
+            var file = File.Open(filePath, FileMode.Open);
+            var mimeType = MimeTypes.GetMimeType($"test{extension}");
+            var resUrl = await Globals.UploadToCdn(fileName, mimeType, file);
+            file.Close();
+            File.Delete(filePath);
+
+            await ctx.RespondAsync("Url: " + resUrl);
+        }
         
         // [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         // [Command("upload")]

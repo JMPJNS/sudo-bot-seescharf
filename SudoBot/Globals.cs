@@ -92,7 +92,7 @@ namespace SudoBot
             {
                 StartInfo = new ProcessStartInfo()
                 {
-                    FileName = isWindows ? "powershell.exe" : "/bin/sh",
+                    FileName = isWindows ? "powershell.exe" : "/bin/bash",
                     Arguments = isWindows ? $"\"{escapedArgs}\"" : $"-c \"{escapedArgs}\"",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
