@@ -27,16 +27,13 @@ namespace SudoBot.Commands
                 
                 var uriWithoutQuery = uri.GetLeftPart(UriPartial.Path);
                 var fileExtension = Path.GetExtension(uriWithoutQuery);
-                
-                var path = Path.Combine("/drive/jonas/files/d", $"{ctx.Message.Id.ToString()}{fileExtension}");
-
+                var mimeType = MimeTypes.GetMimeType($"test{fileExtension}");
                 var httpClient = new HttpClient();
-
                 var img = await httpClient.GetByteArrayAsync(uri);
+                var imgStream = new MemoryStream(img);
 
-                await File.WriteAllBytesAsync(path, img);
-
-                await ctx.Channel.SendMessageAsync($"https://cdn.jmp.blue/files/d/{ctx.Message.Id.ToString()}{fileExtension}");
+                var fileUrl = await Globals.UploadToCdn($"{ctx.Message.Id.ToString()}{fileExtension}", mimeType, imgStream);
+                await ctx.Channel.SendMessageAsync(fileUrl);
             }
             catch (Exception e)
             {

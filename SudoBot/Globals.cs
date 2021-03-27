@@ -36,7 +36,7 @@ namespace SudoBot
             formData.Add(content, filename, filename);
             var request = new HttpRequestMessage()
             {
-                RequestUri = new Uri("https://cdn.jmp.blue"),
+                RequestUri = new Uri(Environment.GetEnvironmentVariable("CDN_URL") ?? "https://cdn.jmp.blue"),
                 Method = HttpMethod.Post,
                 Content = formData
             };
