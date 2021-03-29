@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
+using SudoBot.Models;
 
 namespace SudoBot.Specifics
 {
@@ -110,6 +111,12 @@ namespace SudoBot.Specifics
                 {
                     Winner = p;
                     WinnerName = p.DisplayName;
+                    
+                    var user = await User.GetOrCreateUser(p);
+
+                    int count = _rng.Next(250, 1000);
+                    await user.AddSpecialPoints(count);
+                    
                     await channel.SendMessageAsync($"**{p.Mention}** hat gewonnen!");
                 }
                 else
