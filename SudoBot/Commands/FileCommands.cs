@@ -49,7 +49,7 @@ namespace SudoBot.Commands
             
             var fileName = ctx.Message.Id.ToString() + extension;
             var filePath = Path.GetTempPath() + fileName;
-            var format = audioOnly ? "bestaudio[ext=m4a]" : "bestvideo+bestaudio";
+            var format = audioOnly ? "bestaudio[ext=m4a]" : "mp4/bestvideo+bestaudio";
 
             String cmd;
             
