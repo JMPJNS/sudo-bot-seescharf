@@ -141,13 +141,13 @@ namespace SudoBot
             {
                 if (Environment.GetEnvironmentVariable("DBNAME") == "SudoBot")
                 {
-                    var guild = Client.GetGuildAsync(468835109844418575).GetAwaiter().GetResult();
-                    return guild.GetChannel(712253992243036281);
+                    var guild = Client.GetGuildAsync(716635355020918784).GetAwaiter().GetResult();
+                    return guild.GetChannel(828953910164062208);
                 }
                 else
                 {
-                    var guild = Client.GetGuildAsync(468835109844418575).GetAwaiter().GetResult();
-                    return guild.GetChannel(712254249148350495);
+                    var guild = Client.GetGuildAsync(716635355020918784).GetAwaiter().GetResult();
+                    return guild.GetChannel(716636916832927805);
                 }
             }
         }
