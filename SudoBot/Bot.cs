@@ -13,6 +13,7 @@ using DSharpPlus.Interactivity;
 using DSharpPlus.Net;
 using DSharpPlus.Lavalink;
 using DSharpPlus.Interactivity.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SudoBot.Attributes;
@@ -62,13 +63,19 @@ namespace SudoBot
             Client.GuildDeleted += OnGuildDeleted;
 
             Client.GuildMemberUpdated += OnMemberUpdated;
+            
+            //DI
+            var services = new ServiceCollection()
+                .AddSingleton<Translation>()
+                .BuildServiceProvider();
 
             //Commands
             var commandsConfig = new CommandsNextConfiguration
             {
                 StringPrefixes = new []{"$"},
                 EnableMentionPrefix = true,
-                EnableDms = false
+                EnableDms = false,
+                Services =  services
             };
 
             Commands = Client.UseCommandsNext(commandsConfig);

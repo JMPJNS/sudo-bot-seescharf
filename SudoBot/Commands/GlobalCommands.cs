@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
@@ -20,6 +21,8 @@ namespace SudoBot.Commands
     public class GlobalCommands : BaseCommandModule
     {
 
+        public Translation Translator { private get; set; }
+        
         [Command("invite")]
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         [Description("Invite Link um den Bot einzuladen (kann jeder verwenden)")]
@@ -100,6 +103,22 @@ namespace SudoBot.Commands
         public async Task Reminder(CommandContext ctx, [Description("in")] string format, [Description("Zeitspanne {beispiel: 12m}")] TimeSpan timespan, [Description("Nachricht"), RemainingText] string message)
         {
             await UtilityCommands.ReminderCommand(ctx, format, DateTime.UtcNow + timespan, message);
+        }
+
+        [Command("translate"), Description("get translation for line in language"),
+         CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
+        public async Task Translate(CommandContext ctx, string line, String lang = "en", [RemainingText] String args = "")
+        {
+            Translation.Lang language = lang.ToLower() switch
+            {
+                "en" => Translation.Lang.En,
+                "de" => Translation.Lang.De,
+                _ => Translation.Lang.En
+            };
+
+            var argList = args.Split(",").ToList();
+
+            await ctx.RespondAsync(Translator.Translate(line, language, argList));
         }
         
         

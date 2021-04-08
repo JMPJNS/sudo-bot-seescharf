@@ -19,6 +19,8 @@ namespace SudoBot.Commands
     public class RankCommands: BaseCommandModule
     {
         
+        public Translation Translator { private get; set; }
+        
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         [Description("Information über den Aktuellen Rang (30s Cooldown)")]
         [GroupCommand]
@@ -28,10 +30,10 @@ namespace SudoBot.Commands
             var user = await User.GetOrCreateUser(member);
             var guild = await Guild.GetGuild(user.GuildId);
 
-            if (member.Id != Globals.MyId && guild.CommandChannel != 0 && guild.CommandChannel != ctx.Channel.Id)
+            if (guild.CommandChannel != 0 && guild.CommandChannel != ctx.Channel.Id)
             {
                 var channel = ctx.Guild.GetChannel(guild.CommandChannel);
-                var sentMessage = await ctx.Channel.SendMessageAsync($"In diesem Channel nicht erlaubt, bitte in {channel.Mention} verwenden!");
+                var sentMessage = await ctx.Channel.SendMessageAsync(Translator.Translate("RANKING_CHANNEL_NOT_ALLOWED", Translation.Lang.De, new List<string>{channel.Mention}));
                 Task.Run(() =>
                 {
                     Task.Delay(5000).GetAwaiter().GetResult();

@@ -4,7 +4,7 @@ using System.Net;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 
-namespace SudoBot.Handlers
+namespace SudoBot.Specifics
 {
     public class SubnetCalculator
     {

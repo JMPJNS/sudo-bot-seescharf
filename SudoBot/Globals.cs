@@ -23,7 +23,7 @@ namespace SudoBot
         public static ulong MyId = 272809112851578881;
         public static ulong JuliansId = 201413280261079042;
         public static string CdnKey;
-        public static readonly List<Guild> GuildCache = new List<Guild>();
+        public static readonly List<Guild> GuildCache = new();
 
         public static List<YoutubeVideoGifParser> YoutubeVideoGifParsers = new List<YoutubeVideoGifParser>();
 
