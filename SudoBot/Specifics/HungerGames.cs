@@ -61,6 +61,15 @@ namespace SudoBot.Specifics
                 new List<bool>{true, true, true, false}, 1, false, false, true),
             new HungerGamesLine("(...) verschluckt sich an einem Schlürfsaft.", new List<bool>{true}),
             new HungerGamesLine("(...) hat so gutes Bogen Aim, dass er (...) mit einem Pfeil durchbohrt.", new List<bool>{false, true}),
+            new HungerGamesLine("(...) hat die Pistole falsch rum gehalten.", new List<bool>{true}),
+            new HungerGamesLine("(...) hat bekanntschaft mit dem Bann-Hammer gemacht.", new List<bool>{true}),
+            new HungerGamesLine("Ein Gewitter scheint aufzuziehen...  (...) kam nicht schnell genug vom Baum herunter und wurde von einem Blitz getroffen.", new List<bool>{true}),
+            new HungerGamesLine("Autsch ! (...) wird von einem Rudel wilder Hunde angegriffen und kann sich nicht verteidigen... Das war es wohl...", new List<bool>{true}),
+            new HungerGamesLine("Ups ! Die Beeren die (...) gegessen hat waren doch keine Erdbeeren :grimacing:", new List<bool>{true}),
+            new HungerGamesLine("Fischen ist wichtig zum überleben. Blöd nur ,dass (...) dabei von einem Grizzlybär geangelt wird.", new List<bool>{true}),
+            new HungerGamesLine("Beim Entzünden des Lagerfeuers fängt die Kleidung von (...)  Feuer. (...) nutzt das aus und kann (...) überwältigen.", new List<bool>{false, false, true}, nameTwice: true),
+            new HungerGamesLine("Das sieht nicht gut aus ! Der Ast auf dem sich (...) befindet bricht ab und fällt genau in einen Ameisenhaufen voller Tödlicher Ameisen.", new List<bool>{true}),
+            new HungerGamesLine("Eine Tomatenbombe platzt in der Mitte der Arena. Beim Versuch , so viele Tomaten wie möglich zu ergattern löst (...) einige Sprengfallen aus. Auch (...) wird von der Explosion erwischt und stirbt.", new List<bool>{true, true})
         };
         
         public List<HungerGamesPlayer> PlayersAlive = new List<HungerGamesPlayer>();
@@ -279,6 +288,17 @@ namespace SudoBot.Specifics
             }
 
             PlayersAlive = PlayersAlive.Except(dies).ToList();
+
+            foreach (var squad in Squads)
+            {
+                foreach (var m in squad)
+                {
+                    if (dies.Any(x => x == m))
+                    {
+                        Squads.Remove(squad);
+                    }
+                }
+            }
                 
             var filled = FillNames(line.Line, chosen);
             return filled;
