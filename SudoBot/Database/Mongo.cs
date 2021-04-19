@@ -178,7 +178,12 @@ namespace SudoBot.Database
                 g => guild.GuildId == g.GuildId,
                 guild);
         }
-        
+
+        public async Task<List<Guild>> GetAllGuilds()
+        {
+            return await _guilds.FindAsync(g => g.GuildId != 0).Result.ToListAsync();
+        }
+
         // Parser Stuff
         
         public async Task InsertParserResult(ParserResult res)

@@ -25,17 +25,18 @@ namespace SudoBot
             }
         }
         
-        public Dictionary<String, Line> Lines = new ();
+        private Dictionary<String, Line> _lines = new ();
 
-        public String Translate(String line, Lang lang, List<string> args)
+        public String Translate(String line, Lang lang, List<string> args = null)
         {
-            var found = Lines[line.ToUpper()];
+            var found = _lines[line.ToUpper()];
 
             return FillArgs(found.Text[lang], args);
         }
         
         private String FillArgs(String line, List<String> args)
         {
+            if (args == null) return line;
             var regex = new Regex(Regex.Escape("{{}}"));
 
             foreach (var arg in args)
@@ -53,9 +54,12 @@ namespace SudoBot
 
         private void AddLines()
         {
-            Lines.Add("TEST", new Line("Test in {{}}", "Test in {{}}"));
+            _lines.Add("TEST", new Line("Test in {{}}", "Test in {{}}"));
             
-            Lines.Add("RANKING_CHANNEL_NOT_ALLOWED", new Line("not allowed in this channel, please use {{}}", "In diesem Channel nicht erlaubt, bitte in {{}} verwenden!"));
+            _lines.Add("RANKING_CHANNEL_NOT_ALLOWED", new Line("not allowed in this channel, please use {{}}", "In diesem Channel nicht erlaubt, bitte in {{}} verwenden!"));
+            _lines.Add("RANKING_BOT_NO_PERMISSION", new Line("Sudo doesn't have permission to grant this role, grant manage roles permission and move the role under the sudo role", 
+                "Sudo hat keine Rechte diese Rolle zu vergeben, es wird dazu die manage roles permission benötigt und die Rolle muss unter der Sudo Rolle sein"));
+            _lines.Add("DONE", new Line("done", "fertig"));
         }
     }
 }

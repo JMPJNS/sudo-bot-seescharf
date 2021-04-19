@@ -33,6 +33,8 @@ namespace SudoBot.Models
         public string RankingPointName { get; private set; }
         
         public List<ReactionRole> ReactionRoles { get; private set; }
+        
+        public Translation.Lang Language { get; private set; }
 
         public List<GuildPermission> Permissions { get; set; }
 
@@ -47,6 +49,7 @@ namespace SudoBot.Models
             RankingMultiplier = 1;
             RankingPointName = "XP";
             TicketCount = 1;
+            Language = Translation.Lang.En;
         }
         
         public class RankingRole
@@ -74,7 +77,7 @@ namespace SudoBot.Models
         public async Task SaveGuild()
         {
             var cacheIndex = Globals.GuildCache.FindIndex(x => x.GuildId == GuildId);
-            Globals.GuildCache[cacheIndex] = this;
+            if (cacheIndex != -1) Globals.GuildCache[cacheIndex] = this;
             await Mongo.Instance.UpdateGuild(this);
         }
 
@@ -103,6 +106,12 @@ namespace SudoBot.Models
         public async Task SetRankingPointsName(string name)
         {
             RankingPointName = name;
+            await SaveGuild();
+        }
+
+        public async Task SetLanguage(Translation.Lang lang)
+        {
+            Language = lang;
             await SaveGuild();
         }
 
@@ -185,7 +194,12 @@ namespace SudoBot.Models
 
         public async Task<bool> RemoveRankingRole(DiscordRole role)
         {
-            var rr = RankingRoles.FirstOrDefault(r => r.Role == role.Id);
+            return await RemoveRankingRole(role.Id);
+        }
+        
+        public async Task<bool> RemoveRankingRole(ulong roleId)
+        {
+            var rr = RankingRoles.FirstOrDefault(r => r.Role == roleId);
             if (rr == null)
             {
                 return false;

@@ -15,6 +15,8 @@ namespace SudoBot.Commands
     [Description("Administrations Stuff")]
     public class AdminCommands : BaseCommandModule
     {
+        public Translation Translator { private get; set; }
+        
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         [Command("give-guild-permission")]
         [Aliases("ggp")]
@@ -32,6 +34,46 @@ namespace SudoBot.Commands
                 await guildConfig.GivePermission(perm);
                 await ctx.Channel.SendMessageAsync("Die Rechte wurden Vergeben!");
             }
+        }
+
+        [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
+        [Command("set-language"), Aliases("set-lang")]
+        public async Task SetLanguage(CommandContext ctx, [Description("language: en/de")] string l)
+        {
+            Translation.Lang lang;
+            if (l.ToLower() == "de" || l.ToLower() == "deutsch" || l.ToLower() == "german")
+            {
+                lang = Translation.Lang.De;
+            }
+            else
+            {
+                lang = Translation.Lang.En;
+            }
+
+            var guild = await Guild.GetGuild(ctx.Guild.Id);
+            await guild.SetLanguage(lang);
+            await ctx.RespondAsync(Translator.Translate("DONE", guild.Language));
+        }
+
+        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
+        [Command("set-all-langs")]
+        public async Task SetAllLangs(CommandContext ctx)
+        {
+            try
+            {
+                var guilds = await Mongo.Instance.GetAllGuilds();
+                foreach (var g in guilds)
+                {
+                    await g.SetLanguage(Translation.Lang.De);
+                }
+
+                await ctx.RespondAsync("done");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            
         }
 
         // Mute

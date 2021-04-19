@@ -7,6 +7,8 @@ using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
+using DSharpPlus.Exceptions;
+using Microsoft.Extensions.Logging;
 using SudoBot.Attributes;
 using SudoBot.Database;
 using SudoBot.Models;
@@ -189,8 +191,21 @@ namespace SudoBot.Commands
         public async Task SetRankingRole(CommandContext ctx, [Description("Die Rolle die zu erhalten ist")]DiscordRole role, [Description("Anzahl der Punkte bei der man die Rolle erhält")]int points)
         {
             var guild = await Guild.GetGuild(ctx.Guild.Id);
-            await guild.AddRankingRole(role, points);
-            await ctx.Channel.SendMessageAsync($"Die Rolle {role.Name} ist mit {points.ToString()} IQ zu Erreichen!");
+            try
+            {
+                var bu = Globals.BotUser;
+                var bm = await ctx.Guild.GetMemberAsync(bu.Id);
+
+                await bm.GrantRoleAsync(role);
+                await bm.RevokeRoleAsync(role);
+                
+                await guild.AddRankingRole(role, points);
+                await ctx.Channel.SendMessageAsync($"Die Rolle {role.Name} ist mit {points.ToString()} IQ zu Erreichen!");
+            }
+            catch (UnauthorizedException e)
+            {
+                await ctx.RespondAsync(Translator.Translate("RANKING_BOT_NO_PERMISSION", guild.Language));
+            }
         }
         
         [Command("remove-role")]
@@ -294,6 +309,12 @@ namespace SudoBot.Commands
                     foreach (var r in currRoles)
                     {
                         var drole = ctx.Guild.GetRole(r.Role);
+                        if (drole == null)
+                        {
+                            await guild.RemoveRankingRole(r.Role);
+                            continue;
+                        }
+                        
                         embed.AddField($"{r.Points.ToString()} {guild.RankingPointName ?? "XP"}", drole.Mention, true);
                     }
                     embeds.Add(embed);

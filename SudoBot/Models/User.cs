@@ -195,6 +195,10 @@ namespace SudoBot.Models
                 else next = null;
                 
                 var role = dGuild.GetRole(r.Role);
+                if (role == null)
+                {
+                    await guild.RemoveRankingRole(r.Role);
+                }
                 try
                 {
                     if (xp > r.Points && xp < (next != null ? next.Points : int.MaxValue))

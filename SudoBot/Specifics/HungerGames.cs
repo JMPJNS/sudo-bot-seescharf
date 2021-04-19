@@ -190,7 +190,8 @@ namespace SudoBot.Specifics
 
             if (PlayersAlive.Count == 2)
             {
-                rollable = Lines.Where(x => x.Dies.Count <= (x.NameTwice ? 3 : 2)).ToList();
+                if (_rng.Next(0, 14) == 7)
+                    rollable = Lines.Where(x => x.Dies.Count <= (x.NameTwice ? 3 : 2)).ToList();
             }
 
             if (_isDay)

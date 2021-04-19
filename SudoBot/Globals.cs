@@ -151,6 +151,21 @@ namespace SudoBot
                 }
             }
         }
+
+        public static DiscordUser BotUser
+        {
+            get
+            {
+                if (Environment.GetEnvironmentVariable("DBNAME") == "SudoBot")
+                {
+                    return Client.GetUserAsync(705548602994458684).GetAwaiter().GetResult();;
+                }
+                else
+                {
+                    return Client.GetUserAsync(705549474575024240).GetAwaiter().GetResult();;
+                }
+            }
+        }
     }
 }
 
