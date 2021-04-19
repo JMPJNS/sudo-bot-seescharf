@@ -226,6 +226,18 @@ namespace SudoBot.Specifics
                 }
             }
             
+            if (rolled.UseCount > 1)
+            {
+                int t = 100 / rolled.UseCount;
+                var r = _rng.Next(0, 100);
+                if (r > t)
+                {
+                    return false;
+                }
+            }
+
+            rolled.UseCount++;
+
             var filled = await ExecuteRolled(rolled);
             if (!debug) await channel.SendMessageAsync(filled);
             else Console.WriteLine(filled);
@@ -355,6 +367,8 @@ namespace SudoBot.Specifics
         public Boolean KillsSquad;
         // says if the line is spoken at day / night or both
         public HungerGamesDayState DayState;
+
+        public int UseCount = 0;
 
         public HungerGamesLine(String line, List<Boolean> dies, int rarity = 1, Boolean nameTwice = false, Boolean makesSquad = false, Boolean killsSquad = false, HungerGamesDayState dayState = HungerGamesDayState.Both)
         {
