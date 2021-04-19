@@ -69,7 +69,12 @@ namespace SudoBot.Specifics
             new HungerGamesLine("Fischen ist wichtig zum überleben. Blöd nur ,dass (...) dabei von einem Grizzlybär geangelt wird.", new List<bool>{true}),
             new HungerGamesLine("Beim Entzünden des Lagerfeuers fängt die Kleidung von (...)  Feuer. (...) nutzt das aus und kann (...) überwältigen.", new List<bool>{false, false, true}, nameTwice: true),
             new HungerGamesLine("Das sieht nicht gut aus ! Der Ast auf dem sich (...) befindet bricht ab und fällt genau in einen Ameisenhaufen voller Tödlicher Ameisen.", new List<bool>{true}),
-            new HungerGamesLine("Eine Tomatenbombe platzt in der Mitte der Arena. Beim Versuch , so viele Tomaten wie möglich zu ergattern löst (...) einige Sprengfallen aus. Auch (...) wird von der Explosion erwischt und stirbt.", new List<bool>{true, true})
+            new HungerGamesLine("Eine Tomatenbombe platzt in der Mitte der Arena. Beim Versuch , so viele Tomaten wie möglich zu ergattern löst (...) einige Sprengfallen aus. Auch (...) wird von der Explosion erwischt und stirbt.", new List<bool>{true, true}),
+            new HungerGamesLine("Kampfgeschrei ertönt als (...) und (...) aufeinander zu rennen. Leider achtete keiner der beiden auf den Boden und bemerkte den Treibsand.... Zumindest versinken sie gemeinsam.", new List<bool>{true, true}),
+            new HungerGamesLine("Ein stickiger Nebel zieht auf ! (...) ist zu langsam und erstickt. (...) schafft es gerade so zu überleben , fällt allerdings in einen tiefen Sumpf und schafft es nicht mehr heraus. (...) lacht sich darüber Schlapp , wird aber von einer Falle erwischt.", new List<bool>{true, true, true}),
+            new HungerGamesLine("Ein stickiger Nebel zieht auf ! (...) ist zu langsam und erstickt. (...) schafft es gerade so zu überleben. (...) lacht sich darüber Schlapp, wird aber von einer Falle erwischt.", new List<bool>{true, false, true}),
+            new HungerGamesLine("(...) ist das Messer aus der Hand gefallen.", new List<bool>{true}),
+            new HungerGamesLine("(...) hat sich früh morgens den Fuß gestoßen ... **Autsch**", new List<bool>{false}),
         };
         
         public List<HungerGamesPlayer> PlayersAlive = new List<HungerGamesPlayer>();
