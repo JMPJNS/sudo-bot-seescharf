@@ -97,13 +97,13 @@ namespace SudoBot.Models
         {
             if (Blocked) return false;
             
-            TimeSpan minDelay = TimeSpan.FromMinutes(1);
+            TimeSpan minDelay = TimeSpan.FromMinutes(10);
 
             if (DateTime.UtcNow - minDelay <= LastUpdated) return false;
 
             var guild = await Guild.GetGuild(GuildId);
 
-            int countedMessageLength = 100;
+            int countedMessageLength = 10;
             int multiplier;
 
             if (guild.RankingMultiplier == 0)
