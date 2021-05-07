@@ -163,7 +163,7 @@ namespace SudoBot.Commands
         }
         
         [Command("give-points"), Aliases("give")]
-        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
+        [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
         [Description("Einem User Bonus Punkte Geben")]
         public async Task GiveSp(CommandContext ctx, [Description("Der User der die Punkte Erhalten Soll")]DiscordMember member, [Description("Anzahl der Punkte")]int count)
         {
@@ -174,7 +174,7 @@ namespace SudoBot.Commands
         }
         
         [Command("remove-points"), Aliases("remove")]
-        [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]
+        [CheckForPermissions(SudoPermission.Admin, GuildPermission.Any)]
         [Description("Einem User Bonus Punkte Entfernen")]
         public async Task RemoveSp(CommandContext ctx, [Description("Der User dem die Punkte abgezogen werden")]DiscordMember member, [Description("Anzahl der Punkte")]int count)
         {
