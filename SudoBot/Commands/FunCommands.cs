@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
@@ -94,6 +95,24 @@ namespace SudoBot.Commands
             Random rnd = new Random();
             int random = rnd.Next(minimum, maximum+1);
             await ctx.RespondAsync(random.ToString());
+        }
+
+        [Command("choose"), Description("Pick random item from list")]
+        public async Task Choose(CommandContext ctx, [RemainingText, Description("comma seperated values")] string items)
+        {
+            if (!items.Contains(","))
+            {
+                await ctx.RespondAsync("Not enough items to choose from");
+                return;
+            }
+            var split = items.Split(",").ToList();
+            
+            Random rnd = new Random();
+            int random = rnd.Next(0, split.Count);
+
+            var chosen = split[random];
+
+            await ctx.RespondAsync(chosen.Trim());
         }
 
         [Command("subnet"), Description("Subnetmask und Broadcast Adresse zu einer IP Adresse und Prefix länge")]
