@@ -129,29 +129,30 @@ namespace SudoBot.Commands
             var split = items.Split(",").ToList();
 
             Random rnd = new Random();
-            List<(int name, int times)> picks = new();
+
+            Dictionary<String, int> picks = new();
             
             for (int i = 0; i < count; i++)
             {
                 int random = rnd.Next(0, split.Count);
-                var found = picks.FirstOrDefault(x => x.name == random);
-                if (found != (0, 0))
+                var chosen = split[random];
+                    
+                if (picks.ContainsKey(chosen))
                 {
-                    found.times += 1;
+                    picks[chosen] = picks[chosen] += 1;
                 }
                 else
                 {
-                    picks.Add((random, 1));
+                    picks[chosen] = 1;
                 }
             }
             
-            picks = picks.OrderBy(x => x.times).ToList();
-
+            var ordered = picks.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
             string sendString = "";
             
-            foreach (var pick in picks)
+            foreach (var pick in ordered)
             {
-                sendString += $"{split[pick.name]}: ${pick.times}\n";
+                sendString += $"{pick.Key}: {pick.Value}\n";
             }
 
             await ctx.RespondAsync(sendString);
