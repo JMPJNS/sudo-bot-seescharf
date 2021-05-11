@@ -32,7 +32,7 @@ namespace SudoBot.Commands
             var user = await User.GetOrCreateUser(member);
             var guild = await Guild.GetGuild(user.GuildId);
 
-            if (guild.CommandChannel != 0 && guild.CommandChannel != ctx.Channel.Id)
+            if (guild.CommandChannel != 0 && guild.CommandChannel != ctx.Channel.Id || member.Id != Globals.MyId)
             {
                 var channel = ctx.Guild.GetChannel(guild.CommandChannel);
                 var sentMessage = await ctx.Channel.SendMessageAsync(Translator.Translate("RANKING_CHANNEL_NOT_ALLOWED", Translation.Lang.De, new List<string>{channel.Mention}));
