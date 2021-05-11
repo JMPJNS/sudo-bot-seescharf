@@ -152,7 +152,7 @@ namespace SudoBot.Commands
             
             foreach (var pick in ordered)
             {
-                sendString += $"{pick.Key}: {pick.Value}\n";
+                sendString += $"{pick.Key.Trim()}: {pick.Value}\n";
             }
 
             await ctx.RespondAsync(sendString);
