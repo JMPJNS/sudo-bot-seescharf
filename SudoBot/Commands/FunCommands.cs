@@ -115,6 +115,48 @@ namespace SudoBot.Commands
             await ctx.RespondAsync(chosen.Trim());
         }
 
+        [Command("mass-choose"), Description("Pick random item from list")]
+        public async Task MassChoose(CommandContext ctx, [Description("times to pick")] int count,
+            [RemainingText, Description("comma seperated values")]
+            string items)
+        {
+            if (!items.Contains(","))
+            {
+                await ctx.RespondAsync("Not enough items to choose from");
+                return;
+            }
+
+            var split = items.Split(",").ToList();
+
+            Random rnd = new Random();
+            List<(int name, int times)> picks = new();
+            
+            for (int i = 0; i < count; i++)
+            {
+                int random = rnd.Next(0, split.Count);
+                var found = picks.FirstOrDefault(x => x.name == random);
+                if (found != (0, 0))
+                {
+                    found.times += 1;
+                }
+                else
+                {
+                    picks.Add((random, 1));
+                }
+            }
+            
+            picks = picks.OrderBy(x => x.times).ToList();
+
+            string sendString = "";
+            
+            foreach (var pick in picks)
+            {
+                sendString += $"{split[pick.name]}: ${pick.times}\n";
+            }
+
+            await ctx.RespondAsync(sendString);
+        }
+
         [Command("subnet"), Description("Subnetmask und Broadcast Adresse zu einer IP Adresse und Prefix länge")]
         public async Task Subnet(CommandContext ctx, [Description("Die IP Adresse (Format Beispiel: 192.168.8.30/24)")] string ip, [Description("Die Anzahl der Subnets")] int subnetCount)
         {
