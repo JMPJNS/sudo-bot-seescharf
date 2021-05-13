@@ -150,6 +150,7 @@ namespace SudoBot.Specifics
             {
                 var emb = new DiscordEmbedBuilder();
                 emb.Title = "Der 1 Tag hat begonnen.";
+                emb.Description = $"{PlayersAlive.Count} Spieler bereiten sich vor.";
                 if (!debug) await channel.SendMessageAsync(embed: emb.Build());
                 else Console.WriteLine(emb.Title);
                 _firstRun = false;
