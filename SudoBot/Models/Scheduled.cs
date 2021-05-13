@@ -79,18 +79,23 @@ namespace SudoBot.Models
         public static async Task RunSchedule()
         {
             var scheduled = await Mongo.Instance.GetDueScheduled();
+            List<Task> tasks = new();
             foreach (var stuff in scheduled)
             {
-                try
+                stuff.Active = false;
+                tasks.Add(Task.Run(async () =>
                 {
-                    await Scheduler.Execute(stuff);
-                    stuff.Active = false;
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine($"Error running Schedule: {e.Message}");
-                }
+                    try {
+                        await Scheduler.Execute(stuff);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"Error running Schedule: {e.Message}");
+                    }
+                }));
             }
+
+            await Task.WhenAll(tasks);
         }
     }
 }
