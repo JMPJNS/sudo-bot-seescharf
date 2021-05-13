@@ -197,7 +197,8 @@ namespace SudoBot.Commands
         [Command("hunger-games"), Description("Starte eine Hunger games Session")]
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.HungerGames)]
         public async Task HungerGames(CommandContext ctx, [Description("Wie lange bis zum start")] int minutes = 5, 
-            [Description("Wie viele Leute maximal mitspielen dürfen")] int maxPlayers = 512, 
+            [Description("Wie viele Leute maximal mitspielen dürfen")] int maxPlayers = 512,
+            [Description("Ob Sudo mit spielen soll")] bool withSudo = true,
             [Description("Ob spieler die zu wenig sind, durch bots ersetzt werden sollen")] Boolean useBots = false)
         {
             var emoji = DiscordEmoji.FromUnicode("🏟");
@@ -210,20 +211,23 @@ namespace SudoBot.Commands
             var m = await ctx.RespondAsync(embed: em.Build());
 
             await m.CreateReactionAsync(emoji);
-            
-            var sched = new Scheduled(new List<ScheduledType> {ScheduledType.HungerGames, ScheduledType.Minute}, $"{maxPlayers}:{useBots}", DateTime.Now.AddMinutes(minutes), ctx.Guild.Id, ctx.Channel.Id, ctx.User.Id, m.Id);
 
-            if (minutes < 10)
-            {
-                await Task.Delay(TimeSpan.FromMinutes(minutes));
-                await Scheduled.RunSchedule(ScheduledType.Minute);
-            }
+            Dictionary<string, string> args = new();
+            args.Add("MaxPlayers", maxPlayers.ToString());
+            args.Add("UseBots", useBots.ToString());
+            args.Add("WithSudo", withSudo.ToString());
+            args.Add("GuildId", ctx.Guild.Id.ToString());
+            args.Add("ChannelId", ctx.Channel.Id.ToString());
+            args.Add("MessageId", m.Id.ToString());
+            
+            new Scheduled( new List<ScheduledType> {ScheduledType.HungerGames, ScheduledType.Minute}, DateTime.Now.AddMinutes(minutes), args);
         }
 
         [Command("sim-hg"), Description("Simulate Hunger-Games")]
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         public async Task SimHungerGames(CommandContext ctx, int count, int playerCount = 16, bool debug = true)
         {
+            var guild = await Guild.GetGuild(ctx.Guild.Id);
             for (int i = 0; i < count; i++)
             {
                 await ctx.Channel.SendMessageAsync($"Starting Game {i}");
@@ -241,7 +245,7 @@ namespace SudoBot.Commands
                 var hg = new HungerGames(names);
                 try
                 {
-                    while (!await hg.RunCycle(ctx.Channel, debug))
+                    while (!await hg.RunCycle(ctx.Channel, guild, debug))
                     {
                     }
                     await ctx.Channel.SendMessageAsync($"Winner: {hg.WinnerName}");

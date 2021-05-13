@@ -33,12 +33,6 @@ namespace SudoBot
         private MessageHandler _messageHandler = new MessageHandler();
         private ReactionRolesHandler _reactionRolesHandler = new ReactionRolesHandler();
         private MemberUpdateHandler _memberUpdateHandler = new MemberUpdateHandler();
-
-        public static Timer MinuteScheduler;
-        public static Timer HourScheduler;
-        public static Timer SixHourScheduler;
-        public static Timer DayScheduler;
-
         public async Task RunAsync()
         {
 
@@ -123,17 +117,23 @@ namespace SudoBot
             Commands.RegisterCommands<MusicCommands>();
             Commands.RegisterCommands<ReactionRoleCommands>();
 
-            MinuteScheduler = new Timer(60*1000);
-            MinuteScheduler.Elapsed += OnMinuteEvent;
-            
-            HourScheduler = new Timer(60*60*1000);
-            HourScheduler.Elapsed += OnHourEvent;
-            
-            SixHourScheduler = new Timer(6*60*60*1000);
-            SixHourScheduler.Elapsed += OnSixHourEvent;
-            
-            DayScheduler = new Timer(24*60*60*1000);
-            DayScheduler.Elapsed += OnDayEvent;
+            // scheduler
+            var task = Task.Run(async () =>
+            {
+                await Task.Delay(1000*30);
+                while (true)
+                {
+                    await Task.Delay(1000);
+                    try
+                    {
+                        await Scheduled.RunSchedule();
+                    }
+                    catch (Exception e)
+                    {
+                        Client.Logger.Log(LogLevel.Critical, $"Error running Scheduler: {e.Message}");
+                    }
+                }
+            });
             
             // Start Bot
             await Client.ConnectAsync();
@@ -157,27 +157,6 @@ namespace SudoBot
             
             return Task.CompletedTask;
         }
-
-        private static void OnMinuteEvent(object source, ElapsedEventArgs e)
-        {
-            Scheduled.RunSchedule(ScheduledType.Minute).GetAwaiter().GetResult();
-        }
-        
-        private static void OnHourEvent(object source, ElapsedEventArgs e)
-        {
-            Scheduled.RunSchedule(ScheduledType.Hour).GetAwaiter().GetResult();
-        }
-        
-        private static void OnSixHourEvent(object source, ElapsedEventArgs e)
-        {
-            Scheduled.RunSchedule(ScheduledType.SixHour).GetAwaiter().GetResult();
-        }
-        
-        private static void OnDayEvent(object source, ElapsedEventArgs e)
-        {
-            Scheduled.RunSchedule(ScheduledType.Day).GetAwaiter().GetResult();
-        }
-
         private Task OnClientReady(DiscordClient sender, ReadyEventArgs e)
         {
             Globals.Client = sender;

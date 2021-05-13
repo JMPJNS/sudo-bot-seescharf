@@ -35,7 +35,7 @@ namespace SudoBot.Database
                 _tags = _db.GetCollection<Tag>("Tags");
                 _guilds = _db.GetCollection<Guild>("Guilds");
                 _parserResults = _db.GetCollection<ParserResult>("ParserResults");
-                _scheduled = _db.GetCollection<Scheduled>("Scheduled");
+                _scheduled = _db.GetCollection<Scheduled>("Scheduled_V2");
                 _lists = _db.GetCollection<SudoList>("Lists");
 
                 try
@@ -64,11 +64,11 @@ namespace SudoBot.Database
         
         // Scheduled Stuff
         
-        public async Task<Scheduled> GetScheduled(MongoDB.Bson.ObjectId scheduledId)
+        public async Task<Scheduled> GetScheduled(ObjectId scheduledId)
         {
             try
             {
-                return await _scheduled.FindAsync(scheduled => scheduled._id == scheduledId).Result.FirstAsync();
+                return await _scheduled.FindAsync(scheduled => scheduled.Id == scheduledId).Result.FirstAsync();
             }
             catch (Exception e)
             {
@@ -84,7 +84,7 @@ namespace SudoBot.Database
         public async Task UpdateScheduled(Scheduled scheduled)
         {
             await _scheduled.ReplaceOneAsync(
-                s => scheduled._id == s._id,
+                s => scheduled.Id == s.Id,
                 scheduled);
         }
 

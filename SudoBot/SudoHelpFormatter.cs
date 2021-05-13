@@ -124,16 +124,40 @@ namespace SudoBot
         public override BaseHelpFormatter WithSubcommands(IEnumerable<Command> subcommands)
         {
 
-            var commandsString = "";
+            var commandsStrings = new List<string> {""};
+            var index = 0;
 
-            foreach(var command in subcommands) {
-                if (command.Description != null)
-                    commandsString += $"**{command.Name}{((command is CommandGroup) ? " [Gruppe]" : "")}**\n{command.Description}\n\n";
+            foreach(var command in subcommands)
+            {
+                string s = "";
+                
+                s = command.Description != null 
+                    ? $"**{command.Name}{((command is CommandGroup) ? " [Gruppe]" : "")}**\n{command.Description}\n\n" 
+                    : $"**{command.Name}{((command is CommandGroup) ? " [Gruppe]" : "")}**\n\n";
+
+                if (commandsStrings[index].Length + s.Length < 1024)
+                {
+                    commandsStrings[index] += s;
+                }
                 else
-                    commandsString += $"**{command.Name}{((command is CommandGroup) ? " [Gruppe]" : "")}**\n\n";
+                {
+                    index++;
+                    commandsStrings.Add(s);
+                }
             }
 
-            Eb.AddField(this.Command != (Command) null ? "- Subcommands" : "- Commands", commandsString);
+            try
+            {
+                foreach (var s in commandsStrings)
+                {
+                    Eb.AddField(this.Command != null ? "- Subcommands" : "- Commands", s);
+                }
+            }
+            catch (Exception e)
+            {
+                Eb.AddField("Exception", e.Message);
+            }
+            
 
             if (this.Command != null)
                 Eb.AddField("- Ausführung", $"`${this.Command.Name} [Subcommand]`");

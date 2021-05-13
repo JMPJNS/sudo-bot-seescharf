@@ -64,15 +64,15 @@ namespace SudoBot.Specifics
             new HungerGamesLine("(...) hat die Pistole falsch rum gehalten.", new List<bool>{true}),
             new HungerGamesLine("(...) hat bekanntschaft mit dem Bann-Hammer gemacht.", new List<bool>{true}),
             new HungerGamesLine("Ein Gewitter scheint aufzuziehen...  (...) kam nicht schnell genug vom Baum herunter und wurde von einem Blitz getroffen.", new List<bool>{true}),
-            new HungerGamesLine("Autsch ! (...) wird von einem Rudel wilder Hunde angegriffen und kann sich nicht verteidigen... Das war es wohl...", new List<bool>{true}),
-            new HungerGamesLine("Ups ! Die Beeren die (...) gegessen hat waren doch keine Erdbeeren :grimacing:", new List<bool>{true}),
-            new HungerGamesLine("Fischen ist wichtig zum überleben. Blöd nur ,dass (...) dabei von einem Grizzlybär geangelt wird.", new List<bool>{true}),
+            new HungerGamesLine("Autsch! (...) wird von einem Rudel wilder Hunde angegriffen und kann sich nicht verteidigen... Das war es wohl...", new List<bool>{true}),
+            new HungerGamesLine("Ups! Die Beeren die (...) gegessen hat waren doch keine Erdbeeren :grimacing:", new List<bool>{true}),
+            new HungerGamesLine("Fischen ist wichtig zum überleben. Blöd nur, dass (...) dabei von einem Grizzlybär geangelt wird.", new List<bool>{true}),
             new HungerGamesLine("Beim Entzünden des Lagerfeuers fängt die Kleidung von (...)  Feuer. (...) nutzt das aus und kann (...) überwältigen.", new List<bool>{false, false, true}, nameTwice: true),
-            new HungerGamesLine("Das sieht nicht gut aus ! Der Ast auf dem sich (...) befindet bricht ab und fällt genau in einen Ameisenhaufen voller Tödlicher Ameisen.", new List<bool>{true}),
-            new HungerGamesLine("Eine Tomatenbombe platzt in der Mitte der Arena. Beim Versuch , so viele Tomaten wie möglich zu ergattern löst (...) einige Sprengfallen aus. Auch (...) wird von der Explosion erwischt und stirbt.", new List<bool>{true, true}),
+            new HungerGamesLine("Das sieht nicht gut aus! Der Ast auf dem sich (...) befindet bricht ab und fällt genau in einen Ameisenhaufen voller Tödlicher Ameisen.", new List<bool>{true}),
+            new HungerGamesLine("Eine Tomatenbombe platzt in der Mitte der Arena. Beim Versuch, so viele Tomaten wie möglich zu ergattern löst (...) einige Sprengfallen aus. Auch (...) wird von der Explosion erwischt und stirbt.", new List<bool>{true, true}),
             new HungerGamesLine("Kampfgeschrei ertönt als (...) und (...) aufeinander zu rennen. Leider achtete keiner der beiden auf den Boden und bemerkte den Treibsand.... Zumindest versinken sie gemeinsam.", new List<bool>{true, true}),
-            new HungerGamesLine("Ein stickiger Nebel zieht auf ! (...) ist zu langsam und erstickt. (...) schafft es gerade so zu überleben , fällt allerdings in einen tiefen Sumpf und schafft es nicht mehr heraus. (...) lacht sich darüber Schlapp , wird aber von einer Falle erwischt.", new List<bool>{true, true, true}),
-            new HungerGamesLine("Ein stickiger Nebel zieht auf ! (...) ist zu langsam und erstickt. (...) schafft es gerade so zu überleben. (...) lacht sich darüber Schlapp, wird aber von einer Falle erwischt.", new List<bool>{true, false, true}),
+            new HungerGamesLine("Ein stickiger Nebel zieht auf! (...) ist zu langsam und erstickt. (...) schafft es gerade so zu überleben, fällt allerdings in einen tiefen Sumpf und schafft es nicht mehr heraus. (...) lacht sich darüber Schlapp, wird aber von einer Falle erwischt.", new List<bool>{true, true, true}),
+            new HungerGamesLine("Ein stickiger Nebel zieht auf! (...) ist zu langsam und erstickt. (...) schafft es gerade so zu überleben. (...) lacht sich darüber Schlapp, wird aber von einer Falle erwischt.", new List<bool>{true, false, true}),
             new HungerGamesLine("(...) ist das Messer aus der Hand gefallen.", new List<bool>{true}),
             new HungerGamesLine("(...) hat sich früh morgens den Fuß gestoßen ... **Autsch**", new List<bool>{false}),
         };
@@ -85,13 +85,15 @@ namespace SudoBot.Specifics
         private int _night = 0;
         private bool _isDay = true;
 
+        private int currentCycleEventCount = 0;
+
         private bool _firstRun = true;
 
         public DiscordMember Winner;
         public string WinnerName;
 
         // Returns true if game is over
-        public async Task<Boolean> RunCycle(DiscordChannel channel, bool debug = false)
+        public async Task<Boolean> RunCycle(DiscordChannel channel, Guild guild, bool debug = false)
         {
             if (PlayersAlive.Count <= 0)
             {
@@ -131,7 +133,7 @@ namespace SudoBot.Specifics
                     int count = _rng.Next(250, 1000);
                     await user.AddSpecialPoints(count);
                     
-                    await channel.SendMessageAsync($"**{p.Mention}** hat gewonnen!");
+                    await channel.SendMessageAsync($"**{p.Mention}** hat gewonnen und erhält {count} Bonus {guild.RankingPointName}!");
                 }
                 else
                 {
@@ -153,13 +155,13 @@ namespace SudoBot.Specifics
                 _firstRun = false;
             }
             
-            if (_rng.Next(0, 8) == 7)
+            if (currentCycleEventCount != 0 && _rng.Next(0, 8) == 7)
             {
                 var emb = new DiscordEmbedBuilder();
                 if (_isDay)
                 {
                     _night += 1;
-                    emb.Title = $"Die {_night} Nacht hat angebrochen.";
+                    emb.Title = $"Die {_night} Nacht ist angebrochen.";
                 }
                 else
                 {
@@ -167,9 +169,16 @@ namespace SudoBot.Specifics
                     emb.Title = $"Der {_day} Tag hat begonnen.";
                 }
                 _isDay = !_isDay;
+
+                emb.Description = $"Es sind noch {PlayersAlive.Count} Spieler am Leben.";
+                
                 if (!debug) await channel.SendMessageAsync(embed: emb.Build());
                 else Console.WriteLine(emb.Title);
+
+                currentCycleEventCount = 0;
             }
+
+            currentCycleEventCount++;
             
             // Do the Magic
 
@@ -306,15 +315,23 @@ namespace SudoBot.Specifics
 
             PlayersAlive = PlayersAlive.Except(dies).ToList();
 
+            // to avoid enumarable was modified error in foreach loop
+            List<List<HungerGamesPlayer>> deadSquads = new();
+
             foreach (var squad in Squads)
             {
                 foreach (var m in squad)
                 {
                     if (dies.Any(x => x == m))
                     {
-                        Squads.Remove(squad);
+                        deadSquads.Add(squad);
                     }
                 }
+            }
+
+            foreach (var squad in deadSquads)
+            {
+                Squads.Remove(squad);
             }
                 
             var filled = FillNames(line.Line, chosen);
