@@ -75,6 +75,8 @@ namespace SudoBot.Specifics
             new HungerGamesLine("Ein stickiger Nebel zieht auf! (...) ist zu langsam und erstickt. (...) schafft es gerade so zu überleben. (...) lacht sich darüber Schlapp, wird aber von einer Falle erwischt.", new List<bool>{true, false, true}),
             new HungerGamesLine("(...) ist das Messer aus der Hand gefallen.", new List<bool>{true}),
             new HungerGamesLine("(...) hat sich früh morgens den Fuß gestoßen ... **Autsch**", new List<bool>{false}),
+            new HungerGamesLine("(...) schlägt mit seiner Gürtelschnalle durch die Gegend, da keiner in der Nähe war ist das ziemlich fragwürdig.", new List<bool>{false}),
+            new HungerGamesLine("(...) schlägt mit seiner Gürtelschnalle durch die Gegend und trifft dabei (...).", new List<bool>{false, true}),
         };
         
         public List<HungerGamesPlayer> PlayersAlive = new List<HungerGamesPlayer>();
@@ -130,7 +132,7 @@ namespace SudoBot.Specifics
                     
                     var user = await User.GetOrCreateUser(p);
 
-                    int count = _rng.Next(250, 1000);
+                    int count = _rng.Next(150, 400);
                     await user.AddSpecialPoints(count);
                     
                     await channel.SendMessageAsync($"**{p.Mention}** hat gewonnen und erhält {count} Bonus {guild.RankingPointName}!");
