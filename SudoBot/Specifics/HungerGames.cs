@@ -83,6 +83,8 @@ namespace SudoBot.Specifics
             new HungerGamesLine("(...) ging die Kraft nach einem langen und erbitterten Kampf mit einem wilden Panda aus.", new List<bool>{true}),
             new HungerGamesLine("(...) wurde von einem wilden Pokemon überweltigt.", new List<bool>{true}),
             new HungerGamesLine("(...) wurde von einem wilden Pokemon überrascht, dieses verschont ihn aber.", new List<bool>{false}),
+            new HungerGamesLine("(...) findet eine Axt und fällt damit den Baum auf dem sich (...) befindet, er fällt dadurch in den Tot.", new List<bool>{false, true}),
+            new HungerGamesLine("(...) schreit so laut durch den Wald, dass er vom Anti-Spam Bot gebannt wird.", new List<bool>{true}),
         };
         
         public List<HungerGamesPlayer> PlayersAlive = new List<HungerGamesPlayer>();
