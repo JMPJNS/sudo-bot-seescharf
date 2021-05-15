@@ -189,8 +189,6 @@ namespace SudoBot.Specifics
                 currentCycleEventCount = 0;
             }
 
-            currentCycleEventCount++;
-            
             // Do the Magic
 
             HungerGamesLine rolled;
@@ -261,11 +259,14 @@ namespace SudoBot.Specifics
                 }
             }
 
-            rolled.UseCount++;
+            if (rolled.UseCount <= 5)
+                rolled.UseCount++;
 
             var filled = await ExecuteRolled(rolled);
             if (!debug) await channel.SendMessageAsync(filled);
             else Console.WriteLine(filled);
+            
+            currentCycleEventCount++;
             
             return false;
         }
