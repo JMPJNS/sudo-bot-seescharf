@@ -67,7 +67,7 @@ namespace SudoBot.Specifics
             new HungerGamesLine("Autsch! (...) wird von einem Rudel wilder Hunde angegriffen und kann sich nicht verteidigen... Das war es wohl...", new List<bool>{true}),
             new HungerGamesLine("Ups! Die Beeren die (...) gegessen hat waren doch keine Erdbeeren :grimacing:", new List<bool>{true}),
             new HungerGamesLine("Fischen ist wichtig zum überleben. Blöd nur, dass (...) dabei von einem Grizzlybär geangelt wird.", new List<bool>{true}),
-            new HungerGamesLine("Beim Entzünden des Lagerfeuers fängt die Kleidung von (...)  Feuer. (...) nutzt das aus und kann (...) überwältigen.", new List<bool>{false, false, true}, nameTwice: true),
+            new HungerGamesLine("Beim Entzünden des Lagerfeuers fängt die Kleidung von (...)  Feuer. (...) nutzt das aus und kann ihn überwältigen.", new List<bool>{true, false}),
             new HungerGamesLine("Das sieht nicht gut aus! Der Ast auf dem sich (...) befindet bricht ab und fällt genau in einen Ameisenhaufen voller Tödlicher Ameisen.", new List<bool>{true}),
             new HungerGamesLine("Eine Tomatenbombe platzt in der Mitte der Arena. Beim Versuch, so viele Tomaten wie möglich zu ergattern löst (...) einige Sprengfallen aus. Auch (...) wird von der Explosion erwischt und stirbt.", new List<bool>{true, true}),
             new HungerGamesLine("Kampfgeschrei ertönt als (...) und (...) aufeinander zu rennen. Leider achtete keiner der beiden auf den Boden und bemerkte den Treibsand.... Zumindest versinken sie gemeinsam.", new List<bool>{true, true}),
@@ -85,27 +85,26 @@ namespace SudoBot.Specifics
             new HungerGamesLine("(...) wurde von einem wilden Pokemon überrascht, dieses verschont ihn aber.", new List<bool>{false}),
             new HungerGamesLine("(...) findet eine Axt und fällt damit den Baum auf dem sich (...) befindet, er fällt dadurch in den Tot.", new List<bool>{false, true}),
             new HungerGamesLine("(...) schreit so laut durch den Wald, dass er vom Anti-Spam Bot gebannt wird.", new List<bool>{true}),
-            new HungerGamesLine("(...) trifft auf ein wildes Celebi und wird mit Blättersturm attackiert.", new List<bool>{true}),
-            new HungerGamesLine("(...) trifft auf ein wildes Celebi und wird von Blättersturm umhüllt und verschlungen.", new List<bool>{true}),
-            new HungerGamesLine("(...) trifft auf ein wildes Celebi und wird von Blättersturm umhüllt, doch kann dem gerade noch so ausweichen.", new List<bool>{false}),
+            new HungerGamesLine("(...) trifft auf ein wildes Celebi und wird von Blättersturm umhüllt und verschlungen.", new List<bool>{true}, rarity: 2),
+            new HungerGamesLine("(...) trifft auf ein wildes Celebi und wird von Blättersturm umhüllt, doch kann dem gerade noch so ausweichen.", new List<bool>{false}, rarity: 2),
             new HungerGamesLine("(...) trifft auf ein wildes Celebi und wird von Blättersturm umhüllt, doch kann dem gerade noch so ausweichen. Allerdings kommt Yodajonasde, der ein riesen Celebi Fanboy ist und schubst ihn wieder in den Radius der Attacke. Feels Bad man #CelebiFTW", new List<bool>{true}, rarity: 3),
-            new HungerGamesLine("(...) trifft auf ein wildes Aquana und und wird mit Hydropumpe attackiert.", new List<bool>{true}),
-            new HungerGamesLine("(...) trifft auf ein wildes Aquana und wird von Hydropumpe getroffen. Der Strahl schießt (...) aus der Arena. Bei Team Rocket würde man sagen 'Das war mal wieder ein Schuss in den Opfeeeeeen'", new List<bool>{true, true}, nameTwice: true),
-            new HungerGamesLine("(...) trifft auf ein wildes Aquana und kann der Hydropumpe gerade noch so ausweichen. ", new List<bool>{false}),
-            new HungerGamesLine("(...) trifft auf ein wildes Lavados und wird von Ausbrennen getroffen. Da ist der letzten Schimmer Hoffnung dahin.", new List<bool>{true}),
-            new HungerGamesLine("(...) trifft auf ein wildes Arktos und wird durch Blizzard verletzt. (...) erliegt an den Wunden.", new List<bool>{true, true}, nameTwice: true),
-            new HungerGamesLine("(...) trifft auf ein wildes Arktos und wird durch Blizzard verletzt. (...) hatte zum Glück das richtige Wissen um sich selbst zu verarzten. Puh. Nochmal Glück gehabt.", new List<bool>{false, false}, nameTwice: true),
-            new HungerGamesLine("(...) trifft auf ein wildes Zapdos. Das scheint gar nicht gut gelaunt zu sein. Er wird durch Ladungsstoß ins jenseits befördert. Auch (...), der zufällig in der Nähe war, wird davon getroffen.", new List<bool>{true, true}),
-            new HungerGamesLine("(...) trifft auf ein wildes Glurak. Glurak setzt Flügelschlag ein. Das scheint nicht gerade sehr effektiv zu sein.", new List<bool>{false}),
-            new HungerGamesLine("(...) trifft auf ein wildes Turtok, das versucht ihn mit Aquaknarre zu treffen. Er wurde dadurch getroffen und wegen seiner Zielkünste hat es dabei noch (...), (...) und (...) mitgenommen.", new List<bool>{true, true, true, true}),
-            new HungerGamesLine("(...) trifft auf ein wildes Turtok, das versucht ihn mit Aquaknarre zu treffen. Es hat heute wohl kein Zielwasser getrunken. Da hat man nochmal Glück gehabt.", new List<bool>{false}),
-            new HungerGamesLine("(...) will wohl gerade zu hoch hinaus. Als er versucht hatte die Gegend zu erkunden, und auf einen Berg zu klettern, wir er durch ein wildes Dragoran überrascht welches ihm mit Drachenrute kurzen Prozess machte.", new List<bool>{true}),
-            new HungerGamesLine("(...), (...) und (...) treffen rein zufällig bei einem See gleichzeitig auf ein Glaziola. Das scheint ihm nicht so zu gefallen und es will sein Revier verteidigen. Alle 3 werden durch die Attacke Blizzard eingefroren und zu Pulverschnee verarbeitet.", new List<bool>{true, true, true}),
-            new HungerGamesLine("Ehe (...) sich versieht begegnet er einem Evoli und wird durch Bezirzer verzaubert. Dies hat jedoch keine große Wirkung.", new List<bool>{false}),
-            new HungerGamesLine("Ehe (...) sich versieht begegnet er einem Evoli und wird durch Bezirzer verzaubert. Das wars dann wohl. (...) ist dadurch kampfunfähig und scheidet somit aus. Naja vielleicht wurde dabei ja die große Liebe gefunden.", new List<bool>{true, true}, nameTwice: true),
-            new HungerGamesLine("Ein wildes Mewtu erscheint. (...), (...) und (...) werden von seiner Attacke Psychokinese getroffen. (...) nutzt das aus und besiegelt ihr Schicksal.", new List<bool>{true, true, true, false}),
-            new HungerGamesLine("(...) trifft auf Herobrine. Nach einem langen Kampf kommt er gerade noch mit einer Enderperle davon", new List<bool>{false}),
-            new HungerGamesLine("(...) trifft auf Herobrine. Nach einem langen Kampf versucht er davon zu laufen, schafft dies aber nicht", new List<bool>{true}),
+            new HungerGamesLine("(...) trifft auf ein wildes Aquana und und wird mit Hydropumpe attackiert.", new List<bool>{true}, rarity: 2),
+            new HungerGamesLine("(...) trifft auf ein wildes Aquana und wird von Hydropumpe getroffen. Der Strahl schießt (...) aus der Arena. Bei Team Rocket würde man sagen 'Das war mal wieder ein Schuss in den Opfeeeeeen'", new List<bool>{true, true}, nameTwice: true, rarity: 2),
+            new HungerGamesLine("(...) trifft auf ein wildes Aquana und kann der Hydropumpe gerade noch so ausweichen. ", new List<bool>{false}, rarity: 2),
+            new HungerGamesLine("(...) trifft auf ein wildes Lavados und wird von Ausbrennen getroffen. Da schwindet der letzte Schimmer Hoffnung dahin.", new List<bool>{true}, rarity: 2),
+            new HungerGamesLine("(...) trifft auf ein wildes Arktos und wird durch Blizzard verletzt. (...) erliegt an den Wunden.", new List<bool>{true, true}, nameTwice: true, rarity: 2),
+            new HungerGamesLine("(...) trifft auf ein wildes Arktos und wird durch Blizzard verletzt. (...) hatte zum Glück das richtige Wissen um sich selbst zu verarzten. Puh. Nochmal Glück gehabt.", new List<bool>{false, false}, nameTwice: true, rarity: 2),
+            new HungerGamesLine("(...) trifft auf ein wildes Zapdos. Das scheint gar nicht gut gelaunt zu sein. Er wird durch Ladungsstoß ins jenseits befördert. Auch (...), der zufällig in der Nähe war, wird davon getroffen.", new List<bool>{true, true}, rarity: 2),
+            new HungerGamesLine("(...) trifft auf ein wildes Glurak. Glurak setzt Flügelschlag ein. Das scheint nicht gerade sehr effektiv zu sein.", new List<bool>{false}, rarity: 2),
+            new HungerGamesLine("(...) trifft auf ein wildes Turtok, das versucht ihn mit Aquaknarre zu treffen. Er wurde dadurch getroffen und wegen seiner Zielkünste hat es dabei noch (...), (...) und (...) mitgenommen.", new List<bool>{true, true, true, true}, rarity: 2),
+            new HungerGamesLine("(...) trifft auf ein wildes Turtok, das versucht ihn mit Aquaknarre zu treffen. Es hat heute wohl kein Zielwasser getrunken. Da hat man nochmal Glück gehabt.", new List<bool>{false}, rarity: 2),
+            new HungerGamesLine("(...) will wohl gerade zu hoch hinaus. Als er versucht hatte die Gegend zu erkunden, und auf einen Berg zu klettern, wird er durch ein wildes Dragoran überrascht welches ihm mit Drachenrute kurzen Prozess machte.", new List<bool>{true}, rarity: 2),
+            new HungerGamesLine("(...), (...) und (...) treffen rein zufällig bei einem See gleichzeitig auf ein Glaziola. Das scheint ihm nicht so zu gefallen und es will sein Revier verteidigen. Alle 3 werden durch die Attacke Blizzard eingefroren und zu Pulverschnee verarbeitet.", new List<bool>{true, true, true}, rarity: 2),
+            new HungerGamesLine("Ehe (...) sich versieht begegnet er einem Evoli und wird durch Bezirzer verzaubert. Dies hat jedoch keine große Wirkung.", new List<bool>{false}, rarity: 2),
+            new HungerGamesLine("Ehe (...) sich versieht begegnet er einem Evoli und wird durch Bezirzer verzaubert. Das wars dann wohl. (...) ist dadurch kampfunfähig und scheidet somit aus. Naja vielleicht wurde dabei ja die große Liebe gefunden.", new List<bool>{true, true}, nameTwice: true, rarity: 2),
+            new HungerGamesLine("Ein wildes Mewtu erscheint. (...), (...) und (...) werden von seiner Attacke Psychokinese getroffen. (...) nutzt das aus und besiegelt ihr Schicksal.", new List<bool>{true, true, true, false}, rarity: 2),
+            new HungerGamesLine("(...) trifft auf Herobrine. Nach einem langen Kampf kommt er gerade noch mit einer Enderperle davon", new List<bool>{false}, rarity: 3),
+            new HungerGamesLine("(...) trifft auf Herobrine. Nach einem langen Kampf versucht er davon zu laufen, schafft dies aber nicht", new List<bool>{true}, rarity: 3),
         };
         
         public List<HungerGamesPlayer> PlayersAlive = new List<HungerGamesPlayer>();
@@ -187,7 +186,7 @@ namespace SudoBot.Specifics
                 _firstRun = false;
             }
             
-            if (currentCycleEventCount > 3 && _rng.Next(0, 8) == 7)
+            if (currentCycleEventCount > 3 && _rng.Next(0, 6) == 5)
             {
                 var emb = new DiscordEmbedBuilder();
                 if (_isDay)
