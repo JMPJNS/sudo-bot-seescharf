@@ -104,6 +104,8 @@ namespace SudoBot.Specifics
             new HungerGamesLine("Ehe (...) sich versieht begegnet er einem Evoli und wird durch Bezirzer verzaubert. Dies hat jedoch keine große Wirkung.", new List<bool>{false}),
             new HungerGamesLine("Ehe (...) sich versieht begegnet er einem Evoli und wird durch Bezirzer verzaubert. Das wars dann wohl. (...) ist dadurch kampfunfähig und scheidet somit aus. Naja vielleicht wurde dabei ja die große Liebe gefunden.", new List<bool>{true, true}, nameTwice: true),
             new HungerGamesLine("Ein wildes Mewtu erscheint. (...), (...) und (...) werden von seiner Attacke Psychokinese getroffen. (...) nutzt das aus und besiegelt ihr Schicksal.", new List<bool>{true, true, true, false}),
+            new HungerGamesLine("(...) trifft auf Herobrine. Nach einem langen Kampf kommt er gerade noch mit einer Enderperle davon", new List<bool>{false}),
+            new HungerGamesLine("(...) trifft auf Herobrine. Nach einem langen Kampf versucht er davon zu laufen, schafft dies aber nicht", new List<bool>{true}),
         };
         
         public List<HungerGamesPlayer> PlayersAlive = new List<HungerGamesPlayer>();
