@@ -187,7 +187,7 @@ namespace SudoBot.Specifics
                 _firstRun = false;
             }
             
-            if (currentCycleEventCount != 0 && _rng.Next(0, 8) == 7)
+            if (currentCycleEventCount > 3 && _rng.Next(0, 8) == 7)
             {
                 var emb = new DiscordEmbedBuilder();
                 if (_isDay)
