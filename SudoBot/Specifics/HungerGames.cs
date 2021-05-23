@@ -13,8 +13,7 @@ namespace SudoBot.Specifics
     {
         public List<HungerGamesLine> Lines = new List<HungerGamesLine>
         {
-            new HungerGamesLine("(...) sucht nach einem Tomaten Drop.",
-            new List<bool>{false}),
+            new HungerGamesLine("(...) sucht nach einem Tomaten Drop.", new List<bool>{false}),
             new HungerGamesLine("(...), (...) und (...) schließen einen nicht Angriffspakt. Der Anticheatbot merkt das und sie werden gebannt.",
             new List<bool>{true, true, true}),
             new HungerGamesLine("(...), (...) und (...) schließen einen nicht Angriffspakt. Der Anticheatbot merkt das **nicht** und sie bilden einen Squad.",
@@ -105,6 +104,45 @@ namespace SudoBot.Specifics
             new HungerGamesLine("Ein wildes Mewtu erscheint. (...), (...) und (...) werden von seiner Attacke Psychokinese getroffen. (...) nutzt das aus und besiegelt ihr Schicksal.", new List<bool>{true, true, true, false}, rarity: 2),
             new HungerGamesLine("(...) trifft auf Herobrine. Nach einem langen Kampf kommt er gerade noch mit einer Enderperle davon", new List<bool>{false}, rarity: 3),
             new HungerGamesLine("(...) trifft auf Herobrine. Nach einem langen Kampf versucht er davon zu laufen, schafft dies aber nicht", new List<bool>{true}, rarity: 3),
+            new HungerGamesLine("(...) holt sich ein Eis. (...) klaut sich das Eis aber wird dabei mit einer Pistole erschossen.", new List<bool>{false, true}),
+            //TODO multiple players support (.1.), (.2.)...
+            // new HungerGamesLine("(...) hat Streit mit (...). (...) will helfen, wird aber reingelegt, und fällt in ein Loch, dass (...) gebaut hat und stirbt. (...) und (...) haben sich in der Zwischenzeit wieder vertragen.
+            // new HungerGamesLine("(...) hat Streit mit (...). (...) will helfen, wird aber reingelegt, und fällt in ein Loch, dass (...) gebaut hat und stirbt. (...) und (...) meinten anschließend, dass sie das in einem Schießduell entscheiden müssen. (...)/(...) gewinnt und beendet damit die Zeit von (...)/(...) hier.
+            // new HungerGamesLine("(...) hat Streit mit (...). (...) will helfen, wird aber reingelegt, und fällt in ein Loch, dass (...) gebaut hat und stirbt. (...) und (...) meinten anschließend, dass sie das in einem Schießduell entscheiden müssen. (...) und (...) feuern gleichzeitig und sind somit beide raus.
+            new HungerGamesLine("(...) wurde beim Versuch zu cheaten erwischt.", new List<bool>{true}),
+            new HungerGamesLine("(...) hat so lange gewartet, dass ein neue Runde Hungergames beginnt sodass er, nach dem er sich so gefreut hatte, nicht darauf geachtet hatte wo er gerade hin läuft. Naja. Der Bär hat nun eine noch heftigere Killstreak.", new List<bool>{true}),
+            new HungerGamesLine("(...) wird vom Wolf gefressen, der gerade auf der Suche nach Rotkäppchen war. Später erschießt der Jäger den Wolf und befreit (...) wieder. POG Jäger", new List<bool>{false, false}, nameTwice: true),
+            new HungerGamesLine("(...) wurde von einem AMG platt gefahren", new List<bool>{true}),
+            new HungerGamesLine("(...) wird beim suchen nach dem legendären Tomaten Drop von einem Unbekannten im Gebüsch erledigt.", new List<bool>{true}),
+            new HungerGamesLine("(...) wird beim öffnen eines Tomaten Drops von (...) überfallen, jedoch werden beide vom allgegenwärtigen Panda vernichtet. (...) schnappt sich die Ausrüstung.", new List<bool>{true, true, false}),
+            new HungerGamesLine("(...) ist nach einer langen HG-Runde an Altersschwäche gestorben. (...), (...) und (...) lachen ihn aus, bevor (...)vom Anticheatbot einen Teamingbann bekommt und die anderen knapp entkommen.", new List<bool>{false, false, false, false, true}, nameTwice: true),
+            new HungerGamesLine("(...) buggt in der Luft fest und wird vom Server gekickt.", new List<bool>{true}),
+            new HungerGamesLine("(...) erhält einen TomatenDrop und wurde kurz nach dem Öffnen, durch einen Headshot von (...), weggesniped.", new List<bool>{true, false}),
+            new HungerGamesLine("(...) wurde durch den Stein, den (...) geworfen hat, schwer verletzt.", new List<bool>{false, false}),
+            new HungerGamesLine("(...) versteckt sich in einer Höhle, (...) kriegt das mit und schießt eine Rakete rein.", new List<bool>{true, false}),
+            new HungerGamesLine("(...) wollte Dynamit auf (...) werfen, aber hat vergessen los zu lassen.", new List<bool>{true, false}),
+            new HungerGamesLine("(...) wurde von einem fliegenden Fisch erschlagen.", new List<bool>{true}),
+            new HungerGamesLine("(...) hat die Mods nach !drops gefragt und wurde gebannt.", new List<bool>{true}),
+            new HungerGamesLine("(...) stirbt durch einen herabfallenden Amboss.", new List<bool>{true}),
+            new HungerGamesLine("(...) wollte aus der Arena fliehen. Die Schutzmechanismen der Arena waren wohl stärker als er.", new List<bool>{true}),
+            new HungerGamesLine("(...) will (...) mit einer Briefbombe eliminieren. Leider hat er zu wenig Porto auf den Brief geklebt, weswegen der Brief zu ihm zurück kommt. Er öffnet den Brief ohne darüber nachzudenken und wird von der Bombe getötet.", new List<bool>{false, true}),
+            new HungerGamesLine("(...) gönnt sich eine Pause, passt aber nicht auf, und schläft ein. (...) nutzt dieses und entlässt ihn in die unendliche Welt des Schlafs.", new List<bool>{true, false}),
+            new HungerGamesLine("(...) läuft ins hohe Gras und trifft auf eine Horde von Taubsis ... die Schnäbel hatten einiges zu picken.", new List<bool>{true}),
+            new HungerGamesLine("(...) versucht einem wilden Hunden zu entkommen. Als er auf einen Baum geklettert ist wird er leider von fallenden Pandas erschlagen, die genüsslich Bambus neben ihm gegessen hatten. Beim herunter fallen nehmen sie fast noch (...) mit, aber der konnte ganz knapp ausweichen.", new List<bool>{true, false}),
+            new HungerGamesLine("(...) versucht einem wilden Hunden zu entkommen. Als er auf einen Baum geklettert ist versucht der Hund ihm hinter her zu kommen, aber schafft es nicht. Das war knapp. Aber gerade noch so gerettet.", new List<bool>{false}),
+            new HungerGamesLine("(...) backt für (...) einen Kuchen. Dieser nimmt ihn dankend an. (...) nimmt einen Bissen und stirbt durch das beigemischte Gift", new List<bool>{false, false, true}, nameTwice: true),
+            // new HungerGamesLine("(...) backt für (...) einen Kuchen. Dieser nimmt ihn dankend an. (...) isst den Kuchen und geht satt und unbeschadet erstmal ein Nickerchen machen.
+            new HungerGamesLine("(...) backt für (...) einen Kuchen. Dieser nimmt ihn dankend an. Er versucht noch vor Ort einen Bissen zu essen. Durch die Bombe im Kuchen werden beide in die Luft gesprengt.", new List<bool>{true, true}),
+            //TODO multiple players support...
+            // new HungerGamesLine("(...) und (...) werfen sich mit Tomaten ab, aber bei (...) war ein Stein drin und trift (...) lebensgefährlich am Kopf.
+            new HungerGamesLine("(...) geht schwimmen obwohl er nicht schwimmen kann.", new List<bool>{true}),
+            new HungerGamesLine("(...) denkt das hier ist Minecraft, schlägt den Baum mit der Faust und verletzt dabei seine Hand.", new List<bool>{false}),
+            new HungerGamesLine("(...) wurde zu tarzan und springt von Baum zu Baum.", new List<bool>{false}),
+            new HungerGamesLine("(...) fällt von einen Baum und fällt dabei auf (...).", new List<bool>{true, true}),
+            new HungerGamesLine("(...) und (...) haben Spaß am Rande der Arena und bewerfen sich mit Tomaten.", new List<bool>{false, false}),
+            new HungerGamesLine("(...) verwechselt die Hungergames mit Djungelcamp und isst eine giftige Tomate. Im Djungelcamp hättest du dafür wenigstens Punkte bekommen. Feels Bad Man", new List<bool>{true}),
+            // new HungerGamesLine("(...) ist der Armor und beschießt (...) und (...) mit einem Liebespfeil. Leider hat er zu spät bemerkt, dass es kein Liebespfeil war, sondern ein ganz normaler Pfeil und erschießt deswegen beide. (...) tut das so Leid, dass er sich selbst auch umbringt
+            // new HungerGamesLine("(...) öffnet eine Truhe, findet darin eine Scar und jagt die folgenden Gegner (...), (...) und (...) hinterher. (...) kletterte einen Baum hoch und kann sich retten, (...) findet einen Busch und konnte sich in dem verstecken, doch (...) lief dummerweise in eine Sackgasse und wurde erschossen. Für mehr hat es auch nicht gereicht, da abschließend auch die Munition von (...) leer war. Puh. Da haben die anderen nochmal Glück gehabt.
         };
         
         public List<HungerGamesPlayer> PlayersAlive = new List<HungerGamesPlayer>();
