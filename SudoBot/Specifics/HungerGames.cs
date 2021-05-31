@@ -115,7 +115,7 @@ namespace SudoBot.Specifics
             new HungerGamesLine("(...) wurde von einem AMG platt gefahren", new List<bool>{true}),
             new HungerGamesLine("(...) wird beim suchen nach dem legendären Tomaten Drop von einem Unbekannten im Gebüsch erledigt.", new List<bool>{true}),
             new HungerGamesLine("(...) wird beim öffnen eines Tomaten Drops von (...) überfallen, jedoch werden beide vom allgegenwärtigen Panda vernichtet. (...) schnappt sich die Ausrüstung.", new List<bool>{true, true, false}),
-            new HungerGamesLine("(...) ist nach einer langen HG-Runde an Altersschwäche gestorben. (...), (...) und (...) lachen ihn aus, bevor (...)vom Anticheatbot einen Teamingbann bekommt und die anderen knapp entkommen.", new List<bool>{false, false, false, false, true}, nameTwice: true),
+            new HungerGamesLine("(...) ist nach einer langen HG-Runde an Altersschwäche gestorben. (...), (...) und (...) lachen ihn aus, bevor (...) vom Anticheatbot einen Teamingbann bekommt und die anderen knapp entkommen.", new List<bool>{true, false, false, false, true}, nameTwice: true),
             new HungerGamesLine("(...) buggt in der Luft fest und wird vom Server gekickt.", new List<bool>{true}),
             new HungerGamesLine("(...) erhält einen TomatenDrop und wurde kurz nach dem Öffnen, durch einen Headshot von (...), weggesniped.", new List<bool>{true, false}),
             new HungerGamesLine("(...) wurde durch den Stein, den (...) geworfen hat, schwer verletzt.", new List<bool>{false, false}),
