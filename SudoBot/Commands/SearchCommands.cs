@@ -365,7 +365,7 @@ namespace SudoBot.Commands
             }
             
             var hp = new HytaleParser();
-            var res = await hp.ParseAsync(0, 1);
+            var res = hp.Parse(0, 1);
 
             var embed = new DiscordEmbedBuilder()
                 .WithColor(DiscordColor.CornflowerBlue)

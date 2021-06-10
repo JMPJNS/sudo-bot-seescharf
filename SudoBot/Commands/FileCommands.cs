@@ -35,7 +35,7 @@ namespace SudoBot.Commands
                 var fileUrl = await Globals.UploadToCdn($"{ctx.Message.Id.ToString()}{fileExtension}", mimeType, imgStream);
                 await ctx.Channel.SendMessageAsync("Url: " + fileUrl);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 await ctx.Channel.SendMessageAsync("Fehler!, Eine Bild muss mitgesendet werden");
             }

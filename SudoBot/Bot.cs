@@ -137,7 +137,8 @@ namespace SudoBot
             
             // Start Bot
             await Client.ConnectAsync();
-            await lavalink.ConnectAsync(lavalinkConfig);
+            if (Environment.GetEnvironmentVariable("LAVALINK") != null)
+                await lavalink.ConnectAsync(lavalinkConfig);
             await Task.Delay(-1);
         }
 
@@ -347,7 +348,7 @@ namespace SudoBot
             if (e.Guild.Id == 716635355020918784)
             {
                 var c = Globals.LogChannel;
-                c.SendMessageAsync("Bot Started");
+                c.SendMessageAsync("Bot Started").GetAwaiter().GetResult();
             }
             
             return Task.CompletedTask;
@@ -398,20 +399,7 @@ namespace SudoBot
         private Task MessageCreated(DiscordClient sender, MessageCreateEventArgs e)
         {
             sender.Logger.Log(LogLevel.Information,  $"Message Created: [{e.Guild.Id} : {e.Channel.Id}] ({e.Author.Username}): {e.Message.Content}", DateTime.Now);
-            try
-            {
-                _messageHandler.HandleMessage(e).GetAwaiter().GetResult();
-            }
-            catch (Exception ex)
-            {
-                if (ex.Message == "NO LOG CHANNEL")
-                {
-                }
-                else
-                {
-                    throw ex;
-                }
-            }
+            _messageHandler.HandleMessage(e).GetAwaiter().GetResult();
             
             return Task.CompletedTask;
         }

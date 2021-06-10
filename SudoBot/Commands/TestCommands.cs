@@ -21,7 +21,7 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Any, GuildPermission.TestCommands)]
         [Cooldown(1, 13337, CooldownBucketType.Channel)]
         [Description("test"), Hidden()]
-        public async Task Test(CommandContext ctx)
+        public void Test(CommandContext ctx)
         {
         }
         

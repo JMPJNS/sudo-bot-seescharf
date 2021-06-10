@@ -25,7 +25,7 @@ namespace SudoBot.Commands
                 var user = await User.GetOrCreateUser(ctx.Member);
                 await user.SetLastList(list.Name);
             }
-            catch (DuplicateNameException e)
+            catch (DuplicateNameException)
             {
                 await ctx.RespondAsync("Liste existiert bereits");
                 return;
@@ -92,7 +92,7 @@ namespace SudoBot.Commands
                     {
                         uri = new Uri(ai.Url);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         await ctx.RespondAsync("Item hat Invalide URL");
                         return;
@@ -127,14 +127,14 @@ namespace SudoBot.Commands
 
         [Command("delete"), Description("Liste / List Item Löschen"),
          CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
-        public async Task Delete(CommandContext ctx, string listName, string itemName = null)
+        public void Delete(CommandContext ctx, string listName, string itemName = null)
         {
             throw new NotImplementedException();
         }
         
         [Command("rename"), Description("Liste / List Item Umbenennen"),
          CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
-        public async Task Rename(CommandContext ctx, string newName, string listName, string itemName = null)
+        public void Rename(CommandContext ctx, string newName, string listName, string itemName = null)
         {
             throw new NotImplementedException();
         }

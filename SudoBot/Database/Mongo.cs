@@ -41,8 +41,8 @@ namespace SudoBot.Database
                 try
                 {
                     Globals.Client.Logger.LogInformation("Connecting to Mongo");
-                    Globals.Client.Logger.LogInformation("me: " + _users.FindAsync(user => user.UserId == Globals.MyId)
-                        .Result.First().UserName);
+                    Globals.Client.Logger.LogInformation("me: " + _users.Find(user => user.UserId == Globals.MyId)
+                        .First().UserName);
                 }
                 catch (Exception e)
                 {
@@ -68,9 +68,9 @@ namespace SudoBot.Database
         {
             try
             {
-                return await _scheduled.FindAsync(scheduled => scheduled.Id == scheduledId).Result.FirstAsync();
+                return await _scheduled.Find(scheduled => scheduled.Id == scheduledId).FirstAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
@@ -92,9 +92,9 @@ namespace SudoBot.Database
         {
             try
             {
-                return await _scheduled.FindAsync(scheduled => scheduled.Active && scheduled.ScheduledOn < DateTime.UtcNow).Result.ToListAsync();
+                return await _scheduled.Find(scheduled => scheduled.Active && scheduled.ScheduledOn < DateTime.UtcNow).ToListAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
@@ -106,9 +106,9 @@ namespace SudoBot.Database
         {
             try
             {
-                return await _lists.FindAsync(list => list.UserId == userId).Result.ToListAsync();
+                return await _lists.Find(list => list.UserId == userId).ToListAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
@@ -118,9 +118,9 @@ namespace SudoBot.Database
         {
             try
             {
-                return _lists.CountDocumentsAsync(list => list.UserId == userId).Result;
+                return await _lists.CountDocumentsAsync(list => list.UserId == userId);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return 0;
             }
@@ -129,9 +129,9 @@ namespace SudoBot.Database
         {
             try
             {
-                return await _lists.FindAsync(list => userId == list.UserId && list.Name == listName).Result.FirstAsync();
+                return await _lists.Find(list => userId == list.UserId && list.Name == listName).FirstAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
@@ -159,9 +159,9 @@ namespace SudoBot.Database
         {
             try
             {
-                return await _guilds.FindAsync(guild => guild.GuildId == guildId).Result.FirstAsync();
+                return await _guilds.Find(guild => guild.GuildId == guildId).FirstAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
@@ -181,7 +181,7 @@ namespace SudoBot.Database
 
         public async Task<List<Guild>> GetAllGuilds()
         {
-            return await _guilds.FindAsync(g => g.GuildId != 0).Result.ToListAsync();
+            return await _guilds.Find(g => g.GuildId != 0).ToListAsync();
         }
 
         // Parser Stuff
@@ -211,9 +211,10 @@ namespace SudoBot.Database
         {
             try
             {
-                return await _tags.FindAsync(tag => (tag.Type == type && tag.Name == name)).Result.FirstAsync();
+                var r = _tags.Find(tag => (tag.Type == type && tag.Name == name));
+                return await r.FirstAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
@@ -224,9 +225,10 @@ namespace SudoBot.Database
             var filter = Builders<Tag>.Filter.Regex("Name", new BsonRegularExpression(name, "i"));
             try
             {
-                return _tags.Find(filter).Limit(5).ToList();
+                var r = _tags.Find(filter);
+                return await r.Limit(5).ToListAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
@@ -244,9 +246,9 @@ namespace SudoBot.Database
         {
             try
             {
-                return await _users.FindAsync(user => user.UserId == userId && user.GuildId == guildId).Result.FirstAsync();
+                return await _users.Find(user => user.UserId == userId && user.GuildId == guildId).FirstAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
@@ -303,13 +305,13 @@ namespace SudoBot.Database
 
         public async Task<List<User>> GetGuildUsers(ulong guildId)
         {
-            return await _users.FindAsync(user => user.GuildId == guildId).Result.ToListAsync();
+            return await _users.Find(user => user.GuildId == guildId).ToListAsync();
         }
         
         // Custom Game Stuff
         public async Task<List<User>> GetUsersWithoutTicket(ulong guildId)
         {
-            return await _users.FindAsync(user => user.GuildId == guildId && user.TicketsRemaining == 0).Result.ToListAsync();
+            return await _users.Find(user => user.GuildId == guildId && user.TicketsRemaining == 0).ToListAsync();
         }
     }
 }

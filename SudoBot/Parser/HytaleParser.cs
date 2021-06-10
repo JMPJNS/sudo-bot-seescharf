@@ -14,7 +14,7 @@ namespace SudoBot.Parser
         private string url = "https://hytale.com/news";
         
 
-        public async Task<HytaleParserResult> ParseAsync(int startIndex = 0, int limit = 5)
+        public HytaleParserResult Parse(int startIndex = 0, int limit = 5)
         {
             var web = new HtmlWeb();
             var html = web.Load(url);

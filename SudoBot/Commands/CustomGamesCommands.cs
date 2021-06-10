@@ -58,7 +58,7 @@ namespace SudoBot.Commands
             {
                 joinEmoji = DiscordEmoji.FromName(ctx.Client, $":{emoji.Name}:");
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 joinEmoji = DiscordEmoji.FromName(ctx.Client, ":white_check_mark:");
             }

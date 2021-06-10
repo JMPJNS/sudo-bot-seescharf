@@ -226,12 +226,9 @@ namespace SudoBot.Commands
             {
                 var channel = ctx.Guild.GetChannel(guild.CommandChannel);
                 var sentMessage = await ctx.Channel.SendMessageAsync($"In diesem Channel nicht erlaubt, bitte in {channel.Mention} verwenden!");
-                Task.Run(() =>
-                {
-                    Task.Delay(5000).GetAwaiter().GetResult();
-                    sentMessage.DeleteAsync();
-                    ctx.Message.DeleteAsync();
-                });
+                await Task.Delay(5000);
+                await sentMessage.DeleteAsync();
+                await ctx.Message.DeleteAsync();
                 return;
             }
             

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 
@@ -8,7 +9,7 @@ namespace SudoBot.Specifics
 {
     public class SubnetCalculator
     {
-        public static async void DoTheThing(string input, int subnetCount, CommandContext ctx)
+        public static async Task DoTheThing(string input, int subnetCount, CommandContext ctx)
         {
             int prefixLength = int.Parse(
                 input.Split("/")[1]);

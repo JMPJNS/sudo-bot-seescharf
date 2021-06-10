@@ -186,7 +186,7 @@ namespace SudoBot.Specifics
                 {
                     p = await channel.Guild.GetMemberAsync(winner.Id);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     //ignore
                 }
@@ -320,7 +320,7 @@ namespace SudoBot.Specifics
             if (rolled.UseCount <= 5)
                 rolled.UseCount++;
 
-            var filled = await ExecuteRolled(rolled);
+            var filled = ExecuteRolled(rolled);
             if (!debug) await channel.SendMessageAsync(filled);
             else Console.WriteLine(filled);
             
@@ -329,7 +329,7 @@ namespace SudoBot.Specifics
             return false;
         }
 
-        private async Task<String> ExecuteRolled(HungerGamesLine line)
+        private String ExecuteRolled(HungerGamesLine line)
         {
             var grabCount = line.Dies.Count;
             if (line.NameTwice) grabCount--;

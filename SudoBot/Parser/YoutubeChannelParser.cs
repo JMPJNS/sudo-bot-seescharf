@@ -40,7 +40,7 @@ namespace SudoBot.Parser
                 res.LatestVideoViewCount = page.Html.QuerySelector(".yt-lockup-meta-info").FirstChild.InnerText;
                 res.NoVideo = false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 res.NoVideo = true;
             }

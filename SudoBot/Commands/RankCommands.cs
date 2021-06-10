@@ -36,12 +36,9 @@ namespace SudoBot.Commands
             {
                 var channel = ctx.Guild.GetChannel(guild.CommandChannel);
                 var sentMessage = await ctx.Channel.SendMessageAsync(Translator.Translate("RANKING_CHANNEL_NOT_ALLOWED", Translation.Lang.De, new List<string>{channel.Mention}));
-                Task.Run(() =>
-                {
-                    Task.Delay(5000).GetAwaiter().GetResult();
-                    sentMessage.DeleteAsync();
-                    ctx.Message.DeleteAsync();
-                });
+                await Task.Delay(5000);
+                await sentMessage.DeleteAsync();
+                await ctx.Message.DeleteAsync();
                 return;
             }
 
@@ -202,7 +199,7 @@ namespace SudoBot.Commands
                 await guild.AddRankingRole(role, points);
                 await ctx.Channel.SendMessageAsync($"Die Rolle {role.Name} ist mit {points.ToString()} IQ zu Erreichen!");
             }
-            catch (UnauthorizedException e)
+            catch (UnauthorizedException)
             {
                 await ctx.RespondAsync(Translator.Translate("RANKING_BOT_NO_PERMISSION", guild.Language));
             }
