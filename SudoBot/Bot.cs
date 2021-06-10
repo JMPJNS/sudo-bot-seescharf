@@ -344,7 +344,7 @@ namespace SudoBot
                 }
             }
 
-            if (e.Guild.Id == 468835109844418575)
+            if (e.Guild.Id == 716635355020918784)
             {
                 var c = Globals.LogChannel;
                 c.SendMessageAsync("Bot Started");
