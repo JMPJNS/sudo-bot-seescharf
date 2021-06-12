@@ -294,6 +294,8 @@ namespace SudoBot.Specifics
                 rollable = rollable.Where(x =>
                     x.DayState == HungerGamesDayState.Both || x.DayState == HungerGamesDayState.Night).ToList();
             }
+
+            rollable = rollable.Where(x => x.Dies.Count <= PlayersAlive.Count).ToList();
             
             rolled = rollable[_rng.Next(0, rollable.Count)];
 
