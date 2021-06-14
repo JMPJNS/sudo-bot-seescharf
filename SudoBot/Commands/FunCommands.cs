@@ -30,7 +30,11 @@ namespace SudoBot.Commands
             var cmd = $"ffmpeg -i /drive/jonas/files/crab.mkv -vf \"drawtext=text='{text}': fontsize=36: fontcolor=white: shadowcolor=black: shadowx=2: shadowy=2: x=(w-text_w)/2: y=(h-text_h)/2\" -y {path}output.mp4";
             
             var res = await Globals.RunCommand(cmd);
-            await ctx.RespondWithFileAsync($"{path}output.mp4");
+
+            using var file = File.OpenRead($"{path}output.mp4");
+            var url = await Globals.UploadToCdn($"cr{ctx.Message.Id}.mp4", "video/mp4", file);
+            
+            await ctx.RespondAsync(url);
             
             string GetPathName()
             {

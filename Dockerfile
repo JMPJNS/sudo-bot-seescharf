@@ -5,7 +5,7 @@ WORKDIR /app
 COPY SudoBot/*.csproj ./
 
 # Add DSharp Package Source
-#RUN dotnet nuget add source https://nuget.emzi0767.com/api/v3/index.json --name DSharp
+RUN dotnet nuget add source https://nuget.emzi0767.com/api/v3/index.json --name DSharp
 
 
 RUN dotnet restore

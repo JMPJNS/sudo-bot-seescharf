@@ -32,6 +32,7 @@ namespace SudoBot
         
         private MessageHandler _messageHandler = new MessageHandler();
         private ReactionRolesHandler _reactionRolesHandler = new ReactionRolesHandler();
+        private ReactionIqHandler _reactionIqHandler = new ReactionIqHandler();
         private MemberUpdateHandler _memberUpdateHandler = new MemberUpdateHandler();
         public async Task RunAsync()
         {
@@ -373,6 +374,7 @@ namespace SudoBot
             try
             {
                 _reactionRolesHandler.HandleReactionAdded(args).GetAwaiter().GetResult();
+                _reactionIqHandler.HandleReactionAdded(args).GetAwaiter().GetResult();
             }
             catch (Exception e)
             {
@@ -387,6 +389,7 @@ namespace SudoBot
             try
             {
                 _reactionRolesHandler.HandleReactionRemoved(args).GetAwaiter().GetResult();
+                _reactionIqHandler.HandleReactionRemoved(args).GetAwaiter().GetResult();
             }
             catch (Exception e)
             {
@@ -399,7 +402,12 @@ namespace SudoBot
         private Task MessageCreated(DiscordClient sender, MessageCreateEventArgs e)
         {
             sender.Logger.Log(LogLevel.Information,  $"Message Created: [{e.Guild.Id} : {e.Channel.Id}] ({e.Author.Username}): {e.Message.Content}", DateTime.Now);
+            try {
             _messageHandler.HandleMessage(e).GetAwaiter().GetResult();
+            _reactionIqHandler.HandleMessageSend(e).GetAwaiter().GetResult();
+            } catch (Exception ex) {
+                sender.Logger.Log(LogLevel.Error,  $"Message Created Exception: [{e.Guild.Id} : {e.Channel.Id}] ({e.Author.Username}): {e.Message.Content}, Exception: {ex.Message}", DateTime.Now);
+            }
             
             return Task.CompletedTask;
         }
