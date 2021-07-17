@@ -140,7 +140,7 @@ namespace SudoBot.Specifics
             new HungerGamesLine("(...) wurde zu tarzan und springt von Baum zu Baum.", new List<bool>{false}),
             new HungerGamesLine("(...) fällt von einen Baum und fällt dabei auf (...).", new List<bool>{true, true}),
             new HungerGamesLine("(...) und (...) haben Spaß am Rande der Arena und bewerfen sich mit Tomaten.", new List<bool>{false, false}),
-            new HungerGamesLine("(...) verwechselt die Hungergames mit Djungelcamp und isst eine giftige Tomate. Im Djungelcamp hättest du dafür wenigstens Punkte bekommen. Feels Bad Man", new List<bool>{true}),
+            new HungerGamesLine("(...) verwechselt die Hungergames mit Jungelcamp und isst eine giftige Tomate. Im Jungelcamp hättest du dafür wenigstens Punkte bekommen. Feels Bad Man", new List<bool>{true}),
             // new HungerGamesLine("(...) ist der Armor und beschießt (...) und (...) mit einem Liebespfeil. Leider hat er zu spät bemerkt, dass es kein Liebespfeil war, sondern ein ganz normaler Pfeil und erschießt deswegen beide. (...) tut das so Leid, dass er sich selbst auch umbringt
             // new HungerGamesLine("(...) öffnet eine Truhe, findet darin eine Scar und jagt die folgenden Gegner (...), (...) und (...) hinterher. (...) kletterte einen Baum hoch und kann sich retten, (...) findet einen Busch und konnte sich in dem verstecken, doch (...) lief dummerweise in eine Sackgasse und wurde erschossen. Für mehr hat es auch nicht gereicht, da abschließend auch die Munition von (...) leer war. Puh. Da haben die anderen nochmal Glück gehabt.
         };
