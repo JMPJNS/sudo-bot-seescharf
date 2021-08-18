@@ -85,7 +85,7 @@ namespace SudoBot.Commands
 
             var pages = ita.GeneratePagesInEmbed(memberString, SplitType.Line, embedBase);
 
-            await ita.SendPaginatedMessageAsync(ctx.Channel, ctx.User, pages, timeoutoverride: TimeSpan.FromMinutes(5));
+            // await ita.SendPaginatedMessageAsync(ctx.Channel, ctx.User, pages, timeoutoverride: TimeSpan.FromMinutes(5));
         }
 
         [CheckForPermissions(SudoPermission.Mod, GuildPermission.Any)]

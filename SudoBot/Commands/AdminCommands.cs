@@ -20,15 +20,16 @@ namespace SudoBot.Commands
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         [Command("give-guild-permission")]
         [Aliases("ggp")]
-        public async Task GiveGuildPermission(CommandContext ctx, string p)
+        public async Task GiveGuildPermission(CommandContext ctx, string p, DiscordGuild guild = null)
         {
+            guild ??= ctx.Guild;
             Enum.TryParse(p, out GuildPermission perm);
             if (perm == GuildPermission.Any)
             {
                 await ctx.Channel.SendMessageAsync("Ungültige Eingabe");
                 return;
             }
-            var guildConfig = await Guild.GetGuild(ctx.Guild.Id);
+            var guildConfig = await Guild.GetGuild(guild.Id);
             if (!guildConfig.Permissions.Contains(perm))
             {
                 await guildConfig.GivePermission(perm);
