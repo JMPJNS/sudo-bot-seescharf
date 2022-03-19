@@ -30,7 +30,12 @@ namespace SudoBot.Attributes
             if (ctx.Member.Id == Globals.MyId) return Task.FromResult(true);
             
             if (user.Permissions.Contains(UserPermissions.Blocked)) return Task.FromResult(false);
-            
+
+            if (ctx.Channel.Id == 716635355020918788)
+            {
+                ctx.RespondAsync("Not allowed in this channel, use #commandspam instead");
+                return Task.FromResult(false);
+            }
 
             if (guildConfig == null)
             {
