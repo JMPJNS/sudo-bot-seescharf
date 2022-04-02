@@ -2,23 +2,23 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>netcoreapp5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>SudoBot</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="DSharpPlus" Version="4.1.0-nightly-00883" />
-      <PackageReference Include="DSharpPlus.CommandsNext" Version="4.1.0-nightly-00883" />
-      <PackageReference Include="DSharpPlus.Interactivity" Version="4.1.0-nightly-00883" />
-      <PackageReference Include="DSharpPlus.Lavalink" Version="4.1.0-nightly-00883" />
+      <PackageReference Include="DSharpPlus" Version="4.2.0-nightly-01105" />
+      <PackageReference Include="DSharpPlus.CommandsNext" Version="4.2.0-nightly-01105" />
+      <PackageReference Include="DSharpPlus.Interactivity" Version="4.2.0-nightly-01105" />
+      <PackageReference Include="DSharpPlus.Lavalink" Version="4.2.0-nightly-01105" />
       <PackageReference Include="Fizzler.Systems.HtmlAgilityPack" Version="1.2.1" />
-      <PackageReference Include="HtmlAgilityPack" Version="1.11.34" />
-      <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.10.0" />
-      <PackageReference Include="MimeTypes" Version="2.2.0">
+      <PackageReference Include="HtmlAgilityPack" Version="1.11.42" />
+      <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.2.0-2.final" />
+      <PackageReference Include="MimeTypes" Version="2.4.0">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
-      <PackageReference Include="MongoDB.Driver" Version="2.12.4" />
+      <PackageReference Include="MongoDB.Driver" Version="2.15.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
       <PackageReference Include="ScrapySharp" Version="3.0.0" />
     </ItemGroup>

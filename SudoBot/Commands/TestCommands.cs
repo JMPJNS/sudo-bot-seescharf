@@ -18,11 +18,13 @@ namespace SudoBot.Commands
     {
 
         [Command("test")]
-        [CheckForPermissions(SudoPermission.Any, GuildPermission.TestCommands)]
-        [Cooldown(1, 13337, CooldownBucketType.Channel)]
+        [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
         [Description("test"), Hidden()]
-        public void Test(CommandContext ctx)
+        public async Task Test(CommandContext ctx)
         {
+            var roles = string.Join("\n", ctx.Guild.Roles.Select(x => $"{x.Value.Id}: {x.Value.Name}"));
+
+            await ctx.RespondAsync(roles);
         }
         
         [CheckForPermissions(SudoPermission.Me, GuildPermission.Any)]
