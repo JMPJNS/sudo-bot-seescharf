@@ -147,7 +147,7 @@ namespace SudoBot
                 else
                 {
                     var guild = Client.GetGuildAsync(716635355020918784).GetAwaiter().GetResult();
-                    return guild.GetChannel(716636916832927805);
+                    return guild.GetChannel(1013866924821729351);
                 }
             }
         }

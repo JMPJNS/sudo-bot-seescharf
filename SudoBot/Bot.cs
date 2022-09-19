@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using DSharpPlus;
+using DSharpPlus.SlashCommands;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Exceptions;
 using DSharpPlus.Entities;
@@ -28,6 +29,7 @@ namespace SudoBot
     {
         public DiscordClient Client { get; private set; }
         public CommandsNextExtension Commands { get; private set; }
+        public SlashCommandsExtension Slash { get; private set; }
         public InteractivityExtension Interactivity { get; private set; }
         
         private MessageHandler _messageHandler = new MessageHandler();
@@ -77,6 +79,9 @@ namespace SudoBot
             Commands.SetHelpFormatter<SudoHelpFormatter>();
 
             Commands.CommandErrored += OnCommandErrored;
+            
+            Slash = Client.UseSlashCommands();
+            Slash.RegisterCommands<TestCommands>(716635355020918784);
 
             //Interactivity
             var interactivityConfig = new InteractivityConfiguration
@@ -105,7 +110,6 @@ namespace SudoBot
             Commands.RegisterCommands<UtilityCommands>();
             Commands.RegisterCommands<RankCommands>();
             Commands.RegisterCommands<CustomGamesCommands>();
-            Commands.RegisterCommands<TestCommands>();
             Commands.RegisterCommands<AdminCommands>();
             Commands.RegisterCommands<ModCommands>();
             Commands.RegisterCommands<FileCommands>();
