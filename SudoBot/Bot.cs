@@ -45,7 +45,8 @@ namespace SudoBot
                 Token = Environment.GetEnvironmentVariable("BOTTOKEN"),
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
-                MinimumLogLevel = LogLevel.Debug
+                MinimumLogLevel = LogLevel.Debug,
+                Intents = DiscordIntents.AllUnprivileged | DiscordIntents.GuildMembers | DiscordIntents.MessageContents
             };
 
             Client = new DiscordClient(config);
