@@ -25,7 +25,7 @@ public class ComponentInteractionCreatedHandler
         
         if (a.Id == "rank_leaderboard")
         {
-            var builder = await rankCommands.GetLeaderboardMessageBuilder(member, false);
+            var builder = await rankCommands.GetLeaderboardMessageBuilder(member, withButtons: false);
             await a.Interaction.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(builder).AsEphemeral());
         }
         
