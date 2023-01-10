@@ -86,8 +86,8 @@ namespace SudoBot.Commands
 
             if (withButtons)
             {
-                var infoButton = new DiscordButtonComponent(ButtonStyle.Primary, "rank_info", "Info");
-                var levelButton = new DiscordButtonComponent(ButtonStyle.Secondary, "rank_level", "Mein Level");
+                var infoButton = new DiscordButtonComponent(ButtonStyle.Secondary, "rank_info", "Info");
+                var levelButton = new DiscordButtonComponent(ButtonStyle.Success, "rank_level", "Mein Level");
                 var listButton = new DiscordButtonComponent(ButtonStyle.Secondary, "rank_list", "Alle Ränge");
                 var leaderboardButton =
                     new DiscordButtonComponent(ButtonStyle.Secondary, "rank_leaderboard", "Leaderboard");
