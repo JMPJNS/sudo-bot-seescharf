@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using DSharpPlus.Interactivity;
 using DSharpPlus.Net;
 using DSharpPlus.Lavalink;
 using DSharpPlus.Interactivity.Extensions;
+using DSharpPlus.SlashCommands.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -81,8 +83,25 @@ namespace SudoBot
 
             Commands.CommandErrored += OnCommandErrored;
             
-            Slash = Client.UseSlashCommands();
-            Slash.RegisterCommands<TestCommands>(1062385168406560789);
+            Slash = Client.UseSlashCommands(
+                new SlashCommandsConfiguration
+                {
+                    Services = services
+                });
+            Slash.RegisterCommands(Assembly.GetExecutingAssembly());
+            
+            Slash.SlashCommandErrored += async (s, e) =>
+            {
+                if(e.Exception is SlashExecutionChecksFailedException slex)
+                {
+                    foreach (var check in slex.FailedChecks)
+                        if (check is SlashRequirePermissionsAttribute att)
+                            await e.Context.CreateResponseAsync(
+                                InteractionResponseType.ChannelMessageWithSource, 
+                                new DiscordInteractionResponseBuilder().WithContent($"You are not allowed to run this Command!").AsEphemeral());
+                }
+            };
+
 
             //Interactivity
             var interactivityConfig = new InteractivityConfiguration
@@ -109,7 +128,6 @@ namespace SudoBot
             
             Commands.RegisterCommands<FunCommands>();
             Commands.RegisterCommands<UtilityCommands>();
-            Commands.RegisterCommands<RankCommands>();
             Commands.RegisterCommands<CustomGamesCommands>();
             Commands.RegisterCommands<AdminCommands>();
             Commands.RegisterCommands<ModCommands>();
@@ -122,6 +140,7 @@ namespace SudoBot
             Commands.RegisterCommands<ApecCommands>();
             Commands.RegisterCommands<MusicCommands>();
             Commands.RegisterCommands<ReactionRoleCommands>();
+            Commands.RegisterCommands<LegacyRankCommands>();
 
             // scheduler
             var task = Task.Run(async () =>

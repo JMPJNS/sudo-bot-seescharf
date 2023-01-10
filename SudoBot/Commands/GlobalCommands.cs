@@ -48,14 +48,6 @@ namespace SudoBot.Commands
             await ctx.Channel.SendMessageAsync("https://github.com/JMPJNS/sudo-bot-seescharf");
         }
 
-        [Command("guild")]
-        [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
-        [Description("Invite link zum Sudo Discord")]
-        public async Task Guild(CommandContext ctx)
-        {
-            await ctx.Channel.SendMessageAsync("https://discord.gg/8p4jxMJfsx");
-        }
-        
         [Command("enlarge")]
         [CheckForPermissions(SudoPermission.Any, GuildPermission.Any)]
         [Description("Emote groß machen")]

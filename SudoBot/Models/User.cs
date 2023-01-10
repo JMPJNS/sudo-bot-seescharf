@@ -37,7 +37,7 @@ namespace SudoBot.Models
         
         public int CountedMessages { private set; get; }
         
-        public long Points { private set; get; }
+        public int Points { private set; get; }
         
         public string LastList { private set; get; }
         public string LastListItem { private set; get; }
@@ -47,7 +47,7 @@ namespace SudoBot.Models
         // Logic Starts Here
 
         
-        public long CalculatePoints()
+        public int CalculatePoints()
         {
             var guild = Guild.GetGuild(GuildId).GetAwaiter().GetResult();
             int messages = CountedMessages;

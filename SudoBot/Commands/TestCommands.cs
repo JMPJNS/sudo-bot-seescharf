@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -17,12 +18,13 @@ namespace SudoBot.Commands
 {
     public class TestCommands : ApplicationCommandModule
     {
-        [SlashCommand("test", "A test Slash Command")]
+        [SlashCommand("test", "A aughhh Slash Command")]
+        [SlashCommandPermissions(Permissions.Administrator)]
         public async Task Test(InteractionContext ctx)
         {
-            var roles = string.Join("\n", ctx.Guild.Roles.Select(x => $"{x.Value.Id}: {x.Value.Name}"));
-
-            await ctx.CreateResponseAsync(roles);
+            await ctx.Channel.SendMessageAsync("amogus");
+            await ctx.CreateResponseAsync("ahhh");
+            await ctx.DeleteResponseAsync();
         }
     }
 }
