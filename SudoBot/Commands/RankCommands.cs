@@ -8,6 +8,7 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using DSharpPlus.Exceptions;
+using DSharpPlus.Interactivity.Extensions;
 using DSharpPlus.SlashCommands;
 using DSharpPlus.SlashCommands.Attributes;
 using Microsoft.Extensions.Logging;
@@ -28,9 +29,9 @@ namespace SudoBot.Commands
         [DescriptionLocalization(Localization.German, "Das Level eines Users abfragen")]
         public async Task InfoAsync(InteractionContext ctx, [Option("user", "user")] DiscordUser discordUser = null)
         {
+            await ctx.DeferAsync();
             var member = discordUser != null ? await ctx.Guild.GetMemberAsync(discordUser.Id) : ctx.Member;
-            var user = await User.GetOrCreateUser(member);
-            var guild = await Guild.GetGuild(user.GuildId);
+            var guild = await Guild.GetGuild(member.Guild.Id);
 
             if (ctx.Member.Id != Globals.MyId && guild.CommandChannel != 0 && guild.CommandChannel != ctx.Channel.Id)
             {
@@ -41,14 +42,23 @@ namespace SudoBot.Commands
                 return;
             }
 
+            var builder = await GetInfoMessageBuilder(member);
+            await ctx.EditResponseAsync(new DiscordWebhookBuilder(builder));
+        }
+
+        public async Task<DiscordMessageBuilder> GetInfoMessageBuilder(DiscordMember discordMember, bool withButtons = true)
+        {
+            var guild = await Guild.GetGuild(discordMember.Guild.Id);
+            var user = await User.GetOrCreateUser(discordMember);
+
             await user.UpdateRankRoles();
             var rank = await user.GetRank();
             var currNext = await user.GetCurrentAndNextRole();
 
             var embed = new DiscordEmbedBuilder()
-                .WithColor(member.Color)
-                .WithThumbnail(member.AvatarUrl)
-                .WithTitle(member.Nickname ?? member.Username)
+                .WithColor(discordMember.Color)
+                .WithThumbnail(discordMember.AvatarUrl)
+                .WithTitle(discordMember.Nickname ?? discordMember.Username)
                 .AddField("Rank", $"#{rank.ToString()}", true)
                 .AddField(guild.RankingPointName ?? "XP", user.CalculatePoints().ToString(), true)
                 .AddField($"Bonus {guild.RankingPointName ?? "XP"}", user.SpecialPoints.ToString(), true);
@@ -69,13 +79,29 @@ namespace SudoBot.Commands
                 embed.AddField("Als Nächstes", $"{currNext.Next.Mention}", true);
             }
 
-            embed.AddField("Beigetreten", user.JoinDate.ToString("dd.MM.yyyy H:mm"))
-                .AddField(guild.RankingTimeMultiplier == 0
-                        ? $"```{guild.RankingPointName} kriegt man durch Nachrichten schreiben!```"
-                        : $"```{guild.RankingPointName} kriegt man durch Nachrichten schreiben!\nAußerdem erhälst du jeden Tag {guild.RankingTimeMultiplier.ToString()} {guild.RankingPointName}, rückwirkend seit du dem Discord Beigetreten bist!```",
-                    "`/rank list` um alle Ränge anzuzeigen.");
+            embed.AddField("Beigetreten", user.JoinDate.ToString("dd.MM.yyyy H:mm"));
+            
+            var builder = new DiscordMessageBuilder()
+                .WithEmbed(embed);
 
-            await ctx.CreateResponseAsync(embed);
+            if (withButtons)
+            {
+                var infoButton = new DiscordButtonComponent(ButtonStyle.Primary, "rank_info", "Info");
+                var levelButton = new DiscordButtonComponent(ButtonStyle.Secondary, "rank_level", "Mein Level");
+                var listButton = new DiscordButtonComponent(ButtonStyle.Secondary, "rank_list", "Alle Ränge");
+                var leaderboardButton =
+                    new DiscordButtonComponent(ButtonStyle.Secondary, "rank_leaderboard", "Leaderboard");
+                
+                builder.AddComponents(new DiscordComponent[]
+                {
+                    levelButton,
+                    leaderboardButton,
+                    listButton,
+                    infoButton,
+                });
+            }
+
+            return builder;
         }
 
         [SlashCommand("leaderboard", "Get The Leveling Leaderboard")]
@@ -85,15 +111,22 @@ namespace SudoBot.Commands
             DiscordUser? discordUser = null)
         {
             var member = discordUser != null ? await ctx.Guild.GetMemberAsync(discordUser.Id) : ctx.Member;
-            var skip = 0;
-            var user = await User.GetOrCreateUser(member);
+            var builder = await GetLeaderboardMessageBuilder(member);
 
-            var lb = await Mongo.Instance.GetLeaderboard(skip, ctx.Guild.Id);
+            await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder(builder));
+        }
+
+        public async Task<DiscordMessageBuilder> GetLeaderboardMessageBuilder(DiscordMember discordMember, bool withButtons = true)
+        {
+            var skip = 0;
+            var user = await User.GetOrCreateUser(discordMember);
+
+            var lb = await Mongo.Instance.GetLeaderboard(skip, discordMember.Guild.Id);
 
             var embed = new DiscordEmbedBuilder()
                 .WithTitle("Leaderboard")
                 .WithColor(DiscordColor.Chartreuse);
-            var guild = await Guild.GetGuild(ctx.Guild.Id);
+            var guild = await Guild.GetGuild(discordMember.Guild.Id);
             var wantedRank = await user.GetRank();
             foreach (var u in lb)
             {
@@ -110,7 +143,21 @@ namespace SudoBot.Commands
                 }
             }
 
-            await ctx.CreateResponseAsync(embed);
+            var builder = new DiscordMessageBuilder()
+                .WithEmbed(embed);
+
+            if (withButtons)
+            {
+                var leaderboardButton =
+                    new DiscordButtonComponent(ButtonStyle.Secondary, "rank_leaderboard", "Meine Position am Leaderboard");
+                
+                builder.AddComponents(new DiscordComponent[]
+                {
+                    leaderboardButton
+                });
+            }
+
+            return builder;
         }
 
         [SlashCommand("list", "Auflistung aller Rollen im Ranking System")]
@@ -119,51 +166,7 @@ namespace SudoBot.Commands
         {
             try
             {
-                var guild = await Guild.GetGuild(ctx.Guild.Id);
-                var roles = guild.RankingRoles.OrderBy(x => x.Points).ToList();
-
-                if (roles == null || roles.Count == 0)
-                {
-                    await ctx.CreateResponseAsync(
-                        "Es wurden noch keine Rollen festgelegt, siehe `rank add-ranking-role`", true);
-                    return;
-                }
-
-                int embedCount = 1 + roles.Count / 24;
-
-                List<DiscordEmbedBuilder> embeds = new List<DiscordEmbedBuilder>();
-
-                for (var i = 0; i < embedCount; i++)
-                {
-                    var currRoles = roles.Skip(i * 24).Take(24);
-                    DiscordEmbedBuilder embed;
-                    if (i == 0)
-                    {
-                        embed = new DiscordEmbedBuilder()
-                            .WithColor(DiscordColor.Aquamarine)
-                            .WithTitle("Rollen");
-                    }
-                    else
-                    {
-                        embed = new DiscordEmbedBuilder()
-                            .WithColor(DiscordColor.Aquamarine);
-                    }
-
-
-                    foreach (var r in currRoles)
-                    {
-                        var drole = ctx.Guild.GetRole(r.Role);
-                        if (drole == null)
-                        {
-                            await guild.RemoveRankingRole(r.Role);
-                            continue;
-                        }
-
-                        embed.AddField($"{r.Points.ToString()} {guild.RankingPointName ?? "XP"}", drole.Mention, true);
-                    }
-
-                    embeds.Add(embed);
-                }
+                var embeds = await GetListEmbedBuilders(ctx.Member);
 
                 foreach (var embed in embeds)
                 {
@@ -174,6 +177,55 @@ namespace SudoBot.Commands
             {
                 await ctx.CreateResponseAsync($"Es ist ein fehler aufgetreten: {e.Message}", true);
             }
+        }
+        
+        public async Task<List<DiscordEmbedBuilder>> GetListEmbedBuilders(DiscordMember discordMember)
+        {
+            var guild = await Guild.GetGuild(discordMember.Guild.Id);
+            var roles = guild.RankingRoles.OrderBy(x => x.Points).ToList();
+
+            if (roles == null || roles.Count == 0)
+            {
+                throw new Exception("No Roles Defined");
+            }
+
+            int embedCount = 1 + roles.Count / 24;
+
+            List<DiscordEmbedBuilder> embeds = new List<DiscordEmbedBuilder>();
+
+            for (var i = 0; i < embedCount; i++)
+            {
+                var currRoles = roles.Skip(i * 24).Take(24);
+                DiscordEmbedBuilder embed;
+                if (i == 0)
+                {
+                    embed = new DiscordEmbedBuilder()
+                        .WithColor(DiscordColor.Aquamarine)
+                        .WithTitle("Rollen");
+                }
+                else
+                {
+                    embed = new DiscordEmbedBuilder()
+                        .WithColor(DiscordColor.Aquamarine);
+                }
+
+
+                foreach (var r in currRoles)
+                {
+                    var drole = discordMember.Guild.GetRole(r.Role);
+                    if (drole == null)
+                    {
+                        await guild.RemoveRankingRole(r.Role);
+                        continue;
+                    }
+
+                    embed.AddField($"{r.Points.ToString()} {guild.RankingPointName ?? "XP"}", drole.Mention, true);
+                }
+
+                embeds.Add(embed);
+            }
+
+            return embeds;
         }
     }
 

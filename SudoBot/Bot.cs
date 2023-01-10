@@ -38,6 +38,7 @@ namespace SudoBot
         private ReactionRolesHandler _reactionRolesHandler = new ReactionRolesHandler();
         private ReactionIqHandler _reactionIqHandler = new ReactionIqHandler();
         private MemberUpdateHandler _memberUpdateHandler = new MemberUpdateHandler();
+        private ComponentInteractionCreatedHandler _componentInteractionCreatedHandler = new ComponentInteractionCreatedHandler();
         public async Task RunAsync()
         {
 
@@ -61,6 +62,12 @@ namespace SudoBot
             Client.MessageReactionAdded += OnMessageReactionAdded;
             Client.MessageReactionRemoved += OnMessageReactionRemoved;
             Client.GuildDeleted += OnGuildDeleted;
+
+            Client.ComponentInteractionCreated += async (s, e) =>
+            {
+                await e.Interaction.CreateResponseAsync(InteractionResponseType.DeferredMessageUpdate);
+                await _componentInteractionCreatedHandler.HandleInteraction(s, e);
+            };
 
             Client.GuildMemberUpdated += OnMemberUpdated;
             
