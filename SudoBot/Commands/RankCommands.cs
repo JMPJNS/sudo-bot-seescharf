@@ -271,6 +271,8 @@ namespace SudoBot.Commands
         }
 
         [SlashCommand("give-points", "Add Bonus points to a user")]
+        [SlashRequirePermissions(Permissions.ManageRoles)]
+        [SlashCommandPermissions(Permissions.ManageRoles)]
         [DescriptionLocalization(Localization.German, "Einem User Bonus Punkte Geben")]
         public async Task GiveSp(
             InteractionContext ctx,
@@ -290,6 +292,8 @@ namespace SudoBot.Commands
         }
 
         [SlashCommand("remove-points", "Subtract bonus points from a user")]
+        [SlashRequirePermissions(Permissions.ManageRoles)]
+        [SlashCommandPermissions(Permissions.ManageRoles)]
         [DescriptionLocalization(Localization.German, "Einem User Bonus Punkte Entziehen")]
         public async Task RemoveSp(
             InteractionContext ctx,
@@ -309,6 +313,8 @@ namespace SudoBot.Commands
         }
 
         [SlashCommand("add-ranking-role", "Add a role to the ranking system")]
+        [SlashRequirePermissions(Permissions.ManageRoles)]
+        [SlashCommandPermissions(Permissions.ManageRoles)]
         [DescriptionLocalization(Localization.German, "Eine Rolle zum Ranglisten System hinzufügen")]
         public async Task SetRankingRole(
             InteractionContext ctx,
@@ -343,6 +349,8 @@ namespace SudoBot.Commands
 
         [SlashCommand("remove-ranking-role", "Remove a role from the ranking system")]
         [DescriptionLocalization(Localization.German, "Eine Rolle zum Ranglisten System hinzufügen")]
+        [SlashRequirePermissions(Permissions.ManageRoles)]
+        [SlashCommandPermissions(Permissions.ManageRoles)]
         public async Task RemoveRankingRole(
             InteractionContext ctx,
             [Option("role", "The role you want to add to the system")]
