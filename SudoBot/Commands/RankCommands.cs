@@ -111,17 +111,16 @@ namespace SudoBot.Commands
             DiscordUser? discordUser = null)
         {
             var member = discordUser != null ? await ctx.Guild.GetMemberAsync(discordUser.Id) : ctx.Member;
-            var builder = await GetLeaderboardMessageBuilder(member);
+            var builder = await GetLeaderboardMessageBuilder(member, skip: discordUser == null ? null : 0);
 
             await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder(builder));
         }
 
-        public async Task<DiscordMessageBuilder> GetLeaderboardMessageBuilder(DiscordMember discordMember, bool withButtons = true)
+        public async Task<DiscordMessageBuilder> GetLeaderboardMessageBuilder(DiscordMember discordMember, int? skip = null, bool withButtons = true)
         {
-            var skip = 0;
             var user = await User.GetOrCreateUser(discordMember);
-
-            var lb = await Mongo.Instance.GetLeaderboard(skip, discordMember.Guild.Id);
+            skip ??= (int)await user.GetRank();
+            var lb = await Mongo.Instance.GetLeaderboard((int)skip, discordMember.Guild.Id);
 
             var embed = new DiscordEmbedBuilder()
                 .WithTitle("Leaderboard")
