@@ -28,8 +28,8 @@ namespace SudoBot.Database
         {
             try
             {
-                var client = new MongoClient(Environment.GetEnvironmentVariable("DBSTRING"));
-                _db = client.GetDatabase(Environment.GetEnvironmentVariable("DBNAME"));
+                var client = new MongoClient(Environment.GetEnvironmentVariable("DBSTRING") ?? "mongodb://localhost:27017");
+                _db = client.GetDatabase(Environment.GetEnvironmentVariable("DBNAME") ?? "SudoBotDev");
                 
                 _users = _db.GetCollection<User>("Users");
                 _tags = _db.GetCollection<Tag>("Tags");

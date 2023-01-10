@@ -17,13 +17,12 @@ namespace SudoBot
 {
     public class Globals
     {
-        public static readonly string[] ModRoles = {"SudoAdmin", "SudoMod", "Admins", "Mods", "✨ | Server-Techniker👑", "️✨│Senior Moderatoren", "🔧│Bot Developer✨", "✨│Helferleine", "✨│Moderatoren"};
-        public static readonly string[] AdminRoles = {"SudoAdmin", "Admins", "✨ | Server-Techniker👑", "️✨│Senior Moderatoren", "🔧│Bot Developer✨"};
         public static DiscordClient Client;
         public static ulong MyId = 272809112851578881;
-        public static ulong JuliansId = 201413280261079042;
-        public static string CdnKey;
+        public static string CdnKey = Environment.GetEnvironmentVariable("CDN_API_KEY") ?? "SuperSecret";
         public static readonly List<Guild> GuildCache = new();
+        
+        public static bool isProduction = Environment.GetEnvironmentVariable("PROD") == "true";
 
         public static List<YoutubeVideoGifParser> YoutubeVideoGifParsers = new List<YoutubeVideoGifParser>();
 
@@ -139,15 +138,14 @@ namespace SudoBot
         {
             get
             {
-                if (Environment.GetEnvironmentVariable("DBNAME") == "SudoBot")
+                var guild = Client.GetGuildAsync(1062385168406560789).GetAwaiter().GetResult();
+                if (isProduction)
                 {
-                    var guild = Client.GetGuildAsync(716635355020918784).GetAwaiter().GetResult();
-                    return guild.GetChannel(828953910164062208);
+                    return guild.GetChannel(1062386968333385778);
                 }
                 else
                 {
-                    var guild = Client.GetGuildAsync(716635355020918784).GetAwaiter().GetResult();
-                    return guild.GetChannel(1013866924821729351);
+                    return guild.GetChannel(1062387017226387518);
                 }
             }
         }

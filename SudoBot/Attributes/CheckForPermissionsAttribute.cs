@@ -59,11 +59,11 @@ namespace SudoBot.Attributes
                 // Roles Check
                 case SudoPermission.Any:
                     return Task.FromResult(true);
-                case SudoPermission.Me when ctx.Member.Id == Globals.MyId || ctx.Member.Id == Globals.JuliansId:
+                case SudoPermission.Me when ctx.Member.Id == Globals.MyId:
                     return Task.FromResult(true);
-                case SudoPermission.Admin when ctx.Member.Roles.Any(x => Globals.AdminRoles.Any(y => y == x.Name)) || (ctx.Member.PermissionsIn(ctx.Channel) & Permissions.Administrator) != 0:
+                case SudoPermission.Admin when (ctx.Member.PermissionsIn(ctx.Channel) & Permissions.Administrator) != 0:
                     return Task.FromResult(true);
-                case SudoPermission.Mod when ctx.Member.Roles.Any(x => Globals.ModRoles.Any(y => y == x.Name)) || (ctx.Member.PermissionsIn(ctx.Channel) & Permissions.ManageMessages) != 0:
+                case SudoPermission.Mod when (ctx.Member.PermissionsIn(ctx.Channel) & Permissions.ManageMessages) != 0:
                     return Task.FromResult(true);
                 default:
                     // if (!isHelp) ctx.Channel.SendMessageAsync($"Du hast keine Berechtigung dazu {DiscordEmoji.FromName(ctx.Client, ":smirk:")}");

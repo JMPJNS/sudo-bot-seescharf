@@ -53,7 +53,7 @@ namespace SudoBot.Commands
         [Description("Invite link zum Sudo Discord")]
         public async Task Guild(CommandContext ctx)
         {
-            await ctx.Channel.SendMessageAsync("https://discord.gg/gHV2uhb");
+            await ctx.Channel.SendMessageAsync("https://discord.gg/8p4jxMJfsx");
         }
         
         [Command("enlarge")]

@@ -1,12 +1,8 @@
 # Build
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
 WORKDIR /app
 
 COPY SudoBot/*.csproj ./
-
-# Add DSharp Package Source
-RUN dotnet nuget add source https://nuget.emzi0767.com/api/v3/index.json --name DSharp
-
 
 RUN dotnet restore
 
@@ -14,7 +10,7 @@ COPY SudoBot ./
 RUN dotnet publish -c Release -o out
 
 # Run
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 as run-env
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 as run-env
 WORKDIR /app
 
 # Install Deps

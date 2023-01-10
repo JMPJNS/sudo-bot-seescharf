@@ -81,7 +81,7 @@ namespace SudoBot
             Commands.CommandErrored += OnCommandErrored;
             
             Slash = Client.UseSlashCommands();
-            Slash.RegisterCommands<TestCommands>(716635355020918784);
+            Slash.RegisterCommands<TestCommands>(1062385168406560789);
 
             //Interactivity
             var interactivityConfig = new InteractivityConfiguration
@@ -93,13 +93,13 @@ namespace SudoBot
             
             var lavalinkEndpoint = new ConnectionEndpoint
             {
-                Hostname = "163.172.148.235",
+                Hostname = Environment.GetEnvironmentVariable("LAVALINK_HOST") ?? "localhost",
                 Port = 2334
             };
             
             var lavalinkConfig = new LavalinkConfiguration
             {
-                Password = Environment.GetEnvironmentVariable("LAVALINK"),
+                Password = Environment.GetEnvironmentVariable("LAVALINK_PASSWORD") ?? "SuperSecret",
                 RestEndpoint = lavalinkEndpoint,
                 SocketEndpoint = lavalinkEndpoint
             };
