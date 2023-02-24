@@ -432,7 +432,7 @@ namespace SudoBot
         
         private Task MessageCreated(DiscordClient sender, MessageCreateEventArgs e)
         {
-            sender.Logger.Log(LogLevel.Information,  $"Message Created: [{e.Guild.Id} : {e.Channel.Id}] ({e.Author.Username}): {e.Message.Content}", DateTime.Now);
+            // sender.Logger.Log(LogLevel.Information,  $"Message Created: [{e.Guild.Id} : {e.Channel.Id}] ({e.Author.Username}): {e.Message.Content}", DateTime.Now);
             try {
             _messageHandler.HandleMessage(e).GetAwaiter().GetResult();
             _reactionIqHandler.HandleMessageSend(e).GetAwaiter().GetResult();
