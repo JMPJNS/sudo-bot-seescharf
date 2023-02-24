@@ -36,6 +36,7 @@
       <Content Include="..\TODO.md">
         <Link>TODO.md</Link>
       </Content>
+      <Content Include=".github\actions\publish.yml" />
     </ItemGroup>
 
 </Project>
