@@ -27,6 +27,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Include="..\.github\actions\publish.yml">
+        <Link>publish.yml</Link>
+      </Content>
       <Content Include="..\Dockerfile">
         <Link>Dockerfile</Link>
       </Content>
@@ -36,7 +39,6 @@
       <Content Include="..\TODO.md">
         <Link>TODO.md</Link>
       </Content>
-      <Content Include=".github\actions\publish.yml" />
     </ItemGroup>
 
 </Project>
